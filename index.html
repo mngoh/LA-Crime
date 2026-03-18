@@ -233,6 +233,54 @@
       margin-right: 8px;
     }
 
+    /* Results overview */
+    .overview {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 28px;
+      margin-bottom: 48px;
+    }
+
+    .overview h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .overview ul {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .overview ul li {
+      font-size: 0.85rem;
+      color: #999;
+      line-height: 1.7;
+      padding-left: 12px;
+      position: relative;
+    }
+
+    .overview ul li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: #c0392b;
+    }
+
+    .disclaimer {
+      border-top: 1px solid #2a2a2a;
+      padding-top: 16px;
+      font-size: 0.78rem;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .disclaimer strong {
+      color: #666;
+    }
+
     footer {
       font-size: 0.75rem;
       color: #444;
@@ -308,6 +356,21 @@
       <p>LAPD data, 2020 &ndash; 2023 &nbsp;&middot;&nbsp; Focus: assault victimization by demographics and geography</p>
     </header>
 
+    <div class="overview">
+      <h2>Results Overview</h2>
+      <ul>
+        <li>In 100,946 assault incidents across Los Angeles (2020–2023), <strong style="color:#ddd;">Black women are the only group where female victims outnumber male victims</strong>, making up 56–70% of Black assault victims depending on the division.</li>
+        <li>The pattern shows up across 77th Street, Southeast, Southwest, and Newton divisions, which argues against it being a fluke of one area.</li>
+        <li>Hispanic, White, and Asian victims all follow the opposite trend, with male victims making up roughly 55–60% in each group.</li>
+        <li>The gap is sharpest in Southeast, where Black female victims (864) nearly double Black male victims (378).</li>
+      </ul>
+      <div class="disclaimer">
+        <strong>Limitations:</strong> These are <strong>reported</strong> crimes only. Reporting rates likely differ across groups and areas.
+        All figures are raw victim counts, not rates. Without racial population data at the division level, we can't say whether the disparity reflects a higher victimization rate or simply a higher share of Black women living in these areas.
+        The census data available for this project does not include racial breakdowns by LAPD division, so per-capita analysis was not possible.
+      </div>
+    </div>
+
     <p class="section-title">Dataset Overview</p>
     <div class="stats-grid">
       <div class="stat-card">
@@ -326,6 +389,14 @@
         <div class="value">4</div>
         <div class="label">Racial groups compared</div>
       </div>
+      <div class="stat-card">
+        <div class="value">28–53</div>
+        <div class="label">Typical victim age range (middle 50%)</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">38</div>
+        <div class="label">Median victim age</div>
+      </div>
     </div>
 
     <p class="section-title">Key Findings</p>
@@ -334,7 +405,7 @@
         <h3>Gender disparity unique to Black victims</h3>
         <p>
           Black women are assault victims at <span class="highlight">significantly higher rates than Black men</span>.
-          This pattern does not appear consistently in White, Hispanic, or Asian victim data — making it a demographically distinct finding.
+          This pattern does not appear consistently in White, Hispanic, or Asian victim data, making it a demographically distinct finding.
         </p>
       </div>
       <div class="finding-card">
@@ -348,50 +419,25 @@
         <h3>Dominant weapon type</h3>
         <p>
           The majority of assaults across all groups involve <span class="highlight">strong-arm force</span> (hands, fists, feet) rather than weapons.
-          Hispanic victims account for the highest single count — <span class="highlight">13,783 incidents</span> — via strong-arm force.
+          Hispanic victims account for the highest single count at <span class="highlight">13,783 incidents</span> via strong-arm force.
         </p>
       </div>
-      <div class="finding-card">
-        <h3>Vehicle theft is the #1 crime</h3>
-        <p>
-          Across all crime types in 2020 LAPD data, <span class="highlight">vehicle theft leads at 79,081 incidents</span>,
-          ahead of simple assault (58,559) and identity theft (47,937).
-        </p>
-      </div>
+    </div>
+
+    <p class="section-title">Victim Breakdown by Race &amp; Gender</p>
+    <div class="chart-section">
+      <h3>Male vs. female assault victims by racial group</h3>
+      <p class="sub">Black victims are the only group where women outnumber men. All other groups skew male.</p>
+      <div id="race-chart" style="margin-top:8px;"></div>
     </div>
 
     <p class="section-title">Geographic Distribution</p>
     <div class="map-section">
       <h3>LAPD divisions with highest assault disparities</h3>
-      <p class="sub">Click a marker to see victim counts for that division</p>
+      <p class="sub">All figures reflect assault <strong style="color:#888;">victims</strong>, not suspects. Click a marker to see the breakdown by race.</p>
       <div id="map"></div>
     </div>
 
-    <div class="chart-section">
-      <h3>Black female vs. Black male assault victims by district</h3>
-      <p class="sub">Percent more assaults on Black women than Black men in the same LAPD area</p>
-
-      <div class="bar-row">
-        <span class="area-label">Northeast</span>
-        <div class="bar-wrap"><div class="bar-fill" style="width:100%"></div></div>
-        <span class="pct">&gt;75%</span>
-      </div>
-      <div class="bar-row">
-        <span class="area-label">Southeast</span>
-        <div class="bar-wrap"><div class="bar-fill" style="width:75%"></div></div>
-        <span class="pct">56.7%</span>
-      </div>
-      <div class="bar-row">
-        <span class="area-label">77th Street</span>
-        <div class="bar-wrap"><div class="bar-fill" style="width:61%"></div></div>
-        <span class="pct">45.7%</span>
-      </div>
-      <div class="bar-row">
-        <span class="area-label">Southwest</span>
-        <div class="bar-wrap"><div class="bar-fill" style="width:53%"></div></div>
-        <span class="pct">~35%</span>
-      </div>
-    </div>
 
     <div class="table-section">
       <h3>Top crime types in LA, 2020</h3>
@@ -422,6 +468,62 @@
 
   </div>
 
+  <script>
+    // Race/gender grouped bar chart
+    const groups = [
+      { label: 'Black',    female: 6534, male: 5036 },
+      { label: 'Hispanic', female: 13783, male: 15269 },
+      { label: 'White',    female: 4725, male: 6241 },
+      { label: 'Asian',    female: 672,  male: 848 },
+    ];
+
+    const max = Math.max(...groups.flatMap(g => [g.female, g.male]));
+    const container = document.getElementById('race-chart');
+
+    const legend = document.createElement('div');
+    legend.style.cssText = 'display:flex;gap:20px;margin-bottom:18px;font-size:0.75rem;color:#888;';
+    legend.innerHTML = `
+      <span style="display:flex;align-items:center;gap:6px;">
+        <span style="width:12px;height:12px;border-radius:2px;background:#c0392b;display:inline-block;"></span> Female
+      </span>
+      <span style="display:flex;align-items:center;gap:6px;">
+        <span style="width:12px;height:12px;border-radius:2px;background:#4a4a4a;display:inline-block;"></span> Male
+      </span>`;
+    container.appendChild(legend);
+
+    groups.forEach(g => {
+      const total     = g.female + g.male;
+      const femalePct = (g.female / total * 100).toFixed(1);
+      const malePct   = (g.male   / total * 100).toFixed(1);
+      const isFlipped = g.female > g.male;
+
+      const row = document.createElement('div');
+      row.style.cssText = 'margin-bottom:20px;';
+      row.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <span style="font-size:0.82rem;color:${isFlipped ? '#fff' : '#999'};font-weight:${isFlipped ? '600' : '400'};">${g.label}</span>
+          ${isFlipped ? '<span style="font-size:0.72rem;color:#c0392b;font-weight:600;">women outnumber men</span>' : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:0.72rem;color:#888;width:52px;flex-shrink:0;">Female</span>
+            <div style="flex:1;background:#111;border-radius:3px;height:18px;overflow:hidden;">
+              <div style="width:${femalePct}%;height:100%;background:#c0392b;border-radius:3px;"></div>
+            </div>
+            <span style="font-size:0.72rem;color:#c0392b;font-weight:600;width:52px;">${femalePct}%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:0.72rem;color:#888;width:52px;flex-shrink:0;">Male</span>
+            <div style="flex:1;background:#111;border-radius:3px;height:18px;overflow:hidden;">
+              <div style="width:${malePct}%;height:100%;background:#4a4a4a;border-radius:3px;"></div>
+            </div>
+            <span style="font-size:0.72rem;color:#888;width:52px;">${malePct}%</span>
+          </div>
+        </div>`;
+      container.appendChild(row);
+    });
+  </script>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const map = L.map('map', { zoomControl: true }).setView([33.97, -118.27], 11);
@@ -434,61 +536,79 @@
 
     const divisions = [
       {
-        name: '77th Street',
-        coords: [33.9672, -118.2724],
-        female: 1011,
-        male: 549,
-        pct: '45.7%',
-        note: 'Highest raw count of Black female assault victims'
+        name: '77th Street', coords: [33.9672, -118.2724],
+        races: [
+          { label: 'Black',    f: 1025, m: 558  },
+          { label: 'Hispanic', f: 844,  m: 816  },
+          { label: 'White',    f: 63,   m: 68   },
+          { label: 'Asian',    f: 7,    m: 20   },
+        ]
       },
       {
-        name: 'Southeast',
-        coords: [33.9441, -118.2534],
-        female: 856,
-        male: 371,
-        pct: '56.7%',
-        note: 'Second highest disparity by victim count'
+        name: 'Southeast', coords: [33.9441, -118.2534],
+        races: [
+          { label: 'Black',    f: 864, m: 378 },
+          { label: 'Hispanic', f: 843, m: 704 },
+          { label: 'White',    f: 57,  m: 79  },
+          { label: 'Asian',    f: 13,  m: 9   },
+        ]
       },
       {
-        name: 'Southwest',
-        coords: [34.0011, -118.3073],
-        female: 835,
-        male: 545,
-        pct: '~35%',
-        note: 'Consistent disparity across years'
+        name: 'Southwest', coords: [34.0011, -118.3073],
+        races: [
+          { label: 'Black',    f: 851, m: 564 },
+          { label: 'Hispanic', f: 737, m: 815 },
+          { label: 'White',    f: 143, m: 164 },
+          { label: 'Asian',    f: 28,  m: 39  },
+        ]
       },
       {
-        name: 'Northeast',
-        coords: [34.1091, -118.2073],
-        female: null,
-        male: null,
-        pct: '>75%',
-        note: 'Highest percentage disparity of any division'
-      }
+        name: 'Newton', coords: [34.0, -118.255],
+        races: [
+          { label: 'Black',    f: 408,  m: 256  },
+          { label: 'Hispanic', f: 1134, m: 1286 },
+          { label: 'White',    f: 62,   m: 84   },
+          { label: 'Asian',    f: 18,   m: 25   },
+        ]
+      },
     ];
 
-    const markerStyle = {
-      radius: 10,
-      fillColor: '#c0392b',
-      color: '#ff6b6b',
-      weight: 1.5,
-      opacity: 0.9,
-      fillOpacity: 0.75
-    };
+    function buildPopup(d) {
+      const rows = d.races.map(r => {
+        const pct = (r.f / (r.f + r.m) * 100).toFixed(1);
+        const isHigh = r.label === 'Black' && r.f > r.m;
+        const color  = isHigh ? '#c0392b' : '#777';
+        const fw     = isHigh ? '600' : '400';
+        const bar    = `<div style="display:inline-block;width:${pct}px;max-width:80px;height:6px;background:${color};border-radius:2px;vertical-align:middle;margin-left:6px;"></div>`;
+        return `<tr style="color:${color};font-weight:${fw};">
+          <td style="padding:3px 8px 3px 0;">${r.label}</td>
+          <td style="padding:3px 4px;">${pct}% F${bar}</td>
+          <td style="padding:3px 0 3px 8px;color:#555;font-size:0.72rem;">${r.f.toLocaleString()} / ${r.m.toLocaleString()}</td>
+        </tr>`;
+      }).join('');
+
+      return `<strong>${d.name} Division</strong>
+        <table style="margin-top:8px;border-collapse:collapse;font-size:0.78rem;">
+          <thead><tr style="color:#444;font-size:0.7rem;">
+            <th style="padding:2px 8px 4px 0;font-weight:400;">Race</th>
+            <th style="padding:2px 4px 4px;font-weight:400;">% Female</th>
+            <th style="padding:2px 0 4px 8px;font-weight:400;">F / M</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
 
     divisions.forEach(d => {
-      const countLine = d.female !== null
-        ? `<br>Female victims: <span class="pop-stat">${d.female.toLocaleString()}</span><br>Male victims: ${d.male.toLocaleString()}`
-        : '';
-      const popup = `
-        <strong>${d.name} Division</strong>
-        F vs M disparity: <span class="pop-stat">${d.pct} more women</span>
-        ${countLine}
-        <br><span style="color:#666">${d.note}</span>
-      `;
-      L.circleMarker(d.coords, markerStyle)
-        .bindPopup(popup)
-        .addTo(map);
+      const blackRace = d.races.find(r => r.label === 'Black');
+      const isDisparity = blackRace && blackRace.f > blackRace.m;
+      L.circleMarker(d.coords, {
+        radius: 10,
+        fillColor: isDisparity ? '#c0392b' : '#555',
+        color: isDisparity ? '#ff6b6b' : '#888',
+        weight: 1.5,
+        opacity: 0.9,
+        fillOpacity: 0.75
+      }).bindPopup(buildPopup(d)).addTo(map);
     });
   </script>
 </body>
