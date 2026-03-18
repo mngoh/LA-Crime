@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LA Crime Analysis</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #0f0f0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 48px 24px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 48px;
+      border-left: 3px solid #c0392b;
+      padding-left: 16px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: #888;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    /* Stat cards row */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .stat-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .stat-card .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .stat-card .label {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    /* Finding cards */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .finding-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .finding-card h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .finding-card p {
+      font-size: 0.85rem;
+      color: #888;
+      line-height: 1.6;
+    }
+
+    .finding-card .highlight {
+      color: #c0392b;
+      font-weight: 600;
+    }
+
+    /* Bar chart */
+    .chart-section {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 28px;
+      margin-bottom: 48px;
+    }
+
+    .chart-section h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .chart-section .sub {
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .bar-row .area-label {
+      font-size: 0.78rem;
+      color: #999;
+      width: 110px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .bar-wrap {
+      flex: 1;
+      background: #111;
+      border-radius: 3px;
+      height: 22px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #c0392b;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    .bar-row .pct {
+      font-size: 0.78rem;
+      color: #c0392b;
+      font-weight: 600;
+      width: 46px;
+      flex-shrink: 0;
+    }
+
+    /* Top crimes table */
+    .table-section {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 28px;
+      margin-bottom: 48px;
+    }
+
+    .table-section h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .table-section .sub {
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 8px 12px;
+      color: #555;
+      font-weight: 600;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #1e1e1e;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody td {
+      padding: 10px 12px;
+      color: #aaa;
+    }
+
+    tbody td:first-child { color: #ddd; }
+
+    tbody td:last-child {
+      color: #888;
+      text-align: right;
+    }
+
+    .rank {
+      color: #444;
+      font-size: 0.72rem;
+      margin-right: 8px;
+    }
+
+    footer {
+      font-size: 0.75rem;
+      color: #444;
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid #1e1e1e;
+    }
+
+    /* Map */
+    .map-section {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 28px;
+      margin-bottom: 48px;
+    }
+
+    .map-section h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .map-section .sub {
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    #map {
+      width: 100%;
+      height: 420px;
+      border-radius: 4px;
+      background: #111;
+    }
+
+    .leaflet-popup-content-wrapper {
+      background: #1e1e1e;
+      color: #ddd;
+      border: 1px solid #333;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .leaflet-popup-tip { background: #1e1e1e; }
+
+    .leaflet-popup-content {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      margin: 12px 14px;
+    }
+
+    .leaflet-popup-content strong {
+      display: block;
+      color: #fff;
+      font-size: 0.88rem;
+      margin-bottom: 4px;
+    }
+
+    .leaflet-popup-content .pop-stat {
+      color: #c0392b;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>LA Crime Analysis</h1>
+      <p>LAPD data, 2020 &ndash; 2023 &nbsp;&middot;&nbsp; Focus: assault victimization by demographics and geography</p>
+    </header>
+
+    <p class="section-title">Dataset Overview</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="value">58,559</div>
+        <div class="label">Simple assault incidents</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">42,387</div>
+        <div class="label">Aggravated assault incidents</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">21</div>
+        <div class="label">LAPD districts analyzed</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">4</div>
+        <div class="label">Racial groups compared</div>
+      </div>
+    </div>
+
+    <p class="section-title">Key Findings</p>
+    <div class="findings-grid">
+      <div class="finding-card">
+        <h3>Gender disparity unique to Black victims</h3>
+        <p>
+          Black women are assault victims at <span class="highlight">significantly higher rates than Black men</span>.
+          This pattern does not appear consistently in White, Hispanic, or Asian victim data — making it a demographically distinct finding.
+        </p>
+      </div>
+      <div class="finding-card">
+        <h3>Geographic concentration</h3>
+        <p>
+          The disparity is sharpest in <span class="highlight">77th Street, Southeast, and Southwest</span> districts.
+          In the Northeast district, Black women experience over <span class="highlight">75% more assaults</span> than Black men in the same area.
+        </p>
+      </div>
+      <div class="finding-card">
+        <h3>Dominant weapon type</h3>
+        <p>
+          The majority of assaults across all groups involve <span class="highlight">strong-arm force</span> (hands, fists, feet) rather than weapons.
+          Hispanic victims account for the highest single count — <span class="highlight">13,783 incidents</span> — via strong-arm force.
+        </p>
+      </div>
+      <div class="finding-card">
+        <h3>Vehicle theft is the #1 crime</h3>
+        <p>
+          Across all crime types in 2020 LAPD data, <span class="highlight">vehicle theft leads at 79,081 incidents</span>,
+          ahead of simple assault (58,559) and identity theft (47,937).
+        </p>
+      </div>
+    </div>
+
+    <p class="section-title">Geographic Distribution</p>
+    <div class="map-section">
+      <h3>LAPD divisions with highest assault disparities</h3>
+      <p class="sub">Click a marker to see victim counts for that division</p>
+      <div id="map"></div>
+    </div>
+
+    <div class="chart-section">
+      <h3>Black female vs. Black male assault victims by district</h3>
+      <p class="sub">Percent more assaults on Black women than Black men in the same LAPD area</p>
+
+      <div class="bar-row">
+        <span class="area-label">Northeast</span>
+        <div class="bar-wrap"><div class="bar-fill" style="width:100%"></div></div>
+        <span class="pct">&gt;75%</span>
+      </div>
+      <div class="bar-row">
+        <span class="area-label">Southeast</span>
+        <div class="bar-wrap"><div class="bar-fill" style="width:75%"></div></div>
+        <span class="pct">56.7%</span>
+      </div>
+      <div class="bar-row">
+        <span class="area-label">77th Street</span>
+        <div class="bar-wrap"><div class="bar-fill" style="width:61%"></div></div>
+        <span class="pct">45.7%</span>
+      </div>
+      <div class="bar-row">
+        <span class="area-label">Southwest</span>
+        <div class="bar-wrap"><div class="bar-fill" style="width:53%"></div></div>
+        <span class="pct">~35%</span>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <h3>Top crime types in LA, 2020</h3>
+      <p class="sub">Incident counts across all LAPD-recorded crime categories</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Crime type</th>
+            <th style="text-align:right">Incidents</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="rank">1</span>Vehicle theft</td><td>79,081</td></tr>
+          <tr><td><span class="rank">2</span>Simple assault / battery</td><td>58,559</td></tr>
+          <tr><td><span class="rank">3</span>Identity theft</td><td>47,937</td></tr>
+          <tr><td><span class="rank">4</span>Vehicle burglary</td><td>45,810</td></tr>
+          <tr><td><span class="rank">5</span>Vandalism</td><td>45,392</td></tr>
+          <tr><td><span class="rank">6</span>Burglary</td><td>44,921</td></tr>
+          <tr><td><span class="rank">7</span>Aggravated assault</td><td>42,387</td></tr>
+          <tr><td><span class="rank">8</span>Petty theft</td><td>37,878</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      Data source: LAPD Open Data &nbsp;&middot;&nbsp; Analysis by Martin
+    </footer>
+
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map', { zoomControl: true }).setView([33.97, -118.27], 11);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 16
+    }).addTo(map);
+
+    const divisions = [
+      {
+        name: '77th Street',
+        coords: [33.9672, -118.2724],
+        female: 1011,
+        male: 549,
+        pct: '45.7%',
+        note: 'Highest raw count of Black female assault victims'
+      },
+      {
+        name: 'Southeast',
+        coords: [33.9441, -118.2534],
+        female: 856,
+        male: 371,
+        pct: '56.7%',
+        note: 'Second highest disparity by victim count'
+      },
+      {
+        name: 'Southwest',
+        coords: [34.0011, -118.3073],
+        female: 835,
+        male: 545,
+        pct: '~35%',
+        note: 'Consistent disparity across years'
+      },
+      {
+        name: 'Northeast',
+        coords: [34.1091, -118.2073],
+        female: null,
+        male: null,
+        pct: '>75%',
+        note: 'Highest percentage disparity of any division'
+      }
+    ];
+
+    const markerStyle = {
+      radius: 10,
+      fillColor: '#c0392b',
+      color: '#ff6b6b',
+      weight: 1.5,
+      opacity: 0.9,
+      fillOpacity: 0.75
+    };
+
+    divisions.forEach(d => {
+      const countLine = d.female !== null
+        ? `<br>Female victims: <span class="pop-stat">${d.female.toLocaleString()}</span><br>Male victims: ${d.male.toLocaleString()}`
+        : '';
+      const popup = `
+        <strong>${d.name} Division</strong>
+        F vs M disparity: <span class="pop-stat">${d.pct} more women</span>
+        ${countLine}
+        <br><span style="color:#666">${d.note}</span>
+      `;
+      L.circleMarker(d.coords, markerStyle)
+        .bindPopup(popup)
+        .addTo(map);
+    });
+  </script>
+</body>
+</html>
