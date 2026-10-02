@@ -3,615 +3,215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LA Crime Analysis</title>
+  <title>Assault victims in Los Angeles</title>
+  <meta name="description" content="Who gets assaulted in Los Angeles: 100,946 LAPD assault reports from 2020 to 2023, by race, sex and division, as rates per 100,000 residents." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      background: #0f0f0f;
-      color: #e0e0e0;
-      min-height: 100vh;
-      padding: 48px 24px;
-    }
-
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    header {
-      margin-bottom: 48px;
-      border-left: 3px solid #c0392b;
-      padding-left: 16px;
-    }
-
-    header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-
-    header p {
-      margin-top: 6px;
-      font-size: 0.95rem;
-      color: #888;
-    }
-
-    .section-title {
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #555;
-      margin-bottom: 16px;
-    }
-
-    /* Stat cards row */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-
-    .stat-card {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 6px;
-      padding: 20px;
-    }
-
-    .stat-card .value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1;
-    }
-
-    .stat-card .label {
-      margin-top: 6px;
-      font-size: 0.8rem;
-      color: #666;
-    }
-
-    /* Finding cards */
-    .findings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-
-    .finding-card {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 6px;
-      padding: 24px;
-    }
-
-    .finding-card h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 10px;
-    }
-
-    .finding-card p {
-      font-size: 0.85rem;
-      color: #888;
-      line-height: 1.6;
-    }
-
-    .finding-card .highlight {
-      color: #c0392b;
-      font-weight: 600;
-    }
-
-    /* Bar chart */
-    .chart-section {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 6px;
-      padding: 28px;
-      margin-bottom: 48px;
-    }
-
-    .chart-section h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .chart-section .sub {
-      font-size: 0.8rem;
-      color: #555;
-      margin-bottom: 24px;
-    }
-
-    .bar-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .bar-row .area-label {
-      font-size: 0.78rem;
-      color: #999;
-      width: 110px;
-      flex-shrink: 0;
-      text-align: right;
-    }
-
-    .bar-wrap {
-      flex: 1;
-      background: #111;
-      border-radius: 3px;
-      height: 22px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: #c0392b;
-      border-radius: 3px;
-      transition: width 0.4s ease;
-    }
-
-    .bar-row .pct {
-      font-size: 0.78rem;
-      color: #c0392b;
-      font-weight: 600;
-      width: 46px;
-      flex-shrink: 0;
-    }
-
-    /* Top crimes table */
-    .table-section {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 6px;
-      padding: 28px;
-      margin-bottom: 48px;
-    }
-
-    .table-section h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .table-section .sub {
-      font-size: 0.8rem;
-      color: #555;
-      margin-bottom: 24px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-    }
-
-    thead th {
-      text-align: left;
-      padding: 8px 12px;
-      color: #555;
-      font-weight: 600;
-      font-size: 0.72rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      border-bottom: 1px solid #2a2a2a;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid #1e1e1e;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-
-    tbody td {
-      padding: 10px 12px;
-      color: #aaa;
-    }
-
-    tbody td:first-child { color: #ddd; }
-
-    tbody td:last-child {
-      color: #888;
-      text-align: right;
-    }
-
-    .rank {
-      color: #444;
-      font-size: 0.72rem;
-      margin-right: 8px;
-    }
-
-    /* Results overview */
-    .overview {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 6px;
-      padding: 28px;
-      margin-bottom: 48px;
-    }
-
-    .overview h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 16px;
-    }
-
-    .overview ul {
-      list-style: none;
-      margin-bottom: 20px;
-    }
-
-    .overview ul li {
-      font-size: 0.85rem;
-      color: #999;
-      line-height: 1.7;
-      padding-left: 12px;
-      position: relative;
-    }
-
-    .overview ul li::before {
-      content: '·';
-      position: absolute;
-      left: 0;
-      color: #c0392b;
-    }
-
-    .disclaimer {
-      border-top: 1px solid #2a2a2a;
-      padding-top: 16px;
-      font-size: 0.78rem;
-      color: #555;
-      line-height: 1.7;
-    }
-
-    .disclaimer strong {
-      color: #666;
-    }
-
-    footer {
-      font-size: 0.75rem;
-      color: #444;
-      text-align: center;
-      padding-top: 24px;
-      border-top: 1px solid #1e1e1e;
-    }
-
-    /* Map */
-    .map-section {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 6px;
-      padding: 28px;
-      margin-bottom: 48px;
-    }
-
-    .map-section h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .map-section .sub {
-      font-size: 0.8rem;
-      color: #555;
-      margin-bottom: 16px;
-    }
-
-    #map {
-      width: 100%;
-      height: 420px;
-      border-radius: 4px;
-      background: #111;
-    }
-    /* OpenStreetMap tiles are light; invert them to match the dark theme */
+    :root { --bg: #0a0a0a; --surface: #121212; --border: #262626; --text: #f2f2f2; --muted: #8b8b8b; --blue: #2563eb; --blue-light: #93c5fd; --red: #ef4444; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; }
+    a { color: var(--blue-light); text-decoration: none; } a:hover { text-decoration: underline; }
+    header { border-bottom: 1px solid var(--border); padding: 28px 40px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+    header p { color: var(--muted); margin-top: 4px; font-size: 13px; }
+    header nav { display: flex; gap: 20px; font-size: 13px; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 40px; }
+    .answer { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 0 8px 8px 0; padding: 20px 24px; margin-bottom: 40px; max-width: 860px; }
+    .answer .q { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+    .answer p { font-size: 15px; line-height: 1.7; }
+    .answer p + p { margin-top: 8px; color: var(--muted); font-size: 14px; }
+    .section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .note { font-size: 12px; color: var(--muted); margin: -6px 0 16px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+    .card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 8px; }
+    .card .value { font-size: 26px; font-weight: 700; line-height: 1; }
+    .card .sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+    .red { color: var(--red); } .blue { color: var(--blue-light); }
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .section-end { margin-bottom: 40px; }
+    .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 22px 24px; }
+    .chart-box h3 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .chart-sub { font-size: 11px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+    .chart-wrap { position: relative; height: 270px; }
+    .chart-wrap.tall { height: 360px; }
+    #map { height: 460px; border-radius: 6px; border: 1px solid var(--border); background: #111; }
     .dark-tiles { filter: invert(100%) hue-rotate(180deg) grayscale(70%) brightness(85%) contrast(90%); }
-
-    .leaflet-popup-content-wrapper {
-      background: #1e1e1e;
-      color: #ddd;
-      border: 1px solid #333;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-    .leaflet-popup-tip { background: #1e1e1e; }
-
-    .leaflet-popup-content {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.82rem;
-      line-height: 1.6;
-      margin: 12px 14px;
-    }
-
-    .leaflet-popup-content strong {
-      display: block;
-      color: #fff;
-      font-size: 0.88rem;
-      margin-bottom: 4px;
-    }
-
-    .leaflet-popup-content .pop-stat {
-      color: #c0392b;
-      font-weight: 600;
+    .leaflet-popup-content-wrapper { background: #1a1a1a; color: var(--text); border-radius: 6px; border: 1px solid var(--border); }
+    .leaflet-popup-tip { background: #1a1a1a; }
+    .leaflet-popup-content { font-size: 12px; margin: 12px 14px; }
+    .leaflet-popup-content table { min-width: 0; font-size: 11px; margin-top: 6px; }
+    .leaflet-popup-content td, .leaflet-popup-content th { padding: 3px 6px; }
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: auto; margin-bottom: 40px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 420px; }
+    thead tr { background: var(--bg); border-bottom: 1px solid var(--border); }
+    th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); font-weight: 600; }
+    td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr:last-child td { border-bottom: none; }
+    .findings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 40px; }
+    .finding { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; padding: 16px 20px; }
+    .finding.red { border-left-color: var(--red); }
+    .finding h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+    .finding p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    footer { border-top: 1px solid var(--border); padding: 20px 40px; color: var(--muted); font-size: 12px; display: flex; gap: 20px; flex-wrap: wrap; }
+    @media (max-width: 768px) {
+      header, footer { padding: 20px; } .container { padding: 20px; }
+      .charts, .findings { grid-template-columns: 1fr; }
+      .chart-box { padding: 18px 16px; } #map { height: 360px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <header>
-      <h1>LA Crime Analysis</h1>
-      <p>LAPD data, 2020 &ndash; 2023 &nbsp;&middot;&nbsp; Focus: assault victimization by demographics and geography</p>
-    </header>
+<header>
+  <div>
+    <h1>Assault victims in Los Angeles</h1>
+    <p>LAPD reports, January 2020 to June 2023 · 100,946 assaults · Martin Ngoh</p>
+  </div>
+  <nav>
+    <a href="https://github.com/mngoh/LA-Crime">Code &amp; notebooks</a>
+    <a href="https://martinngoh.com">martinngoh.com</a>
+  </nav>
+</header>
 
-    <div class="overview">
-      <h2>Results Overview</h2>
-      <ul>
-        <li>In 100,946 assault incidents across Los Angeles (2020–2023), <strong style="color:#ddd;">Black women are the only group where female victims outnumber male victims</strong>, making up 56–70% of Black assault victims depending on the division.</li>
-        <li>The pattern shows up across 77th Street, Southeast, Southwest, and Newton divisions, which argues against it being a fluke of one area.</li>
-        <li>Hispanic, White, and Asian victims all follow the opposite trend, with male victims making up roughly 55–60% in each group.</li>
-        <li>The gap is sharpest in Southeast, where Black female victims (864) nearly double Black male victims (378).</li>
-      </ul>
-      <div class="disclaimer">
-        <strong>Limitations:</strong> These are <strong>reported</strong> crimes only. Reporting rates likely differ across groups and areas.
-        All figures are raw victim counts, not rates. Without racial population data at the division level, we can't say whether the disparity reflects a higher victimization rate or simply a higher share of Black women living in these areas.
-        The census data available for this project does not include racial breakdowns by LAPD division, so per-capita analysis was not possible.
-      </div>
-    </div>
+<div class="container">
 
-    <p class="section-title">Dataset Overview</p>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="value">58,559</div>
-        <div class="label">Simple assault incidents</div>
-      </div>
-      <div class="stat-card">
-        <div class="value">42,387</div>
-        <div class="label">Aggravated assault incidents</div>
-      </div>
-      <div class="stat-card">
-        <div class="value">21</div>
-        <div class="label">LAPD districts analyzed</div>
-      </div>
-      <div class="stat-card">
-        <div class="value">4</div>
-        <div class="label">Racial groups compared</div>
-      </div>
-      <div class="stat-card">
-        <div class="value">28–53</div>
-        <div class="label">Typical victim age range (middle 50%)</div>
-      </div>
-      <div class="stat-card">
-        <div class="value">38</div>
-        <div class="label">Median victim age</div>
-      </div>
-    </div>
-
-    <p class="section-title">Key Findings</p>
-    <div class="findings-grid">
-      <div class="finding-card">
-        <h3>Gender disparity unique to Black victims</h3>
-        <p>
-          Black women are assault victims at <span class="highlight">significantly higher rates than Black men</span>.
-          This pattern does not appear consistently in White, Hispanic, or Asian victim data, making it a demographically distinct finding.
-        </p>
-      </div>
-      <div class="finding-card">
-        <h3>Geographic concentration</h3>
-        <p>
-          The disparity is sharpest in <span class="highlight">77th Street, Southeast, and Southwest</span> districts.
-          In the Northeast district, Black women experience over <span class="highlight">75% more assaults</span> than Black men in the same area.
-        </p>
-      </div>
-      <div class="finding-card">
-        <h3>Dominant weapon type</h3>
-        <p>
-          The majority of assaults across all groups involve <span class="highlight">strong-arm force</span> (hands, fists, feet) rather than weapons.
-          Hispanic victims account for the highest single count at <span class="highlight">13,783 incidents</span> via strong-arm force.
-        </p>
-      </div>
-    </div>
-
-    <p class="section-title">Victim Breakdown by Race &amp; Gender</p>
-    <div class="chart-section">
-      <h3>Male vs. female assault victims by racial group</h3>
-      <p class="sub">Black victims are the only group where women outnumber men. All other groups skew male.</p>
-      <div id="race-chart" style="margin-top:8px;"></div>
-    </div>
-
-    <p class="section-title">Geographic Distribution</p>
-    <div class="map-section">
-      <h3>LAPD divisions with highest assault disparities</h3>
-      <p class="sub">All figures reflect assault <strong style="color:#888;">victims</strong>, not suspects. Click a marker to see the breakdown by race.</p>
-      <div id="map"></div>
-    </div>
-
-
-    <div class="table-section">
-      <h3>Top crime types in LA, 2020</h3>
-      <p class="sub">Incident counts across all LAPD-recorded crime categories</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Crime type</th>
-            <th style="text-align:right">Incidents</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><span class="rank">1</span>Vehicle theft</td><td>79,081</td></tr>
-          <tr><td><span class="rank">2</span>Simple assault / battery</td><td>58,559</td></tr>
-          <tr><td><span class="rank">3</span>Identity theft</td><td>47,937</td></tr>
-          <tr><td><span class="rank">4</span>Vehicle burglary</td><td>45,810</td></tr>
-          <tr><td><span class="rank">5</span>Vandalism</td><td>45,392</td></tr>
-          <tr><td><span class="rank">6</span>Burglary</td><td>44,921</td></tr>
-          <tr><td><span class="rank">7</span>Aggravated assault</td><td>42,387</td></tr>
-          <tr><td><span class="rank">8</span>Petty theft</td><td>37,878</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <footer>
-      Data source: LAPD Open Data &nbsp;&middot;&nbsp; Analysis by Martin
-    </footer>
-
+  <div class="answer">
+    <div class="q">The question</div>
+    <p>Black women are a far larger share of assault victims than women of any other group. Is that a higher rate of victimization, or just where assaults happen?</p>
+    <p>A higher rate. Per 100,000 residents a year, Black women are assaulted 1,803 times: 3 times the rate of Hispanic women, 5.4 times White women, 17 times Asian women, and more often than Hispanic or White men.</p>
   </div>
 
-  <script>
-    // Race/gender grouped bar chart
-    const groups = [
-      { label: 'Black',    female: 6534, male: 5036 },
-      { label: 'Hispanic', female: 13783, male: 15269 },
-      { label: 'White',    female: 4725, male: 6241 },
-      { label: 'Asian',    female: 672,  male: 848 },
-    ];
+  <div class="section-title">Dataset</div>
+  <div class="cards">
+    <div class="card"><div class="label">Assaults</div><div class="value">100,946</div><div class="sub">reported Jan 2020 to Jun 2023</div></div>
+    <div class="card"><div class="label">Simple assault</div><div class="value">58,559</div><div class="sub">battery</div></div>
+    <div class="card"><div class="label">Aggravated</div><div class="value">42,387</div><div class="sub">with a deadly weapon</div></div>
+    <div class="card"><div class="label">Known race and sex</div><div class="value blue">92,325</div><div class="sub">used for rates</div></div>
+    <div class="card"><div class="label">Divisions</div><div class="value">21</div><div class="sub">LAPD areas</div></div>
+    <div class="card"><div class="label">Median victim age</div><div class="value">37</div><div class="sub">middle half 27 to 51</div></div>
+  </div>
 
-    const max = Math.max(...groups.flatMap(g => [g.female, g.male]));
-    const container = document.getElementById('race-chart');
+  <div class="charts">
+    <div class="chart-box">
+      <h3>Victimization rate by race and sex</h3>
+      <div class="chart-sub">Assault victims per 100,000 residents per year, citywide. Population: ACS 2020 to 2024 five-year estimates.</div>
+      <div class="chart-wrap"><canvas id="rateChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Female share of victims</h3>
+      <div class="chart-sub">Black women outnumber Black men only in simple assault. In every category their share is the highest of any group.</div>
+      <div class="chart-wrap"><canvas id="shareChart"></canvas></div>
+    </div>
+  </div>
+  <div class="charts section-end">
+    <div class="chart-box">
+      <h3>Black women's rate by division</h3>
+      <div class="chart-sub">Per 100,000 Black female residents per year, divisions with 2,000 or more. Central includes Skid Row and many non-resident victims, which inflates its rate.</div>
+      <div class="chart-wrap tall"><canvas id="divChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Victims by year</h3>
+      <div class="chart-sub">Victims with known sex. 2023 covers January to June only.</div>
+      <div class="chart-wrap tall"><canvas id="yearChart"></canvas></div>
+    </div>
+  </div>
 
-    const legend = document.createElement('div');
-    legend.style.cssText = 'display:flex;gap:20px;margin-bottom:18px;font-size:0.75rem;color:#888;';
-    legend.innerHTML = `
-      <span style="display:flex;align-items:center;gap:6px;">
-        <span style="width:12px;height:12px;border-radius:2px;background:#c0392b;display:inline-block;"></span> Female
-      </span>
-      <span style="display:flex;align-items:center;gap:6px;">
-        <span style="width:12px;height:12px;border-radius:2px;background:#4a4a4a;display:inline-block;"></span> Male
-      </span>`;
-    container.appendChild(legend);
+  <div class="section-title">Findings</div>
+  <div class="findings">
+    <div class="finding red"><h4>The rate gap is real</h4><p>Black women's victimization rate is 1,803 per 100,000 a year. Hispanic women: 598. White women: 335. Asian women: 106. Population share does not explain it.</p></div>
+    <div class="finding red"><h4>Closest to parity with men</h4><p>Black women are assaulted at 79% of the rate of Black men. For Hispanic, White and Asian women the figure is 62%, 61% and 56%.</p></div>
+    <div class="finding"><h4>Simple assault is where women outnumber men</h4><p>56.5% of Black simple-assault victims are women, the only group above 50%. In aggravated assault the share is 34.4%, against 24.5% to 27.1% for other groups.</p></div>
+    <div class="finding"><h4>South LA carries the counts, Central the rate</h4><p>77th Street (2,069) and Southeast (1,658) have the most Black female victims. Central has the highest rate (7,124) on a small resident population.</p></div>
+    <div class="finding"><h4>Mostly strong-arm</h4><p>58% of all assaults involved hands, fists or feet rather than a weapon. Handguns appear in 6,029.</p></div>
+    <div class="finding"><h4>Limits</h4><p>Reported crimes only; reporting rates differ by group and area. Rates use residential population, so divisions with many visitors or unhoused residents read high. 8,621 victims with unknown race or sex are excluded from rates.</p></div>
+  </div>
 
-    groups.forEach(g => {
-      const total     = g.female + g.male;
-      const femalePct = (g.female / total * 100).toFixed(1);
-      const malePct   = (g.male   / total * 100).toFixed(1);
-      const isFlipped = g.female > g.male;
+  <div class="section-title">Map</div>
+  <p class="note">Each marker is a division. Click one for counts and rates by race and sex.</p>
+  <div id="map" class="section-end"></div>
 
-      const row = document.createElement('div');
-      row.style.cssText = 'margin-bottom:20px;';
-      row.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
-          <span style="font-size:0.82rem;color:${isFlipped ? '#fff' : '#999'};font-weight:${isFlipped ? '600' : '400'};">${g.label}</span>
-          ${isFlipped ? '<span style="font-size:0.72rem;color:#c0392b;font-weight:600;">women outnumber men</span>' : ''}
-        </div>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span style="font-size:0.72rem;color:#888;width:52px;flex-shrink:0;">Female</span>
-            <div style="flex:1;background:#111;border-radius:3px;height:18px;overflow:hidden;">
-              <div style="width:${femalePct}%;height:100%;background:#c0392b;border-radius:3px;"></div>
-            </div>
-            <span style="font-size:0.72rem;color:#c0392b;font-weight:600;width:52px;">${femalePct}%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span style="font-size:0.72rem;color:#888;width:52px;flex-shrink:0;">Male</span>
-            <div style="flex:1;background:#111;border-radius:3px;height:18px;overflow:hidden;">
-              <div style="width:${malePct}%;height:100%;background:#4a4a4a;border-radius:3px;"></div>
-            </div>
-            <span style="font-size:0.72rem;color:#888;width:52px;">${malePct}%</span>
-          </div>
-        </div>`;
-      container.appendChild(row);
-    });
-  </script>
+  <div class="section-title">Method</div>
+  <p class="note">LAPD victim descent codes mapped to four groups (Asian combines the Asian descent codes). Population by census tract from the ACS 2020 to 2024 five-year release via Census Reporter; 1,121 tracts inside the city were assigned to LAPD divisions by tract centroid using the city's division boundaries (11 fell outside). Rates divide victims by residents and by 3.5 years. Cells with fewer than 2,000 residents are not rated.</p>
+  <p class="note">Sources: LAPD Open Data (Crime Data from 2020 to Present), US Census Bureau ACS, LA GeoHub.</p>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    const map = L.map('map', { zoomControl: true }).setView([33.97, -118.27], 11);
+</div>
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 16,
-      className: 'dark-tiles'
-    }).addTo(map);
+<footer>
+  <span>Assault victims in Los Angeles, Martin Ngoh</span>
+  <a href="https://github.com/mngoh/LA-Crime">github.com/mngoh/LA-Crime</a>
+  <a href="https://martinngoh.com">martinngoh.com</a>
+</footer>
 
-    const divisions = [
-      {
-        name: '77th Street', coords: [33.9672, -118.2724],
-        races: [
-          { label: 'Black',    f: 1025, m: 558  },
-          { label: 'Hispanic', f: 844,  m: 816  },
-          { label: 'White',    f: 63,   m: 68   },
-          { label: 'Asian',    f: 7,    m: 20   },
-        ]
-      },
-      {
-        name: 'Southeast', coords: [33.9441, -118.2534],
-        races: [
-          { label: 'Black',    f: 864, m: 378 },
-          { label: 'Hispanic', f: 843, m: 704 },
-          { label: 'White',    f: 57,  m: 79  },
-          { label: 'Asian',    f: 13,  m: 9   },
-        ]
-      },
-      {
-        name: 'Southwest', coords: [34.0011, -118.3073],
-        races: [
-          { label: 'Black',    f: 851, m: 564 },
-          { label: 'Hispanic', f: 737, m: 815 },
-          { label: 'White',    f: 143, m: 164 },
-          { label: 'Asian',    f: 28,  m: 39  },
-        ]
-      },
-      {
-        name: 'Newton', coords: [34.0, -118.255],
-        races: [
-          { label: 'Black',    f: 408,  m: 256  },
-          { label: 'Hispanic', f: 1134, m: 1286 },
-          { label: 'White',    f: 62,   m: 84   },
-          { label: 'Asian',    f: 18,   m: 25   },
-        ]
-      },
-    ];
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const C = { blue: '#2563eb', red: '#ef4444', text: '#f2f2f2', muted: '#8b8b8b', border: '#262626', surface: '#121212' };
+  Chart.defaults.color = C.muted; Chart.defaults.borderColor = C.border;
+  Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif'; Chart.defaults.font.size = 11;
+  Object.assign(Chart.defaults.plugins.tooltip, { backgroundColor: C.surface, borderColor: C.border, borderWidth: 1, titleColor: C.text, bodyColor: C.muted });
+  Chart.defaults.plugins.legend.display = false; Chart.defaults.plugins.legend.labels.boxWidth = 12;
+  const base = { responsive: true, maintainAspectRatio: false };
+  const bar = c => ({ backgroundColor: 'transparent', borderColor: c, borderWidth: 1.5, borderRadius: 3, borderSkipped: false });
 
-    function buildPopup(d) {
-      const rows = d.races.map(r => {
-        const pct = (r.f / (r.f + r.m) * 100).toFixed(1);
-        const isHigh = r.label === 'Black' && r.f > r.m;
-        const color  = isHigh ? '#c0392b' : '#777';
-        const fw     = isHigh ? '600' : '400';
-        const bar    = `<div style="display:inline-block;width:${pct}px;max-width:80px;height:6px;background:${color};border-radius:2px;vertical-align:middle;margin-left:6px;"></div>`;
-        return `<tr style="color:${color};font-weight:${fw};">
-          <td style="padding:3px 8px 3px 0;">${r.label}</td>
-          <td style="padding:3px 4px;">${pct}% F${bar}</td>
-          <td style="padding:3px 0 3px 8px;color:#555;font-size:0.72rem;">${r.f.toLocaleString()} / ${r.m.toLocaleString()}</td>
-        </tr>`;
-      }).join('');
+  const RACES = ["Black", "Hispanic", "White", "Asian"];
+  const RATES = {"Black": {"F": 1803, "M": 2296, "popF": 166645.0, "popM": 157183.0, "ratio": 0.79}, "Hispanic": {"F": 598, "M": 968, "popF": 903648.0, "popM": 916749.0, "ratio": 0.62}, "White": {"F": 335, "M": 550, "popF": 531557.0, "popM": 550836.0, "ratio": 0.61}, "Asian": {"F": 106, "M": 188, "popF": 252224.0, "popM": 216219.0, "ratio": 0.56}};
+  const SHARE = { simple: [56.5, 47.4, 43.1, 44.7], aggravated: [34.4, 24.5, 25.8, 27.1] };
+  const DIV = [["Central", 7124, 5161, 1045, 4191], ["Newton", 3131, 4493, 685, 6251], ["Southeast", 2643, 3635, 1658, 17923], ["Rampart", 2621, 2254, 367, 4001], ["Hollywood", 2613, 4619, 389, 4254], ["Olympic", 2082, 2437, 341, 4679], ["77th Street", 1720, 2189, 2069, 34378], ["Harbor", 1501, 1909, 294, 5598], ["Southwest", 1399, 1696, 1394, 28475], ["Northeast", 1394, 1858, 98, 2009], ["Wilshire", 1373, 1764, 442, 9196], ["Pacific", 1356, 2182, 358, 7543]];
+  const YEARS = {"2020": {"F": 10285, "M": 15237}, "2021": {"F": 10202, "M": 16274}, "2022": {"F": 11322, "M": 16873}, "2023": {"F": 4797, "M": 7335}};
+  const DIVMAP = [{"name": "77th Street", "lat": 33.9762, "lon": -118.2916, "rows": [{"race": "Black", "F": 2069, "M": 2024, "rateF": 1720, "rateM": 2189}, {"race": "Hispanic", "F": 1305, "M": 2101, "rateF": 655, "rateM": 1029}, {"race": "White", "F": 97, "M": 155, "rateF": null, "rateM": 1755}, {"race": "Asian", "F": 15, "M": 31, "rateF": null, "rateM": null}]}, {"name": "Central", "lat": 34.046, "lon": -118.2485, "rows": [{"race": "Black", "F": 1045, "M": 1731, "rateF": 7124, "rateM": 5161}, {"race": "Hispanic", "F": 1176, "M": 2318, "rateF": 4577, "rateM": 5073}, {"race": "White", "F": 542, "M": 952, "rateF": 2359, "rateM": 2687}, {"race": "Asian", "F": 126, "M": 151, "rateF": 256, "rateM": 392}]}, {"name": "Devonshire", "lat": 34.2448, "lon": -118.5404, "rows": [{"race": "Black", "F": 138, "M": 166, "rateF": 666, "rateM": 747}, {"race": "Hispanic", "F": 539, "M": 808, "rateF": 389, "rateM": 618}, {"race": "White", "F": 370, "M": 505, "rateF": 242, "rateM": 325}, {"race": "Asian", "F": 41, "M": 63, "rateF": 48, "rateM": 79}]}, {"name": "Foothill", "lat": 34.2549, "lon": -118.3965, "rows": [{"race": "Black", "F": 113, "M": 138, "rateF": 1354, "rateM": 1339}, {"race": "Hispanic", "F": 868, "M": 1341, "rateF": 420, "rateM": 629}, {"race": "White", "F": 182, "M": 278, "rateF": 215, "rateM": 333}, {"race": "Asian", "F": 8, "M": 6, "rateF": 44, "rateM": 41}]}, {"name": "Harbor", "lat": 33.7777, "lon": -118.287, "rows": [{"race": "Black", "F": 294, "M": 321, "rateF": 1501, "rateM": 1909}, {"race": "Hispanic", "F": 1060, "M": 1448, "rateF": 557, "rateM": 722}, {"race": "White", "F": 351, "M": 473, "rateF": 599, "rateM": 794}, {"race": "Asian", "F": 23, "M": 33, "rateF": 69, "rateM": 106}]}, {"name": "Hollenbeck", "lat": 34.0497, "lon": -118.2062, "rows": [{"race": "Black", "F": 89, "M": 154, "rateF": null, "rateM": null}, {"race": "Hispanic", "F": 1540, "M": 2208, "rateF": 663, "rateM": 971}, {"race": "White", "F": 85, "M": 167, "rateF": 493, "rateM": 757}, {"race": "Asian", "F": 22, "M": 30, "rateF": 66, "rateM": 107}]}, {"name": "Hollywood", "lat": 34.0995, "lon": -118.3288, "rows": [{"race": "Black", "F": 389, "M": 808, "rateF": 2613, "rateM": 4619}, {"race": "Hispanic", "F": 673, "M": 1323, "rateF": 1019, "rateM": 1894}, {"race": "White", "F": 621, "M": 1160, "rateF": 623, "rateM": 1014}, {"race": "Asian", "F": 44, "M": 93, "rateF": 177, "rateM": 432}]}, {"name": "Mission", "lat": 34.2356, "lon": -118.4517, "rows": [{"race": "Black", "F": 106, "M": 146, "rateF": 773, "rateM": 1253}, {"race": "Hispanic", "F": 1021, "M": 1595, "rateF": 336, "rateM": 509}, {"race": "White", "F": 135, "M": 255, "rateF": 306, "rateM": 582}, {"race": "Asian", "F": 16, "M": 32, "rateF": 36, "rateM": 73}]}, {"name": "N Hollywood", "lat": 34.174, "lon": -118.3818, "rows": [{"race": "Black", "F": 220, "M": 300, "rateF": 1108, "rateM": 1313}, {"race": "Hispanic", "F": 671, "M": 1252, "rateF": 483, "rateM": 961}, {"race": "White", "F": 446, "M": 705, "rateF": 283, "rateM": 443}, {"race": "Asian", "F": 20, "M": 30, "rateF": 61, "rateM": 120}]}, {"name": "Newton", "lat": 34.0057, "lon": -118.2629, "rows": [{"race": "Black", "F": 685, "M": 803, "rateF": 3131, "rateM": 4493}, {"race": "Hispanic", "F": 1607, "M": 2796, "rateF": 745, "rateM": 1207}, {"race": "White", "F": 96, "M": 191, "rateF": null, "rateM": null}, {"race": "Asian", "F": 22, "M": 41, "rateF": null, "rateM": null}]}, {"name": "Northeast", "lat": 34.1036, "lon": -118.2412, "rows": [{"race": "Black", "F": 98, "M": 200, "rateF": 1394, "rateM": 1858}, {"race": "Hispanic", "F": 742, "M": 1282, "rateF": 482, "rateM": 815}, {"race": "White", "F": 247, "M": 454, "rateF": 187, "rateM": 310}, {"race": "Asian", "F": 38, "M": 57, "rateF": 60, "rateM": 104}]}, {"name": "Olympic", "lat": 34.0599, "lon": -118.2984, "rows": [{"race": "Black", "F": 341, "M": 488, "rateF": 2082, "rateM": 2437}, {"race": "Hispanic", "F": 1138, "M": 1839, "rateF": 740, "rateM": 1147}, {"race": "White", "F": 197, "M": 377, "rateF": 658, "rateM": 1075}, {"race": "Asian", "F": 214, "M": 371, "rateF": 206, "rateM": 387}]}, {"name": "Pacific", "lat": 33.9887, "lon": -118.4367, "rows": [{"race": "Black", "F": 358, "M": 525, "rateF": 1356, "rateM": 2182}, {"race": "Hispanic", "F": 423, "M": 704, "rateF": 502, "rateM": 945}, {"race": "White", "F": 497, "M": 1086, "rateF": 271, "rateM": 577}, {"race": "Asian", "F": 41, "M": 62, "rateF": 63, "rateM": 121}]}, {"name": "Rampart", "lat": 34.0595, "lon": -118.2754, "rows": [{"race": "Black", "F": 367, "M": 486, "rateF": 2621, "rateM": 2254}, {"race": "Hispanic", "F": 1213, "M": 2403, "rateF": 724, "rateM": 1284}, {"race": "White", "F": 265, "M": 456, "rateF": 776, "rateM": 1225}, {"race": "Asian", "F": 55, "M": 98, "rateF": 108, "rateM": 248}]}, {"name": "Southeast", "lat": 33.9413, "lon": -118.2695, "rows": [{"race": "Black", "F": 1658, "M": 1544, "rateF": 2643, "rateM": 3635}, {"race": "Hispanic", "F": 1349, "M": 1839, "rateF": 710, "rateM": 1004}, {"race": "White", "F": 90, "M": 137, "rateF": null, "rateM": null}, {"race": "Asian", "F": 17, "M": 18, "rateF": 241, "rateM": null}]}, {"name": "Southwest", "lat": 34.0182, "lon": -118.313, "rows": [{"race": "Black", "F": 1394, "M": 1413, "rateF": 1399, "rateM": 1696}, {"race": "Hispanic", "F": 1005, "M": 1573, "rateF": 574, "rateM": 916}, {"race": "White", "F": 182, "M": 259, "rateF": 645, "rateM": 746}, {"race": "Asian", "F": 33, "M": 60, "rateF": 129, "rateM": 246}]}, {"name": "Topanga", "lat": 34.1956, "lon": -118.5994, "rows": [{"race": "Black", "F": 208, "M": 174, "rateF": 1085, "rateM": 848}, {"race": "Hispanic", "F": 572, "M": 903, "rateF": 478, "rateM": 759}, {"race": "White", "F": 407, "M": 588, "rateF": 288, "rateM": 402}, {"race": "Asian", "F": 28, "M": 48, "rateF": 51, "rateM": 98}]}, {"name": "Van Nuys", "lat": 34.1864, "lon": -118.4487, "rows": [{"race": "Black", "F": 195, "M": 256, "rateF": 1332, "rateM": 1272}, {"race": "Hispanic", "F": 696, "M": 1006, "rateF": 524, "rateM": 738}, {"race": "White", "F": 321, "M": 528, "rateF": 239, "rateM": 380}, {"race": "Asian", "F": 18, "M": 35, "rateF": 64, "rateM": 157}]}, {"name": "West LA", "lat": 34.0478, "lon": -118.4421, "rows": [{"race": "Black", "F": 190, "M": 261, "rateF": 1008, "rateM": 1701}, {"race": "Hispanic", "F": 236, "M": 458, "rateF": 394, "rateM": 890}, {"race": "White", "F": 403, "M": 711, "rateF": 160, "rateM": 293}, {"race": "Asian", "F": 56, "M": 57, "rateF": 73, "rateM": 100}]}, {"name": "West Valley", "lat": 34.1924, "lon": -118.5286, "rows": [{"race": "Black", "F": 119, "M": 206, "rateF": 935, "rateM": 1745}, {"race": "Hispanic", "F": 573, "M": 1008, "rateF": 421, "rateM": 782}, {"race": "White", "F": 350, "M": 548, "rateF": 223, "rateM": 363}, {"race": "Asian", "F": 31, "M": 31, "rateF": 85, "rateM": 91}]}, {"name": "Wilshire", "lat": 34.0558, "lon": -118.3511, "rows": [{"race": "Black", "F": 442, "M": 487, "rateF": 1373, "rateM": 1764}, {"race": "Hispanic", "F": 508, "M": 866, "rateF": 748, "rateM": 1261}, {"race": "White", "F": 357, "M": 613, "rateF": 335, "rateM": 577}, {"race": "Asian", "F": 64, "M": 72, "rateF": 156, "rateM": 222}]}];
 
-      return `<strong>${d.name} Division</strong>
-        <table style="margin-top:8px;border-collapse:collapse;font-size:0.78rem;">
-          <thead><tr style="color:#444;font-size:0.7rem;">
-            <th style="padding:2px 8px 4px 0;font-weight:400;">Race</th>
-            <th style="padding:2px 4px 4px;font-weight:400;">% Female</th>
-            <th style="padding:2px 0 4px 8px;font-weight:400;">F / M</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>`;
-    }
+  new Chart(document.getElementById('rateChart'), {
+    type: 'bar',
+    data: { labels: RACES, datasets: [
+      { label: 'Women', data: RACES.map(r => RATES[r].F), ...bar(C.red) },
+      { label: 'Men', data: RACES.map(r => RATES[r].M), ...bar(C.blue) } ] },
+    options: { ...base, plugins: { legend: { display: true }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.parsed.y.toLocaleString()} per 100,000 per year` } } },
+      scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { title: { display: true, text: 'Victims per 100,000 per year' } } } }
+  });
 
-    divisions.forEach(d => {
-      const blackRace = d.races.find(r => r.label === 'Black');
-      const isDisparity = blackRace && blackRace.f > blackRace.m;
-      L.circleMarker(d.coords, {
-        radius: 10,
-        fillColor: isDisparity ? '#c0392b' : '#555',
-        color: isDisparity ? '#ff6b6b' : '#888',
-        weight: 1.5,
-        opacity: 0.9,
-        fillOpacity: 0.75
-      }).bindPopup(buildPopup(d)).addTo(map);
-    });
-  </script>
+  new Chart(document.getElementById('shareChart'), {
+    type: 'bar',
+    data: { labels: RACES, datasets: [
+      { label: 'Simple assault', data: SHARE.simple, ...bar(C.red) },
+      { label: 'Aggravated assault', data: SHARE.aggravated, ...bar(C.blue) } ] },
+    options: { ...base, plugins: { legend: { display: true }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.parsed.y}% women` } } },
+      scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { min: 0, max: 60, title: { display: true, text: 'Women as % of victims' } } } }
+  });
+
+  new Chart(document.getElementById('divChart'), {
+    type: 'bar',
+    data: { labels: DIV.map(d => d[0]), datasets: [{ data: DIV.map(d => d[1]), ...bar(C.red) }] },
+    options: { ...base, indexAxis: 'y',
+      plugins: { tooltip: { callbacks: { label: i => { const d = DIV[i.dataIndex]; return `${d[1].toLocaleString()} per 100,000 (${d[3].toLocaleString()} victims, ${d[4].toLocaleString()} residents); men ${d[2].toLocaleString()}`; } } } },
+      scales: { x: { title: { display: true, text: 'Black women assaulted per 100,000 per year' } }, y: { grid: { display: false }, ticks: { color: C.text } } } }
+  });
+
+  const yl = Object.keys(YEARS);
+  new Chart(document.getElementById('yearChart'), {
+    type: 'bar',
+    data: { labels: yl.map(y => y === '2023' ? '2023 (Jan to Jun)' : y), datasets: [
+      { label: 'Women', data: yl.map(y => YEARS[y].F), ...bar(C.red) },
+      { label: 'Men', data: yl.map(y => YEARS[y].M), ...bar(C.blue) } ] },
+    options: { ...base, plugins: { legend: { display: true } },
+      scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { title: { display: true, text: 'Victims' } } } }
+  });
+
+  const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([34.05, -118.35], 10);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 16, className: 'dark-tiles'
+  }).addTo(map);
+  const fmt = n => n == null ? 'n/a' : n.toLocaleString();
+  DIVMAP.forEach(d => {
+    const b = d.rows.find(r => r.race === 'Black');
+    const radius = 6 + Math.sqrt(d.rows.reduce((s, r) => s + r.F + r.M, 0)) / 6;
+    const rows = d.rows.map(r => `<tr><td>${r.race}</td><td style="text-align:right">${fmt(r.F)}</td><td style="text-align:right">${fmt(r.M)}</td><td style="text-align:right">${fmt(r.rateF)}</td><td style="text-align:right">${fmt(r.rateM)}</td></tr>`).join('');
+    L.circleMarker([d.lat, d.lon], { radius, color: C.red, weight: 1.5, fillColor: C.red, fillOpacity: 0.15 }).addTo(map)
+      .bindPopup(`<strong>${d.name}</strong><br><span style="color:#8b8b8b">Black women: ${fmt(b.rateF)} per 100,000 per year</span>
+        <table><tr><th></th><th>Women</th><th>Men</th><th>Rate W</th><th>Rate M</th></tr>${rows}</table>
+        <div style="color:#8b8b8b;margin-top:4px">Counts Jan 2020 to Jun 2023; rates per 100,000 residents per year</div>`);
+  });
+</script>
 </body>
 </html>
