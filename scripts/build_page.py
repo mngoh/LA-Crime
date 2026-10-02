@@ -155,12 +155,22 @@ html = f'''<!DOCTYPE html>
     <div class="finding"><h4>Simple assault is where women outnumber men</h4><p>{share_simple["Black"]}% of Black simple-assault victims are women, the only group above 50%. In aggravated assault the share is {share_agg["Black"]}%, against {share_agg["Hispanic"]}% to {share_agg["Asian"]}% for other groups.</p></div>
     <div class="finding"><h4>South LA carries the counts, Central the rate</h4><p>77th Street ({fmt(by_div["77th Street"][3])}) and Southeast ({fmt(by_div["Southeast"][3])}) have the most Black female victims. Central has the highest rate ({fmt(black_div[0][1])}) on a small resident population.</p></div>
     <div class="finding"><h4>Mostly strong-arm</h4><p>{round(strong / C["total"] * 100)}% of all assaults involved hands, fists or feet rather than a weapon. Handguns appear in {fmt(weapons["HAND GUN"])}.</p></div>
-    <div class="finding"><h4>Limits</h4><p>Reported crimes only; reporting rates differ by group and area. Rates use residential population, so divisions with many visitors or unhoused residents read high. {fmt(C["total"] - C["known"])} victims with unknown race or sex are excluded from rates.</p></div>
+    <div class="finding"><h4>What this does not show</h4><p>Why. These are reported assaults against residential population. The caveats below matter as much as the numbers.</p></div>
   </div>
 
   <div class="section-title">Map</div>
   <p class="note">Each marker is a division. Click one for counts and rates by race and sex.</p>
   <div id="map" class="section-end"></div>
+
+  <div class="section-title">Caveats</div>
+  <div class="findings">
+    <div class="finding red"><h4>This shows what, not why</h4><p>The data says Black women are assaulted at a higher rate. It does not say why. Nothing here measures causes, offenders or circumstances.</p></div>
+    <div class="finding red"><h4>Reported crimes only</h4><p>Every number is a report that reached LAPD. Willingness to report, and police recording practice, differ by group, by area and over time. A higher rate can partly reflect more reporting.</p></div>
+    <div class="finding red"><h4>Exposure is not population</h4><p>Rates divide by where people live, not where they spend time. Someone who works, commutes or socializes in a high-assault area carries that exposure home to a different denominator.</p></div>
+    <div class="finding red"><h4>Residential denominators</h4><p>Divisions with many visitors, workers or unhoused residents, Central above all, show inflated rates because victims there often do not live there.</p></div>
+    <div class="finding"><h4>Who is counted</h4><p>{fmt(C["total"] - C["known"])} victims with unknown race or sex are left out of the rates. LAPD descent codes are officer-recorded and were collapsed to four groups; everyone else is excluded.</p></div>
+    <div class="finding"><h4>Period and population mismatch</h4><p>Victims cover January 2020 to June 2023, a window that includes the pandemic. Population is the ACS 2020 to 2024 five-year average, with sampling error at the tract level.</p></div>
+  </div>
 
   <div class="section-title">Method</div>
   <p class="note">LAPD victim descent codes mapped to four groups (Asian combines the Asian descent codes). Population by census tract from the ACS 2020 to 2024 five-year release via Census Reporter; {fmt(P["tracts"])} tracts inside the city were assigned to LAPD divisions by tract centroid using the city's division boundaries ({P["unassigned"]} fell outside). Rates divide victims by residents and by {D["years"]} years. Cells with fewer than {fmt(D["min_pop"])} residents are not rated.</p>

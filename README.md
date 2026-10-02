@@ -10,7 +10,14 @@ Black women are assaulted at 1,803 per 100,000 residents a year: 3 times the rat
 
 Black women outnumber Black men only among simple-assault victims (56.5% women). Across all assaults they are 45% of Black victims, still the highest female share of any group (37% to 40% elsewhere).
 
-Reported crimes only. Rates use residential population, so divisions with many visitors or unhoused residents (Central) read high.
+## Caveats
+
+- This shows what the data says, not why. Nothing here measures causes, offenders or circumstances.
+- Reported crimes only. Willingness to report and police recording practice differ by group, area and time, so a higher rate can partly reflect more reporting.
+- Exposure is not population. Rates divide by where people live, not where they spend their time.
+- Residential denominators inflate rates in divisions with many visitors, workers or unhoused residents (Central above all).
+- 8,621 victims with unknown race or sex are excluded. LAPD descent codes are officer-recorded and collapsed to four groups.
+- Victims cover January 2020 to June 2023, including the pandemic; population is the ACS 2020 to 2024 five-year average.
 
 ## Method
 
