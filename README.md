@@ -4,6 +4,8 @@ Who gets assaulted in Los Angeles, as rates rather than counts. 174,827 LAPD ass
 
 **Live analysis:** https://mngoh.github.io/LA-Crime/
 
+The method is packaged as reusable Claude Code skills in [disparity-kit](https://github.com/mngoh/disparity-kit).
+
 ## Finding
 
 Black women are assaulted at 3,544 per 100,000 residents a year: 2.9 times the rate of Hispanic women (1,240), 5.7 times White women (622), 18.4 times Asian women (193), and more often than the men of any group, Black men (2,894) included. The gap is a higher victimization rate, not population share. After adjusting for age, location, neighborhood and homelessness it is still about 2 times Hispanic or White women's.
@@ -62,6 +64,9 @@ National victimization surveys, which include crimes never reported to police, p
 - Reported crimes only. Willingness to report and police recording practice differ by group, area and time, so a higher rate can partly reflect more reporting.
 - Reports, not people. A woman assaulted twice counts twice, so rates are not the share of women assaulted.
 - Race is officer-recorded; the population is Black alone. LA has 24% more people who are Black alone or in combination. If multiracial victims are recorded as Black, the worst case lowers the ratios to about 2.3 times Hispanic and 4.6 times White women.
+- Missing race is uneven: victims with unknown or "Other" race cluster where few Black residents live. Spread like known victims in each division, the ratios move from 2.86x to 2.83x (Hispanic) and 5.7x to 5.46x (White).
+- Controls are not neutral: neighborhood, income and housing are shaped by segregation, so a gap that shrinks after them is located, not explained away.
+- The Asian comparison moved 35% between records systems and is left out of the headline.
 - Exposure is not population. Rates divide by where people live, not where they spend their time.
 - Residential denominators inflate rates in divisions with many visitors, workers or unhoused residents (Central above all).
 - Covers simple and aggravated assault including intimate partner assault (codes 624, 626, 230, 236); assaults on police, child abuse and sexual battery are left out. 13,084 victims with unknown race or sex are excluded. LAPD descent codes are officer-recorded and collapsed to four groups.

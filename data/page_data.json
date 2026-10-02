@@ -921,6 +921,36 @@
   "women_n": {
    "black": 23622,
    "other": 59987
+  },
+  "unknown_race": {
+   "unknown": {
+    "pool": 310,
+    "rates": {
+     "Black": 3557,
+     "Hispanic": 1244,
+     "White": 625,
+     "Asian": 193
+    },
+    "ratios": {
+     "Hispanic": 2.86,
+     "White": 5.69,
+     "Asian": 18.43
+    }
+   },
+   "unknown_and_other": {
+    "pool": 4714,
+    "rates": {
+     "Black": 3693,
+     "Hispanic": 1307,
+     "White": 676,
+     "Asian": 208
+    },
+    "ratios": {
+     "Hispanic": 2.83,
+     "White": 5.46,
+     "Asian": 17.75
+    }
+   }
   }
  },
  "population": {

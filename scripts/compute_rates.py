@@ -253,6 +253,27 @@ def hypothesis_tests(df, pop, years):
     return out
 
 
+def unknown_race_sensitivity(df, pop):
+    """Women's rates if victims with no usable race resembled the known-race victims in the same division.
+
+    Two versions: truly unknown race (X, blank) only, and unknown plus LAPD's "Other" descent code (an upper bound).
+    Unknown race is not spread evenly, so this shows how far the uneven pattern can move the ratios."""
+    women = df[df["sex"] == "F"]
+    out = {}
+    for name, extra in [("unknown", set()), ("unknown_and_other", {"O"})]:
+        pool = women["race"].isna() & (women["vict_race"].isna() | women["vict_race"].isin({"X", "-"} | extra))
+        added = {r: 0.0 for r in RACES}
+        for division, w in women.groupby("area_name"):
+            known = w["race"].value_counts()
+            n_pool = int(pool[w.index].sum())
+            if known.sum():
+                for r in RACES:
+                    added[r] += n_pool * known.get(r, 0) / known.sum()
+        rates = {r: rate(int((women["race"] == r).sum()) + added[r], pop["city"][r]["F"]) for r in RACES}
+        out[name] = {"pool": int(pool.sum()), "rates": rates, "ratios": {r: round(rates["Black"] / rates[r], 2) for r in RACES[1:]}}
+    return out
+
+
 def rate(count, residents):
     return round(count / residents / YEARS * 1e5) if residents >= MIN_POP else None
 
@@ -283,6 +304,8 @@ def main():
         division_rates.append(rec)
 
     tests = hypothesis_tests(df, pop, YEARS)
+    tests["unknown_race"] = unknown_race_sensitivity(df, pop)
+    print("if unknown race resembled known victims in the same division:", {k: v["ratios"] for k, v in tests["unknown_race"].items()})
     out = {"window": "January 2020 to December 2023", "years": YEARS, "min_pop": MIN_POP, "counts": counts, "tests": tests,
            "population": {k: pop[k] for k in ["release", "city_total", "city", "tracts", "unassigned"]},
            "rates": city_rates, "division_rates": division_rates}
