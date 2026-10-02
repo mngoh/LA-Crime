@@ -50,7 +50,7 @@ html = f'''<!DOCTYPE html>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Assault victims in Los Angeles</title>
-  <meta name="description" content="Who gets assaulted in Los Angeles: {fmt(C['total'])} LAPD assault reports from 2020 to 2023, by race, sex and division, as rates per 100,000 residents." />
+  <meta name="description" content="Black women in LA are assaulted at 3 to 6 times the rate of Hispanic and White women, and nothing we measured explains why. {fmt(C['total'])} LAPD assault reports, 2020 to 2023, as rates per 100,000 residents." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
@@ -60,6 +60,8 @@ html = f'''<!DOCTYPE html>
     a {{ color: var(--blue-light); text-decoration: none; }} a:hover {{ text-decoration: underline; }}
     header {{ border-bottom: 1px solid var(--border); padding: 28px 40px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }}
     header h1 {{ font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }}
+    .lede {{ font-size: 21px; font-weight: 600; line-height: 1.4; letter-spacing: -0.2px; max-width: 860px; margin-bottom: 24px; }}
+    @media (max-width: 640px) {{ .lede {{ font-size: 18px; }} }}
     header p {{ color: var(--muted); margin-top: 4px; font-size: 13px; }}
     header nav {{ display: flex; gap: 20px; font-size: 13px; }}
     .container {{ max-width: 1200px; margin: 0 auto; padding: 32px 40px; }}
@@ -123,6 +125,8 @@ html = f'''<!DOCTYPE html>
 </header>
 
 <div class="container">
+
+  <p class="lede">Black women in LA are assaulted at 3 to 6 times the rate of Hispanic and White women, and nothing we measured explains why.</p>
 
   <div class="answer">
     <div class="q">The question</div>
