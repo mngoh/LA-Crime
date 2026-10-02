@@ -10,6 +10,20 @@ Black women are assaulted at 1,803 per 100,000 residents a year: 3 times the rat
 
 Black women outnumber Black men only among simple-assault victims (56.5% women). Across all assaults they are 45% of Black victims, still the highest female share of any group (37% to 40% elsewhere).
 
+## Testing explanations
+
+Women only, Black women against all other women.
+
+- Age: standardized to one age mix the rates are 1,758 vs 596 (Hispanic), 328 (White) and 99 (Asian). Age explains none of the gap.
+- Location: at other women's rate in each division Black women would be at 560 per 100,000, not 1,806. Where assaults happen explains part of it; inside every rated division the rate is still 2.5 to 5.6 times other women's.
+- Type: 2.6 times Hispanic women for simple assault, 4.2 times for aggravated.
+- Time: 1,818, 1,809, 1,876 and 1,618 (first half of 2023, annualized). It persists.
+- Premises: nearly identical distributions (street 22% vs 19%, home 38% vs 35%).
+- Weapons: a firearm in 12.4% of assaults on Black women vs 6.4% for other women.
+- Reporting: not testable with LAPD data. If Black women report more or less often than other women, every rate moves.
+
+After age, location and year, roughly a threefold gap remains, widest in aggravated and armed assaults. The data shows it; it does not explain it.
+
 ## Caveats
 
 - This shows what the data says, not why. Nothing here measures causes, offenders or circumstances.

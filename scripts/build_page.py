@@ -27,6 +27,16 @@ divmap = [{"name": d["division"], "lat": C["centroids"][d["division"]]["lat"], "
            "rows": [{"race": r, "F": d[f"{r}_F"]["n"], "M": d[f"{r}_M"]["n"], "rateF": d[f"{r}_F"]["rate"], "rateM": d[f"{r}_M"]["rate"]} for r in RACES]}
           for d in D["division_rates"]]
 
+T = D["tests"]
+loc_sorted = sorted([d for d in T["location"]["divisions"] if d["ratio"] is not None], key=lambda d: -d["ratio"])
+other_pop_f = sum(P["city"][r]["F"] for r in RACES[1:])
+other_women_rate = round(T["women_n"]["other"] / other_pop_f / D["years"] * 1e5)
+std = T["age"]["standardized"]
+home_black = round(sum(b for l, b in zip(T["premises"]["labels"], T["premises"]["black"]) if "Dwelling" in l), 1)
+home_other = round(sum(o for l, o in zip(T["premises"]["labels"], T["premises"]["other"]) if "Dwelling" in l), 1)
+wi = {k: i for i, k in enumerate(T["weapons"]["labels"])}
+peak_band = T["age"]["labels"][max(range(len(T["age"]["labels"])), key=lambda i: T["age"]["rates"]["Black"][i] or 0)]
+
 html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -162,6 +172,50 @@ html = f'''<!DOCTYPE html>
   <p class="note">Each marker is a division. Click one for counts and rates by race and sex.</p>
   <div id="map" class="section-end"></div>
 
+  <div class="section-title">Testing explanations</div>
+  <p class="note">Six cuts of the same data, women only ({fmt(T["women_n"]["black"])} Black women, {fmt(T["women_n"]["other"])} other women). Each asks whether a plain explanation accounts for the gap.</p>
+
+  <div class="charts">
+    <div class="chart-box">
+      <h3>Age</h3>
+      <div class="chart-sub">Does the gap survive comparing women of the same age? Yes. Standardized to one age mix, Black women's rate is {fmt(std["Black"])} against {fmt(std["Hispanic"])}, {fmt(std["White"])} and {fmt(std["Asian"])}. The curve peaks at ages {peak_band}.</div>
+      <div class="chart-wrap"><canvas id="ageChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Location</h3>
+      <div class="chart-sub">Is it where assaults happen? Partly. At other women's rate in each division, Black women would be at {fmt(T["location"]["expected_if_other_rates"])} per 100,000 instead of {fmt(T["location"]["actual_rate"])}. Inside every rated division their rate is still {round(loc_sorted[-1]["ratio"], 1)} to {round(loc_sorted[0]["ratio"], 1)} times other women's.</div>
+      <div class="chart-wrap"><canvas id="locChart"></canvas></div>
+    </div>
+  </div>
+  <div class="charts">
+    <div class="chart-box">
+      <h3>Type of assault</h3>
+      <div class="chart-sub">Simple or aggravated? Both, and aggravated more: {round(T["type"]["simple"]["Black"] / T["type"]["simple"]["Hispanic"], 1)} times Hispanic women for simple assault, {round(T["type"]["aggravated"]["Black"] / T["type"]["aggravated"]["Hispanic"], 1)} times for aggravated.</div>
+      <div class="chart-wrap"><canvas id="typeChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Time</h3>
+      <div class="chart-sub">Does it persist? Every year. Black women: {", ".join(fmt(T["time"][y]["Black"]) for y in ["2020", "2021", "2022"])} and {fmt(T["time"]["2023"]["Black"])} annualized for the first half of 2023.</div>
+      <div class="chart-wrap"><canvas id="timeChart"></canvas></div>
+    </div>
+  </div>
+  <div class="charts section-end">
+    <div class="chart-box">
+      <h3>Premises</h3>
+      <div class="chart-sub">Different places? Barely. Street {T["premises"]["black"][0]}% vs {T["premises"]["other"][0]}%, at home {home_black}% vs {home_other}%. Share of each group's assaults, top eight premises.</div>
+      <div class="chart-wrap tall"><canvas id="premChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Weapons</h3>
+      <div class="chart-sub">Different circumstances? Yes. A firearm in {T["weapons"]["black"][wi["Firearm"]]}% of assaults on Black women against {T["weapons"]["other"][wi["Firearm"]]}% for other women; strong-arm {T["weapons"]["black"][wi["Strong-arm"]]}% vs {T["weapons"]["other"][wi["Strong-arm"]]}%.</div>
+      <div class="chart-wrap tall"><canvas id="weapChart"></canvas></div>
+    </div>
+  </div>
+  <div class="findings">
+    <div class="finding red"><h4>Reporting: not testable here</h4><p>LAPD data holds only what was reported. The National Crime Victimization Survey measures unreported crime nationally, not for Los Angeles. If Black women report assaults more or less often than other women, every rate above moves, and this data cannot say which way.</p></div>
+    <div class="finding red"><h4>What remains</h4><p>After age, location and year, roughly a threefold gap stands, widest in aggravated and armed assaults. The data shows it. It does not explain it.</p></div>
+  </div>
+
   <div class="section-title">Caveats</div>
   <div class="findings">
     <div class="finding red"><h4>This shows what, not why</h4><p>The data says Black women are assaulted at a higher rate. It does not say why. Nothing here measures causes, offenders or circumstances.</p></div>
@@ -236,6 +290,54 @@ html = f'''<!DOCTYPE html>
     options: {{ ...base, plugins: {{ legend: {{ display: true }} }},
       scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ title: {{ display: true, text: 'Victims' }} }} }} }}
   }});
+
+  const T = {json.dumps(T)};
+  const line = (c, dash) => ({{ borderColor: c, backgroundColor: c, borderWidth: 1.5, pointRadius: 2.5, tension: 0.25, fill: false, borderDash: dash || [] }});
+  const womenColor = {{ Black: C.red, Hispanic: C.blue, White: '#93c5fd', Asian: C.muted }};
+
+  new Chart(document.getElementById('ageChart'), {{
+    type: 'line',
+    data: {{ labels: T.age.labels, datasets: RACES.map(r => ({{ label: r + ' women', data: T.age.rates[r], ...line(womenColor[r]), spanGaps: true }})) }},
+    options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.y == null ? 'n/a' : i.parsed.y.toLocaleString()}} per 100,000 per year` }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }}, title: {{ display: true, text: 'Victim age' }} }}, y: {{ title: {{ display: true, text: 'Victims per 100,000 per year' }} }} }} }}
+  }});
+
+  const LOC = {json.dumps(loc_sorted)};
+  new Chart(document.getElementById('locChart'), {{
+    type: 'bar',
+    data: {{ labels: LOC.map(d => d.division), datasets: [{{ data: LOC.map(d => d.ratio), ...bar(C.red) }}] }},
+    options: {{ ...base, indexAxis: 'y',
+      plugins: {{ tooltip: {{ callbacks: {{ label: i => {{ const d = LOC[i.dataIndex]; return `${{d.ratio}}x: Black women ${{d.black_rate.toLocaleString()}}, other women ${{d.other_rate.toLocaleString()}} per 100,000 per year`; }} }} }} }},
+      scales: {{ x: {{ min: 0, title: {{ display: true, text: "Black women's rate as a multiple of other women's, same division" }} }}, y: {{ grid: {{ display: false }}, ticks: {{ color: C.text, font: {{ size: 10 }} }} }} }} }}
+  }});
+
+  new Chart(document.getElementById('typeChart'), {{
+    type: 'bar',
+    data: {{ labels: RACES, datasets: [
+      {{ label: 'Simple assault', data: RACES.map(r => T.type.simple[r]), ...bar(C.red) }},
+      {{ label: 'Aggravated assault', data: RACES.map(r => T.type.aggravated[r]), ...bar(C.blue) }} ] }},
+    options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.y.toLocaleString()}} per 100,000 women per year` }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ title: {{ display: true, text: 'Women victims per 100,000 per year' }} }} }} }}
+  }});
+
+  const TY = Object.keys(T.time);
+  new Chart(document.getElementById('timeChart'), {{
+    type: 'line',
+    data: {{ labels: TY.map(y => y === '2023' ? '2023 (Jan to Jun)' : y), datasets: RACES.map(r => ({{ label: r + ' women', data: TY.map(y => T.time[y][r]), ...line(womenColor[r]) }})) }},
+    options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.y.toLocaleString()}} per 100,000 per year` }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }} }}, y: {{ min: 0, title: {{ display: true, text: 'Victims per 100,000 per year' }} }} }} }}
+  }});
+
+  const twoGroups = (id, src, xTitle) => new Chart(document.getElementById(id), {{
+    type: 'bar',
+    data: {{ labels: src.labels, datasets: [
+      {{ label: 'Black women', data: src.black, ...bar(C.red) }},
+      {{ label: 'Other women', data: src.other, ...bar(C.blue) }} ] }},
+    options: {{ ...base, indexAxis: 'y', plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.x}}%` }} }} }},
+      scales: {{ x: {{ min: 0, title: {{ display: true, text: xTitle }} }}, y: {{ grid: {{ display: false }}, ticks: {{ color: C.text, font: {{ size: 10 }} }} }} }} }}
+  }});
+  twoGroups('premChart', T.premises, "Share of the group's assaults (%)");
+  twoGroups('weapChart', T.weapons, "Share of the group's assaults (%)");
 
   const map = L.map('map', {{ zoomControl: true, scrollWheelZoom: false }}).setView([34.05, -118.35], 10);
   L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{

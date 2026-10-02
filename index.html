@@ -133,6 +133,50 @@
   <p class="note">Each marker is a division. Click one for counts and rates by race and sex.</p>
   <div id="map" class="section-end"></div>
 
+  <div class="section-title">Testing explanations</div>
+  <p class="note">Six cuts of the same data, women only (10,518 Black women, 26,088 other women). Each asks whether a plain explanation accounts for the gap.</p>
+
+  <div class="charts">
+    <div class="chart-box">
+      <h3>Age</h3>
+      <div class="chart-sub">Does the gap survive comparing women of the same age? Yes. Standardized to one age mix, Black women's rate is 1,758 against 596, 328 and 99. The curve peaks at ages 20-24.</div>
+      <div class="chart-wrap"><canvas id="ageChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Location</h3>
+      <div class="chart-sub">Is it where assaults happen? Partly. At other women's rate in each division, Black women would be at 560 per 100,000 instead of 1,806. Inside every rated division their rate is still 2.5 to 5.6 times other women's.</div>
+      <div class="chart-wrap"><canvas id="locChart"></canvas></div>
+    </div>
+  </div>
+  <div class="charts">
+    <div class="chart-box">
+      <h3>Type of assault</h3>
+      <div class="chart-sub">Simple or aggravated? Both, and aggravated more: 2.6 times Hispanic women for simple assault, 4.2 times for aggravated.</div>
+      <div class="chart-wrap"><canvas id="typeChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Time</h3>
+      <div class="chart-sub">Does it persist? Every year. Black women: 1,818, 1,809, 1,876 and 1,618 annualized for the first half of 2023.</div>
+      <div class="chart-wrap"><canvas id="timeChart"></canvas></div>
+    </div>
+  </div>
+  <div class="charts section-end">
+    <div class="chart-box">
+      <h3>Premises</h3>
+      <div class="chart-sub">Different places? Barely. Street 22.1% vs 18.8%, at home 38.2% vs 35.1%. Share of each group's assaults, top eight premises.</div>
+      <div class="chart-wrap tall"><canvas id="premChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Weapons</h3>
+      <div class="chart-sub">Different circumstances? Yes. A firearm in 12.4% of assaults on Black women against 6.4% for other women; strong-arm 60.6% vs 71.2%.</div>
+      <div class="chart-wrap tall"><canvas id="weapChart"></canvas></div>
+    </div>
+  </div>
+  <div class="findings">
+    <div class="finding red"><h4>Reporting: not testable here</h4><p>LAPD data holds only what was reported. The National Crime Victimization Survey measures unreported crime nationally, not for Los Angeles. If Black women report assaults more or less often than other women, every rate above moves, and this data cannot say which way.</p></div>
+    <div class="finding red"><h4>What remains</h4><p>After age, location and year, roughly a threefold gap stands, widest in aggravated and armed assaults. The data shows it. It does not explain it.</p></div>
+  </div>
+
   <div class="section-title">Caveats</div>
   <div class="findings">
     <div class="finding red"><h4>This shows what, not why</h4><p>The data says Black women are assaulted at a higher rate. It does not say why. Nothing here measures causes, offenders or circumstances.</p></div>
@@ -207,6 +251,54 @@
     options: { ...base, plugins: { legend: { display: true } },
       scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { title: { display: true, text: 'Victims' } } } }
   });
+
+  const T = {"age": {"labels": ["0-4", "5-9", "10-14", "15-17", "18-19", "20-24", "25-29", "30-34", "35-44", "45-54", "55-64", "65-74", "75-84", "85+"], "rates": {"Black": [112, 138, 688, 1803, 2457, 2967, 2892, 2372, 2422, 2095, 1791, 879, 326, 243], "Hispanic": [18, 43, 252, 558, 742, 937, 891, 838, 864, 746, 523, 344, 278, 125], "White": [3, 8, 57, 175, 289, 521, 444, 399, 381, 518, 443, 216, 167, 108], "Asian": [0, 4, 39, 80, 75, 116, 115, 123, 115, 136, 129, 102, 77, 58]}, "standardized": {"Black": 1758, "Hispanic": 596, "White": 328, "Asian": 99}, "crude": {"Black": 1781, "Hispanic": 592, "White": 332, "Asian": 105}, "unknown_age": 391}, "location": {"divisions": [{"division": "77th Street", "black_rate": 1720, "other_rate": 675, "ratio": 2.55, "black_pop": 34378}, {"division": "Central", "black_rate": 7124, "other_rate": 1884, "ratio": 3.78, "black_pop": 4191}, {"division": "Devonshire", "black_rate": 666, "other_rate": 251, "ratio": 2.65, "black_pop": 5919}, {"division": "Foothill", "black_rate": 1354, "other_rate": 342, "ratio": 3.96, "black_pop": 2385}, {"division": "Harbor", "black_rate": 1501, "other_rate": 508, "ratio": 2.95, "black_pop": 5598}, {"division": "Hollenbeck", "black_rate": null, "other_rate": 582, "ratio": null, "black_pop": 1367}, {"division": "Hollywood", "black_rate": 2613, "other_rate": 702, "ratio": 3.72, "black_pop": 4254}, {"division": "Mission", "black_rate": 773, "other_rate": 298, "ratio": 2.59, "black_pop": 3916}, {"division": "N Hollywood", "black_rate": 1108, "other_rate": 345, "ratio": 3.21, "black_pop": 5675}, {"division": "Newton", "black_rate": 3131, "other_rate": 771, "ratio": 4.06, "black_pop": 6251}, {"division": "Northeast", "black_rate": 1394, "other_rate": 294, "ratio": 4.74, "black_pop": 2009}, {"division": "Olympic", "black_rate": 2082, "other_rate": 539, "ratio": 3.86, "black_pop": 4679}, {"division": "Pacific", "black_rate": 1356, "other_rate": 289, "ratio": 4.69, "black_pop": 7543}, {"division": "Rampart", "black_rate": 2621, "other_rate": 607, "ratio": 4.32, "black_pop": 4001}, {"division": "Southeast", "black_rate": 2643, "other_rate": 727, "ratio": 3.64, "black_pop": 17923}, {"division": "Southwest", "black_rate": 1399, "other_rate": 533, "ratio": 2.62, "black_pop": 28475}, {"division": "Topanga", "black_rate": 1085, "other_rate": 319, "ratio": 3.4, "black_pop": 5478}, {"division": "Van Nuys", "black_rate": 1332, "other_rate": 350, "ratio": 3.81, "black_pop": 4182}, {"division": "West LA", "black_rate": 1008, "other_rate": 179, "ratio": 5.63, "black_pop": 5387}, {"division": "West Valley", "black_rate": 935, "other_rate": 290, "ratio": 3.22, "black_pop": 3636}, {"division": "Wilshire", "black_rate": 1373, "other_rate": 431, "ratio": 3.19, "black_pop": 9196}], "actual_rate": 1806, "expected_if_other_rates": 560}, "type": {"simple": {"Black": 1120, "Hispanic": 436, "White": 254, "Asian": 85}, "aggravated": {"Black": 683, "Hispanic": 162, "White": 81, "Asian": 21}}, "time": {"2020": {"Black": 1818, "Hispanic": 571, "White": 345, "Asian": 103}, "2021": {"Black": 1809, "Hispanic": 574, "White": 326, "Asian": 104}, "2022": {"Black": 1876, "Hispanic": 664, "White": 356, "Asian": 122}, "2023": {"Black": 1618, "Hispanic": 567, "White": 295, "Asian": 80}}, "premises": {"labels": ["Street", "Single Family Dwelling", "Multi-Unit Dwelling", "Sidewalk", "Parking Lot", "Other Business", "Driveway", "Mta Bus"], "black": [22.1, 19.7, 18.5, 10.4, 4.7, 2.4, 1.2, 1.1], "other": [18.8, 18.9, 16.2, 11.4, 5.3, 3.9, 1.5, 1.0]}, "weapons": {"labels": ["Strong-arm", "Firearm", "Knife or cutting", "Blunt or other object", "Unknown or other"], "black": [60.6, 12.4, 7.4, 10.8, 8.8], "other": [71.2, 6.4, 5.1, 8.2, 9.1]}, "women_n": {"black": 10518, "other": 26088}};
+  const line = (c, dash) => ({ borderColor: c, backgroundColor: c, borderWidth: 1.5, pointRadius: 2.5, tension: 0.25, fill: false, borderDash: dash || [] });
+  const womenColor = { Black: C.red, Hispanic: C.blue, White: '#93c5fd', Asian: C.muted };
+
+  new Chart(document.getElementById('ageChart'), {
+    type: 'line',
+    data: { labels: T.age.labels, datasets: RACES.map(r => ({ label: r + ' women', data: T.age.rates[r], ...line(womenColor[r]), spanGaps: true })) },
+    options: { ...base, plugins: { legend: { display: true }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.parsed.y == null ? 'n/a' : i.parsed.y.toLocaleString()} per 100,000 per year` } } },
+      scales: { x: { grid: { display: false }, title: { display: true, text: 'Victim age' } }, y: { title: { display: true, text: 'Victims per 100,000 per year' } } } }
+  });
+
+  const LOC = [{"division": "West LA", "black_rate": 1008, "other_rate": 179, "ratio": 5.63, "black_pop": 5387}, {"division": "Northeast", "black_rate": 1394, "other_rate": 294, "ratio": 4.74, "black_pop": 2009}, {"division": "Pacific", "black_rate": 1356, "other_rate": 289, "ratio": 4.69, "black_pop": 7543}, {"division": "Rampart", "black_rate": 2621, "other_rate": 607, "ratio": 4.32, "black_pop": 4001}, {"division": "Newton", "black_rate": 3131, "other_rate": 771, "ratio": 4.06, "black_pop": 6251}, {"division": "Foothill", "black_rate": 1354, "other_rate": 342, "ratio": 3.96, "black_pop": 2385}, {"division": "Olympic", "black_rate": 2082, "other_rate": 539, "ratio": 3.86, "black_pop": 4679}, {"division": "Van Nuys", "black_rate": 1332, "other_rate": 350, "ratio": 3.81, "black_pop": 4182}, {"division": "Central", "black_rate": 7124, "other_rate": 1884, "ratio": 3.78, "black_pop": 4191}, {"division": "Hollywood", "black_rate": 2613, "other_rate": 702, "ratio": 3.72, "black_pop": 4254}, {"division": "Southeast", "black_rate": 2643, "other_rate": 727, "ratio": 3.64, "black_pop": 17923}, {"division": "Topanga", "black_rate": 1085, "other_rate": 319, "ratio": 3.4, "black_pop": 5478}, {"division": "West Valley", "black_rate": 935, "other_rate": 290, "ratio": 3.22, "black_pop": 3636}, {"division": "N Hollywood", "black_rate": 1108, "other_rate": 345, "ratio": 3.21, "black_pop": 5675}, {"division": "Wilshire", "black_rate": 1373, "other_rate": 431, "ratio": 3.19, "black_pop": 9196}, {"division": "Harbor", "black_rate": 1501, "other_rate": 508, "ratio": 2.95, "black_pop": 5598}, {"division": "Devonshire", "black_rate": 666, "other_rate": 251, "ratio": 2.65, "black_pop": 5919}, {"division": "Southwest", "black_rate": 1399, "other_rate": 533, "ratio": 2.62, "black_pop": 28475}, {"division": "Mission", "black_rate": 773, "other_rate": 298, "ratio": 2.59, "black_pop": 3916}, {"division": "77th Street", "black_rate": 1720, "other_rate": 675, "ratio": 2.55, "black_pop": 34378}];
+  new Chart(document.getElementById('locChart'), {
+    type: 'bar',
+    data: { labels: LOC.map(d => d.division), datasets: [{ data: LOC.map(d => d.ratio), ...bar(C.red) }] },
+    options: { ...base, indexAxis: 'y',
+      plugins: { tooltip: { callbacks: { label: i => { const d = LOC[i.dataIndex]; return `${d.ratio}x: Black women ${d.black_rate.toLocaleString()}, other women ${d.other_rate.toLocaleString()} per 100,000 per year`; } } } },
+      scales: { x: { min: 0, title: { display: true, text: "Black women's rate as a multiple of other women's, same division" } }, y: { grid: { display: false }, ticks: { color: C.text, font: { size: 10 } } } } }
+  });
+
+  new Chart(document.getElementById('typeChart'), {
+    type: 'bar',
+    data: { labels: RACES, datasets: [
+      { label: 'Simple assault', data: RACES.map(r => T.type.simple[r]), ...bar(C.red) },
+      { label: 'Aggravated assault', data: RACES.map(r => T.type.aggravated[r]), ...bar(C.blue) } ] },
+    options: { ...base, plugins: { legend: { display: true }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.parsed.y.toLocaleString()} per 100,000 women per year` } } },
+      scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { title: { display: true, text: 'Women victims per 100,000 per year' } } } }
+  });
+
+  const TY = Object.keys(T.time);
+  new Chart(document.getElementById('timeChart'), {
+    type: 'line',
+    data: { labels: TY.map(y => y === '2023' ? '2023 (Jan to Jun)' : y), datasets: RACES.map(r => ({ label: r + ' women', data: TY.map(y => T.time[y][r]), ...line(womenColor[r]) })) },
+    options: { ...base, plugins: { legend: { display: true }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.parsed.y.toLocaleString()} per 100,000 per year` } } },
+      scales: { x: { grid: { display: false } }, y: { min: 0, title: { display: true, text: 'Victims per 100,000 per year' } } } }
+  });
+
+  const twoGroups = (id, src, xTitle) => new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels: src.labels, datasets: [
+      { label: 'Black women', data: src.black, ...bar(C.red) },
+      { label: 'Other women', data: src.other, ...bar(C.blue) } ] },
+    options: { ...base, indexAxis: 'y', plugins: { legend: { display: true }, tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.parsed.x}%` } } },
+      scales: { x: { min: 0, title: { display: true, text: xTitle } }, y: { grid: { display: false }, ticks: { color: C.text, font: { size: 10 } } } } }
+  });
+  twoGroups('premChart', T.premises, "Share of the group's assaults (%)");
+  twoGroups('weapChart', T.weapons, "Share of the group's assaults (%)");
 
   const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([34.05, -118.35], 10);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

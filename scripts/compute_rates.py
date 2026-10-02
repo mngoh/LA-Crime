@@ -134,6 +134,8 @@ def population():
 
     est = place["data"][LA_CITY]
     city = {race: dict(zip(["M", "F"], male_female(est[t]["estimate"], t))) for race, t in ACS_TABLE.items()}
+    # female residents by age band, citywide (table variables 018 to 031)
+    city_female_age = {race: [float(est[t]["estimate"][f"{t}{i:03d}"]) for i in range(18, 32)] for race, t in ACS_TABLE.items()}
 
     centroid = {}
     with open(fetch(GAZETTEER, "gazetteer_tracts_ca.txt"), encoding="latin-1") as f:
@@ -158,7 +160,96 @@ def population():
             cell["M"] += m
             cell["F"] += f
     return {"release": place["release"]["name"], "city_total": float(est["B01001"]["estimate"]["B01001001"]),
-            "city": city, "by_division": by_division, "tracts": assigned, "unassigned": unassigned}
+            "city": city, "city_female_age": city_female_age, "by_division": by_division, "tracts": assigned, "unassigned": unassigned}
+
+
+# ACS female age bands, in table order 018..031
+AGE_BANDS = [(0, 4), (5, 9), (10, 14), (15, 17), (18, 19), (20, 24), (25, 29), (30, 34), (35, 44), (45, 54), (55, 64), (65, 74), (75, 84), (85, 200)]
+AGE_LABELS = ["0-4", "5-9", "10-14", "15-17", "18-19", "20-24", "25-29", "30-34", "35-44", "45-54", "55-64", "65-74", "75-84", "85+"]
+
+
+def age_band(age):
+    for i, (lo, hi) in enumerate(AGE_BANDS):
+        if lo <= age <= hi:
+            return i
+
+
+def weapon_class(w):
+    w = str(w).upper()
+    if "STRONG-ARM" in w:
+        return "Strong-arm"
+    if any(k in w for k in ["GUN", "PISTOL", "FIREARM", "RIFLE", "REVOLVER", "SHOTGUN", "UZI"]):
+        return "Firearm"
+    if any(k in w for k in ["KNIFE", "CUTTING", "BLADE", "MACHETE", "RAZOR", "SWORD", "SCISSORS", "ICE PICK", "AXE", "BOTTLE", "GLASS"]):
+        return "Knife or cutting"
+    if "UNKNOWN" in w or w == "NAN":
+        return "Unknown or other"
+    return "Blunt or other object"
+
+
+def hypothesis_tests(df, pop, years):
+    """Cuts of the data that test explanations for the Black women's rate gap. Women only."""
+    women = df[(df["sex"] == "F") & df["race"].notna()].copy()
+    black = women["race"] == "Black"
+    out = {}
+
+    # Age: age-specific rates per race, and rates standardized to the age mix of all women in the four groups
+    aged = women[women["vict_age"] > 0].copy()
+    aged["band"] = aged["vict_age"].apply(age_band)
+    standard = [sum(pop["city_female_age"][r][i] for r in RACES) for i in range(len(AGE_BANDS))]
+    std_total = sum(standard)
+    age = {"labels": AGE_LABELS, "rates": {}, "standardized": {}, "crude": {}}
+    for r in RACES:
+        counts = aged[aged["race"] == r]["band"].value_counts()
+        pops = pop["city_female_age"][r]
+        rates_r = [(counts.get(i, 0) / pops[i] / years * 1e5) if pops[i] >= 500 else None for i in range(len(AGE_BANDS))]
+        age["rates"][r] = [round(x) if x is not None else None for x in rates_r]
+        age["standardized"][r] = round(sum((x or 0) * w for x, w in zip(rates_r, standard)) / std_total)
+        age["crude"][r] = round(len(aged[aged["race"] == r]) / sum(pops) / years * 1e5)
+    age["unknown_age"] = int((women["vict_age"] <= 0).sum())
+    out["age"] = age
+
+    # Location: within each division, Black women's rate against all other women's rate; and the citywide rate
+    # Black women would have if they faced each division's other-women rate (indirect standardization)
+    loc = []
+    expected = 0.0
+    for division, cells in sorted(pop["by_division"].items()):
+        w = women[women["area_name"] == division]
+        b_n = int((w["race"] == "Black").sum()); o_n = int((w["race"] != "Black").sum())
+        b_pop = cells["Black"]["F"]; o_pop = sum(cells[r]["F"] for r in RACES if r != "Black")
+        b_rate = rate(b_n, b_pop); o_rate = rate(o_n, o_pop)
+        if o_pop > 0:
+            expected += b_pop * (o_n / o_pop)
+        loc.append({"division": division, "black_rate": b_rate, "other_rate": o_rate,
+                    "ratio": round(b_rate / o_rate, 2) if b_rate and o_rate else None, "black_pop": round(b_pop)})
+    black_pop_total = sum(c["Black"]["F"] for c in pop["by_division"].values())
+    out["location"] = {"divisions": loc,
+                       "actual_rate": round(int(black.sum()) / black_pop_total / years * 1e5),
+                       "expected_if_other_rates": round(expected / black_pop_total / years * 1e5)}
+
+    # Type: women's rates by race for simple and aggravated assault
+    out["type"] = {kind: {r: rate(int(((women["race"] == r) & (women["kind"] == kind)).sum()), pop["city"][r]["F"]) for r in RACES}
+                   for kind in ["simple", "aggravated"]}
+
+    # Time: women's annual rates by race (2023 is January to June, so half a year)
+    span = {2020: 1.0, 2021: 1.0, 2022: 1.0, 2023: 0.5}
+    out["time"] = {str(y): {r: round(int(((women["race"] == r) & (women["year_incident_date"] == y)).sum()) / pop["city"][r]["F"] / span[y] * 1e5) for r in RACES} for y in span}
+
+    # Premises: where assaults on Black women happen, against all other women
+    prem = women["premise"].fillna("Unknown").str.title().str.replace(r"\s*\(.*\)", "", regex=True).str.strip()
+    top = prem[black].value_counts().head(8).index.tolist()
+    out["premises"] = {"labels": top,
+                       "black": [round(float((prem[black] == p).mean() * 100), 1) for p in top],
+                       "other": [round(float((prem[~black] == p).mean() * 100), 1) for p in top]}
+
+    # Weapons: circumstances, by class
+    wc = women["weapon_def"].apply(weapon_class)
+    order = ["Strong-arm", "Firearm", "Knife or cutting", "Blunt or other object", "Unknown or other"]
+    out["weapons"] = {"labels": order,
+                      "black": [round(float((wc[black] == k).mean() * 100), 1) for k in order],
+                      "other": [round(float((wc[~black] == k).mean() * 100), 1) for k in order]}
+    out["women_n"] = {"black": int(black.sum()), "other": int((~black).sum())}
+    return out
 
 
 def rate(count, residents):
@@ -190,12 +281,15 @@ def main():
                 rec[f"{race}_{sex}"] = {"n": n, "pop": round(residents), "rate": rate(n, residents)}
         division_rates.append(rec)
 
-    out = {"window": "January 2020 to June 2023", "years": YEARS, "min_pop": MIN_POP, "counts": counts,
+    tests = hypothesis_tests(df, pop, YEARS)
+    out = {"window": "January 2020 to June 2023", "years": YEARS, "min_pop": MIN_POP, "counts": counts, "tests": tests,
            "population": {k: pop[k] for k in ["release", "city_total", "city", "tracts", "unassigned"]},
            "rates": city_rates, "division_rates": division_rates}
     (DATA / "page_data.json").write_text(json.dumps(out, indent=1, default=int))
     print("victims", counts["total"], "| known race and sex", counts["known"], "| tracts", pop["tracts"], "| unassigned", pop["unassigned"])
     print("rates per 100,000 per year:", {r: (v["F"], v["M"]) for r, v in city_rates.items()})
+    print("age-standardized women's rates:", tests["age"]["standardized"], "| crude:", tests["age"]["crude"])
+    print("location: actual", tests["location"]["actual_rate"], "expected at other women's division rates", tests["location"]["expected_if_other_rates"])
     print("wrote", DATA / "page_data.json")
 
 
