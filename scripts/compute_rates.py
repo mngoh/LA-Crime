@@ -1,7 +1,7 @@
 """Compute assault victim counts and victimization rates for the published page.
 
 Inputs
-  data/eda_data.csv          simple assault (battery) victims, LAPD, Jan 2020 to Jun 2023
+  data/eda_data.csv          simple assault (battery) victims, LAPD, Jan 2020 to Dec 2023 (scripts/fetch_victims.py)
   data/eda_data_deadly.csv   aggravated assault victims, same window
   Census Reporter API        ACS 5-year population by race and sex, LA city and its census tracts
   Census gazetteer           2020 census tract centroids for California
@@ -25,7 +25,7 @@ DATA = ROOT / "data"
 EXT = DATA / "external"
 EXT.mkdir(exist_ok=True)
 
-YEARS = 3.5  # January 2020 to June 2023
+YEARS = 4.0  # January 2020 to December 2023
 MIN_POP = 2000  # do not rate a race/sex cell with fewer residents than this
 
 # LAPD victim descent codes -> the four groups used on the page
@@ -231,8 +231,8 @@ def hypothesis_tests(df, pop, years):
     out["type"] = {kind: {r: rate(int(((women["race"] == r) & (women["kind"] == kind)).sum()), pop["city"][r]["F"]) for r in RACES}
                    for kind in ["simple", "aggravated"]}
 
-    # Time: women's annual rates by race (2023 is January to June, so half a year)
-    span = {2020: 1.0, 2021: 1.0, 2022: 1.0, 2023: 0.5}
+    # Time: women's annual rates by race
+    span = {2020: 1.0, 2021: 1.0, 2022: 1.0, 2023: 1.0}
     out["time"] = {str(y): {r: round(int(((women["race"] == r) & (women["year_incident_date"] == y)).sum()) / pop["city"][r]["F"] / span[y] * 1e5) for r in RACES} for y in span}
 
     # Premises: where assaults on Black women happen, against all other women
@@ -282,7 +282,7 @@ def main():
         division_rates.append(rec)
 
     tests = hypothesis_tests(df, pop, YEARS)
-    out = {"window": "January 2020 to June 2023", "years": YEARS, "min_pop": MIN_POP, "counts": counts, "tests": tests,
+    out = {"window": "January 2020 to December 2023", "years": YEARS, "min_pop": MIN_POP, "counts": counts, "tests": tests,
            "population": {k: pop[k] for k in ["release", "city_total", "city", "tracts", "unassigned"]},
            "rates": city_rates, "division_rates": division_rates}
     (DATA / "page_data.json").write_text(json.dumps(out, indent=1, default=int))

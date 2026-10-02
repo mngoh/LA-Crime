@@ -49,7 +49,7 @@ html = f'''<!DOCTYPE html>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Assault victims in Los Angeles</title>
-  <meta name="description" content="Who gets assaulted in Los Angeles: 100,946 LAPD assault reports from 2020 to 2023, by race, sex and division, as rates per 100,000 residents." />
+  <meta name="description" content="Who gets assaulted in Los Angeles: {fmt(C['total'])} LAPD assault reports from 2020 to 2023, by race, sex and division, as rates per 100,000 residents." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
@@ -132,7 +132,7 @@ html = f'''<!DOCTYPE html>
 
   <div class="section-title">Dataset</div>
   <div class="cards">
-    <div class="card"><div class="label">Assaults</div><div class="value">{fmt(C["total"])}</div><div class="sub">reported Jan 2020 to Jun 2023</div></div>
+    <div class="card"><div class="label">Assaults</div><div class="value">{fmt(C["total"])}</div><div class="sub">reported Jan 2020 to Dec 2023</div></div>
     <div class="card"><div class="label">Simple assault</div><div class="value">{fmt(C["simple"])}</div><div class="sub">battery</div></div>
     <div class="card"><div class="label">Aggravated</div><div class="value">{fmt(C["aggravated"])}</div><div class="sub">with a deadly weapon</div></div>
     <div class="card"><div class="label">Known race and sex</div><div class="value blue">{fmt(C["known"])}</div><div class="sub">used for rates</div></div>
@@ -160,7 +160,7 @@ html = f'''<!DOCTYPE html>
     </div>
     <div class="chart-box">
       <h3>Victims by year</h3>
-      <div class="chart-sub">Victims with known sex. 2023 covers January to June only.</div>
+      <div class="chart-sub">Victims with known sex.</div>
       <div class="chart-wrap tall"><canvas id="yearChart"></canvas></div>
     </div>
   </div>
@@ -202,7 +202,7 @@ html = f'''<!DOCTYPE html>
     </div>
     <div class="chart-box">
       <h3>Time</h3>
-      <div class="chart-sub">Does it persist? Every year. Black women: {", ".join(fmt(T["time"][y]["Black"]) for y in ["2020", "2021", "2022"])} and {fmt(T["time"]["2023"]["Black"])} annualized for the first half of 2023.</div>
+      <div class="chart-sub">Does it persist? Every year. Black women: {", ".join(fmt(T["time"][y]["Black"]) for y in ["2020", "2021", "2022"])} and {fmt(T["time"]["2023"]["Black"])} per 100,000.</div>
       <div class="chart-wrap"><canvas id="timeChart"></canvas></div>
     </div>
   </div>
@@ -263,7 +263,7 @@ html = f'''<!DOCTYPE html>
     <div class="finding red"><h4>Exposure is not population</h4><p>Rates divide by where people live, not where they spend time. Someone who works, commutes or socializes in a high-assault area carries that exposure home to a different denominator.</p></div>
     <div class="finding red"><h4>Residential denominators</h4><p>Divisions with many visitors, workers or unhoused residents, Central above all, show inflated rates because victims there often do not live there.</p></div>
     <div class="finding"><h4>Who is counted</h4><p>{fmt(C["total"] - C["known"])} victims with unknown race or sex are left out of the rates. LAPD descent codes are officer-recorded and were collapsed to four groups; everyone else is excluded.</p></div>
-    <div class="finding"><h4>Period and population mismatch</h4><p>Victims cover January 2020 to June 2023, a window that includes the pandemic. Population is the ACS 2020 to 2024 five-year average, with sampling error at the tract level.</p></div>
+    <div class="finding"><h4>Period and population mismatch</h4><p>Victims cover January 2020 to December 2023, a window that includes the pandemic. Population is the ACS 2020 to 2024 five-year average, with sampling error at the tract level.</p></div>
   </div>
 
   <div class="section-title">Method</div>
@@ -324,7 +324,7 @@ html = f'''<!DOCTYPE html>
   const yl = Object.keys(YEARS);
   new Chart(document.getElementById('yearChart'), {{
     type: 'bar',
-    data: {{ labels: yl.map(y => y === '2023' ? '2023 (Jan to Jun)' : y), datasets: [
+    data: {{ labels: yl, datasets: [
       {{ label: 'Women', data: yl.map(y => YEARS[y].F), ...bar(C.red) }},
       {{ label: 'Men', data: yl.map(y => YEARS[y].M), ...bar(C.blue) }} ] }},
     options: {{ ...base, plugins: {{ legend: {{ display: true }} }},
@@ -363,7 +363,7 @@ html = f'''<!DOCTYPE html>
   const TY = Object.keys(T.time);
   new Chart(document.getElementById('timeChart'), {{
     type: 'line',
-    data: {{ labels: TY.map(y => y === '2023' ? '2023 (Jan to Jun)' : y), datasets: RACES.map(r => ({{ label: r + ' women', data: TY.map(y => T.time[y][r]), ...line(womenColor[r]) }})) }},
+    data: {{ labels: TY, datasets: RACES.map(r => ({{ label: r + ' women', data: TY.map(y => T.time[y][r]), ...line(womenColor[r]) }})) }},
     options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.y.toLocaleString()}} per 100,000 per year` }} }} }},
       scales: {{ x: {{ grid: {{ display: false }} }}, y: {{ min: 0, title: {{ display: true, text: 'Victims per 100,000 per year' }} }} }} }}
   }});
@@ -426,7 +426,7 @@ html = f'''<!DOCTYPE html>
     L.circleMarker([d.lat, d.lon], {{ radius, color: C.red, weight: 1.5, fillColor: C.red, fillOpacity: 0.15 }}).addTo(map)
       .bindPopup(`<strong>${{d.name}}</strong><br><span style="color:#8b8b8b">Black women: ${{fmt(b.rateF)}} per 100,000 per year</span>
         <table><tr><th></th><th>Women</th><th>Men</th><th>Rate W</th><th>Rate M</th></tr>${{rows}}</table>
-        <div style="color:#8b8b8b;margin-top:4px">Counts Jan 2020 to Jun 2023; rates per 100,000 residents per year</div>`);
+        <div style="color:#8b8b8b;margin-top:4px">Counts Jan 2020 to Dec 2023; rates per 100,000 residents per year</div>`);
   }});
 </script>
 </body>

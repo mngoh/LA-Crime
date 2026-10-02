@@ -108,7 +108,7 @@ def build_cells(located, pop, grid_years, division, ses, hl, groups, kinds=None,
     counts = sub.groupby(["geoid", "race", "band", "year_incident_date"]).size().rename("n").reset_index()
     grid = popg.merge(pd.DataFrame({"year_incident_date": grid_years}), how="cross")
     cells = grid.merge(counts, on=["geoid", "race", "band", "year_incident_date"], how="left").fillna({"n": 0})
-    cells["exposure"] = cells["pop"] * np.where(cells["year_incident_date"] == 2023, 0.5, 1.0)
+    cells["exposure"] = cells["pop"]  # one person-year per resident per calendar year
     cells = cells[cells["pop"] >= MIN_CELL_POP].copy()
     cells["division"] = cells["geoid"].map(division)
     cells = cells.dropna(subset=["division"]).merge(ses, on="geoid", how="left").dropna(subset=["poverty", "log_income", "unemployment", "renters", "log_density"])
