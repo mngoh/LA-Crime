@@ -127,15 +127,15 @@ html = f'''<!DOCTYPE html>
   <div class="answer">
     <div class="q">The question</div>
     <p>Black women are a far larger share of assault victims than women of any other group. Is that a higher rate of victimization, or just where assaults happen?</p>
-    <p>A higher rate. Per 100,000 residents a year, Black women are assaulted {fmt(bw["F"])} times: {ratio["Hispanic"]} times the rate of Hispanic women, {ratio["White"]} times White women, {ratio["Asian"]} times Asian women, and more often than Hispanic or White men.</p>
+    <p>A higher rate. Per 100,000 residents a year, Black women are assaulted {fmt(bw["F"])} times: {ratio["Hispanic"]} times the rate of Hispanic women, {ratio["White"]} times White women, {ratio["Asian"]} times Asian women, and more often than the men of any group, Black men included.</p>
     <p>Adjusted for age, year, where the assault happened, neighborhood poverty, income, unemployment, housing and homelessness, the gap is still about {round(M["pairwise"]["Hispanic"]["adjusted"]["rate_ratio"])} times Hispanic or White women and {round(M["pairwise"]["Asian"]["adjusted"]["rate_ratio"])} times Asian women. The model is below.</p>
   </div>
 
   <div class="section-title">Dataset</div>
   <div class="cards">
     <div class="card"><div class="label">Assaults</div><div class="value">{fmt(C["total"])}</div><div class="sub">reported Jan 2020 to Dec 2023</div></div>
-    <div class="card"><div class="label">Simple assault</div><div class="value">{fmt(C["simple"])}</div><div class="sub">battery</div></div>
-    <div class="card"><div class="label">Aggravated</div><div class="value">{fmt(C["aggravated"])}</div><div class="sub">with a deadly weapon</div></div>
+    <div class="card"><div class="label">Simple assault</div><div class="value">{fmt(C["simple"])}</div><div class="sub">battery, incl. partner</div></div>
+    <div class="card"><div class="label">Aggravated</div><div class="value">{fmt(C["aggravated"])}</div><div class="sub">weapon or serious injury</div></div>
     <div class="card"><div class="label">Known race and sex</div><div class="value blue">{fmt(C["known"])}</div><div class="sub">used for rates</div></div>
     <div class="card"><div class="label">Divisions</div><div class="value">{C["divisions"]}</div><div class="sub">LAPD areas</div></div>
     <div class="card"><div class="label">Median victim age</div><div class="value">{int(C["median_age"])}</div><div class="sub">middle half {int(C["age_iqr"][0])} to {int(C["age_iqr"][1])}</div></div>
@@ -169,8 +169,8 @@ html = f'''<!DOCTYPE html>
   <div class="section-title">Findings</div>
   <div class="findings">
     <div class="finding red"><h4>The rate gap is real</h4><p>Black women's victimization rate is {fmt(bw["F"])} per 100,000 a year. Hispanic women: {fmt(R["Hispanic"]["F"])}. White women: {fmt(R["White"]["F"])}. Asian women: {fmt(R["Asian"]["F"])}. Population share does not explain it.</p></div>
-    <div class="finding red"><h4>Closest to parity with men</h4><p>Black women are assaulted at {int(bw["ratio"]*100)}% of the rate of Black men. For Hispanic, White and Asian women the figure is {int(R["Hispanic"]["ratio"]*100)}%, {int(R["White"]["ratio"]*100)}% and {int(R["Asian"]["ratio"]*100)}%.</p></div>
-    <div class="finding"><h4>Simple assault is where women outnumber men</h4><p>{share_simple["Black"]}% of Black simple-assault victims are women, the only group above 50%. In aggravated assault the share is {share_agg["Black"]}%, against {share_agg["Hispanic"]}% to {share_agg["Asian"]}% for other groups.</p></div>
+    <div class="finding red"><h4>More often than men</h4><p>Black women are assaulted at {int(bw["ratio"]*100)}% of the rate of Black men. For Hispanic, White and Asian women the figure is {int(R["Hispanic"]["ratio"]*100)}%, {int(R["White"]["ratio"]*100)}% and {int(R["Asian"]["ratio"]*100)}%.</p></div>
+    <div class="finding"><h4>Simple assault is where women outnumber men</h4><p>{share_simple["Black"]}% of Black simple-assault victims are women, the highest of any group ({min(share_simple[r] for r in RACES if r != "Black")}% to {max(share_simple[r] for r in RACES if r != "Black")}% elsewhere). In aggravated assault the share is {share_agg["Black"]}%, against {min(share_agg[r] for r in RACES if r != "Black")}% to {max(share_agg[r] for r in RACES if r != "Black")}% for other groups.</p></div>
     <div class="finding"><h4>South LA carries the counts, Central the rate</h4><p>77th Street ({fmt(by_div["77th Street"][3])}) and Southeast ({fmt(by_div["Southeast"][3])}) have the most Black female victims. Central has the highest rate ({fmt(black_div[0][1])}) on a small resident population.</p></div>
     <div class="finding"><h4>Mostly strong-arm</h4><p>{round(strong / C["total"] * 100)}% of all assaults involved hands, fists or feet rather than a weapon. Handguns appear in {fmt(weapons["HAND GUN"])}.</p></div>
     <div class="finding"><h4>What this does not show</h4><p>Why. These are reported assaults against residential population. The caveats below matter as much as the numbers.</p></div>
@@ -210,7 +210,7 @@ html = f'''<!DOCTYPE html>
   <div class="charts section-end">
     <div class="chart-box">
       <h3>Premises</h3>
-      <div class="chart-sub">Different places? Barely. Street {T["premises"]["black"][0]}% vs {T["premises"]["other"][0]}%, at home {home_black}% vs {home_other}%. Share of each group's assaults, top eight premises. Intimate partner assaults are coded separately by LAPD and covered in their own section below.</div>
+      <div class="chart-sub">Different places? Barely. At home {home_black}% vs {home_other}%, street {T["premises"]["black"][T["premises"]["labels"].index("Street")]}% vs {T["premises"]["other"][T["premises"]["labels"].index("Street")]}%. Share of each group's assaults, top eight premises.</div>
       <div class="chart-wrap tall"><canvas id="premChart"></canvas></div>
     </div>
     <div class="chart-box">
@@ -256,11 +256,11 @@ html = f'''<!DOCTYPE html>
   </div>
 
   <div class="section-title">A second records system, and intimate partner assault</div>
-  <p class="note">Two checks on data the analysis above does not use. LAPD moved to the FBI's NIBRS standard in March 2024, so {N["windows"]["nibrs"]} is a separate test on new records. And LAPD's old system coded intimate partner assaults separately (codes 626 and 236); they are not in the rates or model above. Here both are counted the same way in both systems, women only, per 100,000 residents a year.</p>
+  <p class="note">LAPD moved to the FBI's NIBRS standard in March 2024, so {N["windows"]["nibrs"]} is a separate test on new records. Partner and non-partner assault are counted the same way in both systems, women only, per 100,000 residents a year. LAPD's old system codes intimate partner assault separately (626 and 236), which also lets it be split out.</p>
   <div class="charts section-end">
     <div class="chart-box">
       <h3>The gap replicates</h3>
-      <div class="chart-sub">Non-partner assault. Black women's rate is {N["ratios"]["nibrs"]["general"]["Hispanic"]} times Hispanic women's and {N["ratios"]["nibrs"]["general"]["White"]} times White women's in NIBRS, against {N["ratios"]["legacy"]["general"]["Hispanic"]} and {N["ratios"]["legacy"]["general"]["White"]} before. The Asian comparison moved most, from {N["ratios"]["legacy"]["general"]["Asian"]} to {N["ratios"]["nibrs"]["general"]["Asian"]}.</div>
+      <div class="chart-sub">All assaults on women. Black women's rate is {N["ratios"]["nibrs"]["all"]["Hispanic"]} times Hispanic women's and {N["ratios"]["nibrs"]["all"]["White"]} times White women's in NIBRS, against {N["ratios"]["legacy"]["all"]["Hispanic"]} and {N["ratios"]["legacy"]["all"]["White"]} before. The Asian comparison moved most, from {N["ratios"]["legacy"]["all"]["Asian"]} to {N["ratios"]["nibrs"]["all"]["Asian"]}.</div>
       <div class="chart-wrap"><canvas id="nibrsChart"></canvas></div>
     </div>
     <div class="chart-box">
@@ -270,8 +270,8 @@ html = f'''<!DOCTYPE html>
     </div>
   </div>
   <div class="findings">
-    <div class="finding red"><h4>Same gap, new system</h4><p>Different years, a different records system and different offense coding, and Black women's rate is still about 3 times Hispanic women's and 5.5 times White women's.</p></div>
-    <div class="finding red"><h4>Not concentrated at home</h4><p>Intimate partner assault is {N["intimate_share"]["legacy"]["Black"]}% of assaults on Black women and {N["intimate_share"]["legacy"]["Hispanic"]}% for Hispanic women. The gap is the same size with partners as without. Counting both, Black women are assaulted at {fmt(N["rates"]["legacy"]["all"]["Black"])} per 100,000 a year, about 1 in {round(1e5 / N["rates"]["legacy"]["all"]["Black"])}.</p></div>
+    <div class="finding red"><h4>Same gap, new system</h4><p>Different years, a different records system and different offense coding, and Black women's rate is still about 3 times Hispanic women's and 6 times White women's.</p></div>
+    <div class="finding red"><h4>Not concentrated at home</h4><p>Intimate partner assault is {N["intimate_share"]["legacy"]["Black"]}% of assaults on Black women and {N["intimate_share"]["legacy"]["Hispanic"]}% for Hispanic women. The gap is the same size with partners as without. Counting both, Black women are assaulted at {fmt(N["rates"]["legacy"]["all"]["Black"])} per 100,000 a year, about 1 in {round(1e5 / N["rates"]["legacy"]["all"]["Black"])} each year.</p></div>
   </div>
 
   <p class="note">Context: this is the direction national evidence points. The National Crime Victimization Survey, which counts crimes whether or not they were reported, found the rate of violence against Black women almost 50% higher than against White women in 2005, by strangers, acquaintances and partners alike (<a href="https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/heimer.pdf">Heimer and colleagues, BJS</a>; <a href="https://bjs.ojp.gov/content/pub/pdf/bvvc.pdf">Harrell, BJS 2007</a>). Los Angeles's police-recorded gap is larger than that national survey figure, which is itself worth explaining.</p>
@@ -282,7 +282,7 @@ html = f'''<!DOCTYPE html>
     <div class="finding red"><h4>Reported crimes only</h4><p>Every number is a report that reached LAPD. Willingness to report, and police recording practice, differ by group, by area and over time. A higher rate can partly reflect more reporting.</p></div>
     <div class="finding red"><h4>Exposure is not population</h4><p>Rates divide by where people live, not where they spend time. Someone who works, commutes or socializes in a high-assault area carries that exposure home to a different denominator.</p></div>
     <div class="finding red"><h4>Residential denominators</h4><p>Divisions with many visitors, workers or unhoused residents, Central above all, show inflated rates because victims there often do not live there.</p></div>
-    <div class="finding"><h4>Who is counted</h4><p>The main rates and model cover simple and aggravated assault (LAPD codes 624 and 230); intimate partner assaults are compared separately. {fmt(C["total"] - C["known"])} victims with unknown race or sex are left out of the rates. LAPD descent codes are officer-recorded and were collapsed to four groups; everyone else is excluded.</p></div>
+    <div class="finding"><h4>Who is counted</h4><p>Simple and aggravated assault, including intimate partner assault (LAPD codes 624, 626, 230 and 236). Other assault codes (on police, child abuse, sexual battery) are left out. {fmt(C["total"] - C["known"])} victims with unknown race or sex are left out of the rates. LAPD descent codes are officer-recorded and were collapsed to four groups; everyone else is excluded.</p></div>
     <div class="finding"><h4>Period and population mismatch</h4><p>Victims cover January 2020 to December 2023, a window that includes the pandemic. Population is the ACS 2020 to 2024 five-year average, with sampling error at the tract level.</p></div>
   </div>
 
@@ -430,8 +430,8 @@ html = f'''<!DOCTYPE html>
   new Chart(document.getElementById('nibrsChart'), {{
     type: 'bar',
     data: {{ labels: others.map(r => r + ' women'), datasets: [
-      {{ label: 'Old system, 2020 to 2023', data: others.map(r => NB.ratios.legacy.general[r]), ...bar(C.muted) }},
-      {{ label: 'NIBRS, 2024 to 2026', data: others.map(r => NB.ratios.nibrs.general[r]), ...bar(C.red) }} ] }},
+      {{ label: 'Old system, 2020 to 2023', data: others.map(r => NB.ratios.legacy.all[r]), ...bar(C.muted) }},
+      {{ label: 'NIBRS, 2024 to 2026', data: others.map(r => NB.ratios.nibrs.all[r]), ...bar(C.red) }} ] }},
     options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.y}}x` }} }} }},
       scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, title: {{ display: true, text: "Black women's rate as a multiple of the group's" }} }} }} }}
   }});

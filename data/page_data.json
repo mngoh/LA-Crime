@@ -3,571 +3,571 @@
  "years": 4.0,
  "min_pop": 2000,
  "counts": {
-  "total": 119249,
-  "simple": 69421,
-  "aggravated": 49828,
-  "known": 109011,
+  "total": 174827,
+  "simple": 113138,
+  "aggravated": 61689,
+  "known": 161743,
   "divisions": 21,
   "race_sex_all": {
    "Asian": {
-    "F": 1090,
-    "M": 1668,
-    "female_share": 0.395
+    "F": 1944,
+    "M": 1909,
+    "female_share": 0.505
    },
    "Black": {
-    "F": 12393,
-    "M": 14712,
-    "female_share": 0.457
+    "F": 23622,
+    "M": 18197,
+    "female_share": 0.565
    },
    "Hispanic": {
-    "F": 22520,
-    "M": 36932,
-    "female_share": 0.379
+    "F": 44815,
+    "M": 43156,
+    "female_share": 0.509
    },
    "White": {
-    "F": 7282,
-    "M": 12414,
-    "female_share": 0.37
+    "F": 13228,
+    "M": 14872,
+    "female_share": 0.471
    }
   },
   "race_sex_simple": {
    "Asian": {
-    "F": 873,
-    "M": 1076,
-    "female_share": 0.448
+    "F": 1579,
+    "M": 1280,
+    "female_share": 0.552
    },
    "Black": {
-    "F": 7721,
-    "M": 5906,
-    "female_share": 0.567
+    "F": 15928,
+    "M": 8385,
+    "female_share": 0.655
    },
    "Hispanic": {
-    "F": 16467,
-    "M": 18281,
-    "female_share": 0.474
+    "F": 34404,
+    "M": 23412,
+    "female_share": 0.595
    },
    "White": {
-    "F": 5528,
-    "M": 7312,
-    "female_share": 0.431
+    "F": 10174,
+    "M": 9353,
+    "female_share": 0.521
    }
   },
   "race_sex_aggravated": {
    "Asian": {
-    "F": 217,
-    "M": 592,
-    "female_share": 0.268
+    "F": 365,
+    "M": 629,
+    "female_share": 0.367
    },
    "Black": {
-    "F": 4672,
-    "M": 8806,
-    "female_share": 0.347
+    "F": 7694,
+    "M": 9812,
+    "female_share": 0.44
    },
    "Hispanic": {
-    "F": 6053,
-    "M": 18651,
-    "female_share": 0.245
+    "F": 10411,
+    "M": 19744,
+    "female_share": 0.345
    },
    "White": {
-    "F": 1754,
-    "M": 5102,
-    "female_share": 0.256
+    "F": 3054,
+    "M": 5519,
+    "female_share": 0.356
    }
   },
   "all_by_year": {
    "2020": {
-    "F": 10283,
-    "M": 15239
+    "F": 20133,
+    "M": 18471
    },
    "2021": {
-    "F": 10209,
-    "M": 16276
+    "F": 20312,
+    "M": 19330
    },
    "2022": {
-    "F": 11339,
-    "M": 16880
+    "F": 21626,
+    "M": 19942
    },
    "2023": {
-    "F": 11454,
-    "M": 17331
+    "F": 21538,
+    "M": 20391
    }
   },
   "weapons": {
-   "STRONG-ARM (HANDS, FIST, FEET OR BODILY FORCE)": 69309,
-   "UNKNOWN WEAPON/OTHER WEAPON": 10784,
-   "HAND GUN": 7111,
-   "SEMI-AUTOMATIC PISTOL": 2855,
-   "UNKNOWN FIREARM": 2752,
-   "MACE/PEPPER SPRAY": 2623
+   "STRONG-ARM (HANDS, FIST, FEET OR BODILY FORCE)": 117523,
+   "UNKNOWN WEAPON/OTHER WEAPON": 13501,
+   "HAND GUN": 7482,
+   "SEMI-AUTOMATIC PISTOL": 3014,
+   "KNIFE WITH BLADE 6INCHES OR LESS": 2967,
+   "MACE/PEPPER SPRAY": 2857
   },
-  "median_age": 37.0,
+  "median_age": 35.0,
   "age_iqr": [
    27.0,
-   51.0
+   48.0
   ],
   "centroids": {
    "77th Street": {
-    "lat": 33.9764,
-    "lon": -118.2917
+    "lat": 33.9761,
+    "lon": -118.2916
    },
    "Central": {
     "lat": 34.046,
-    "lon": -118.2485
+    "lon": -118.2488
    },
    "Devonshire": {
     "lat": 34.2448,
-    "lon": -118.5383
+    "lon": -118.5372
    },
    "Foothill": {
-    "lat": 34.2552,
-    "lon": -118.3965
+    "lat": 34.2557,
+    "lon": -118.3972
    },
    "Harbor": {
-    "lat": 33.7778,
+    "lat": 33.7768,
     "lon": -118.2879
    },
    "Hollenbeck": {
-    "lat": 34.0499,
-    "lon": -118.2064
+    "lat": 34.0502,
+    "lon": -118.2061
    },
    "Hollywood": {
-    "lat": 34.0997,
+    "lat": 34.0994,
     "lon": -118.3288
    },
    "Mission": {
-    "lat": 34.2355,
-    "lon": -118.4517
+    "lat": 34.2376,
+    "lon": -118.4526
    },
    "N Hollywood": {
-    "lat": 34.174,
-    "lon": -118.3812
+    "lat": 34.1749,
+    "lon": -118.3813
    },
    "Newton": {
-    "lat": 34.006,
-    "lon": -118.2626
+    "lat": 34.0056,
+    "lon": -118.263
    },
    "Northeast": {
-    "lat": 34.1036,
-    "lon": -118.2426
+    "lat": 34.1049,
+    "lon": -118.2397
    },
    "Olympic": {
-    "lat": 34.0599,
+    "lat": 34.0598,
     "lon": -118.2984
    },
    "Pacific": {
-    "lat": 33.9889,
-    "lon": -118.4351
+    "lat": 33.9886,
+    "lon": -118.4295
    },
    "Rampart": {
     "lat": 34.0595,
-    "lon": -118.2754
+    "lon": -118.275
    },
    "Southeast": {
-    "lat": 33.9414,
+    "lat": 33.941,
     "lon": -118.2695
    },
    "Southwest": {
-    "lat": 34.0183,
-    "lon": -118.313
+    "lat": 34.0182,
+    "lon": -118.3133
    },
    "Topanga": {
-    "lat": 34.1956,
-    "lon": -118.5994
+    "lat": 34.1966,
+    "lon": -118.599
    },
    "Van Nuys": {
     "lat": 34.1867,
     "lon": -118.4487
    },
    "West LA": {
-    "lat": 34.0477,
-    "lon": -118.442
+    "lat": 34.0482,
+    "lon": -118.4411
    },
    "West Valley": {
-    "lat": 34.1928,
-    "lon": -118.5295
+    "lat": 34.1938,
+    "lon": -118.5273
    },
    "Wilshire": {
-    "lat": 34.056,
-    "lon": -118.3511
+    "lat": 34.0534,
+    "lon": -118.3508
    }
   },
   "division_counts": {
    "77th Street": {
     "Asian": {
-     "F": 17,
-     "M": 42
+     "F": 22,
+     "M": 45
     },
     "Black": {
-     "F": 2449,
-     "M": 2315
+     "F": 4839,
+     "M": 2870
     },
     "Hispanic": {
-     "F": 1598,
-     "M": 2474
+     "F": 3308,
+     "M": 2877
     },
     "White": {
-     "F": 110,
-     "M": 188
+     "F": 229,
+     "M": 216
     }
    },
    "Central": {
     "Asian": {
-     "F": 139,
-     "M": 172
+     "F": 226,
+     "M": 206
     },
     "Black": {
-     "F": 1214,
-     "M": 2056
+     "F": 1994,
+     "M": 2359
     },
     "Hispanic": {
-     "F": 1375,
-     "M": 2814
+     "F": 2088,
+     "M": 3061
     },
     "White": {
-     "F": 627,
-     "M": 1122
+     "F": 968,
+     "M": 1281
     }
    },
    "Devonshire": {
     "Asian": {
-     "F": 45,
-     "M": 68
+     "F": 111,
+     "M": 76
     },
     "Black": {
-     "F": 165,
-     "M": 194
+     "F": 353,
+     "M": 273
     },
     "Hispanic": {
-     "F": 663,
-     "M": 960
+     "F": 1433,
+     "M": 1213
     },
     "White": {
-     "F": 423,
-     "M": 590
+     "F": 825,
+     "M": 736
     }
    },
    "Foothill": {
     "Asian": {
-     "F": 10,
-     "M": 11
+     "F": 20,
+     "M": 14
     },
     "Black": {
-     "F": 125,
-     "M": 158
+     "F": 211,
+     "M": 196
     },
     "Hispanic": {
-     "F": 1036,
-     "M": 1617
+     "F": 2308,
+     "M": 1923
     },
     "White": {
-     "F": 233,
-     "M": 334
+     "F": 436,
+     "M": 398
     }
    },
    "Harbor": {
     "Asian": {
-     "F": 28,
-     "M": 43
+     "F": 61,
+     "M": 53
     },
     "Black": {
-     "F": 356,
-     "M": 370
+     "F": 759,
+     "M": 498
     },
     "Hispanic": {
-     "F": 1244,
-     "M": 1731
+     "F": 2565,
+     "M": 2091
     },
     "White": {
-     "F": 403,
-     "M": 552
+     "F": 818,
+     "M": 688
     }
    },
    "Hollenbeck": {
     "Asian": {
-     "F": 29,
-     "M": 43
+     "F": 44,
+     "M": 48
     },
     "Black": {
-     "F": 111,
-     "M": 175
+     "F": 227,
+     "M": 215
     },
     "Hispanic": {
-     "F": 1788,
-     "M": 2554
+     "F": 3239,
+     "M": 2914
     },
     "White": {
-     "F": 106,
-     "M": 195
+     "F": 184,
+     "M": 225
     }
    },
    "Hollywood": {
     "Asian": {
-     "F": 63,
-     "M": 106
+     "F": 100,
+     "M": 114
     },
     "Black": {
-     "F": 467,
-     "M": 940
+     "F": 838,
+     "M": 1139
     },
     "Hispanic": {
-     "F": 800,
-     "M": 1573
+     "F": 1394,
+     "M": 1808
     },
     "White": {
-     "F": 709,
-     "M": 1351
+     "F": 1227,
+     "M": 1637
     }
    },
    "Mission": {
     "Asian": {
-     "F": 18,
-     "M": 36
+     "F": 48,
+     "M": 47
     },
     "Black": {
-     "F": 123,
-     "M": 165
+     "F": 292,
+     "M": 223
     },
     "Hispanic": {
-     "F": 1216,
-     "M": 1934
+     "F": 3087,
+     "M": 2451
     },
     "White": {
-     "F": 149,
-     "M": 292
+     "F": 339,
+     "M": 358
     }
    },
    "N Hollywood": {
     "Asian": {
-     "F": 23,
-     "M": 41
+     "F": 54,
+     "M": 49
     },
     "Black": {
-     "F": 246,
-     "M": 368
+     "F": 534,
+     "M": 501
     },
     "Hispanic": {
-     "F": 832,
-     "M": 1469
+     "F": 1742,
+     "M": 1756
     },
     "White": {
-     "F": 505,
-     "M": 828
+     "F": 968,
+     "M": 1003
     }
    },
    "Newton": {
     "Asian": {
-     "F": 21,
-     "M": 48
+     "F": 30,
+     "M": 50
     },
     "Black": {
-     "F": 804,
-     "M": 917
+     "F": 1557,
+     "M": 1085
     },
     "Hispanic": {
-     "F": 1903,
-     "M": 3320
+     "F": 3599,
+     "M": 3719
     },
     "White": {
-     "F": 107,
-     "M": 229
+     "F": 172,
+     "M": 253
     }
    },
    "Northeast": {
     "Asian": {
-     "F": 48,
-     "M": 64
+     "F": 76,
+     "M": 74
     },
     "Black": {
-     "F": 119,
-     "M": 224
+     "F": 189,
+     "M": 272
     },
     "Hispanic": {
-     "F": 885,
-     "M": 1509
+     "F": 1719,
+     "M": 1735
     },
     "White": {
-     "F": 284,
-     "M": 523
+     "F": 518,
+     "M": 630
     }
    },
    "Olympic": {
     "Asian": {
-     "F": 241,
-     "M": 427
+     "F": 411,
+     "M": 477
     },
     "Black": {
-     "F": 404,
-     "M": 582
+     "F": 812,
+     "M": 750
     },
     "Hispanic": {
-     "F": 1353,
-     "M": 2165
+     "F": 2713,
+     "M": 2572
     },
     "White": {
-     "F": 236,
-     "M": 444
+     "F": 457,
+     "M": 543
     }
    },
    "Pacific": {
     "Asian": {
-     "F": 46,
-     "M": 82
+     "F": 93,
+     "M": 93
     },
     "Black": {
-     "F": 442,
-     "M": 611
+     "F": 799,
+     "M": 740
     },
     "Hispanic": {
-     "F": 494,
-     "M": 851
+     "F": 846,
+     "M": 985
     },
     "White": {
-     "F": 605,
-     "M": 1261
+     "F": 1075,
+     "M": 1464
     }
    },
    "Rampart": {
     "Asian": {
-     "F": 60,
-     "M": 113
+     "F": 112,
+     "M": 125
     },
     "Black": {
-     "F": 447,
-     "M": 594
+     "F": 960,
+     "M": 748
     },
     "Hispanic": {
-     "F": 1440,
-     "M": 2884
+     "F": 2865,
+     "M": 3291
     },
     "White": {
-     "F": 312,
-     "M": 546
+     "F": 539,
+     "M": 636
     }
    },
    "Southeast": {
     "Asian": {
-     "F": 19,
-     "M": 19
+     "F": 22,
+     "M": 21
     },
     "Black": {
-     "F": 1935,
-     "M": 1764
+     "F": 3744,
+     "M": 2199
     },
     "Hispanic": {
-     "F": 1602,
-     "M": 2156
+     "F": 3181,
+     "M": 2521
     },
     "White": {
-     "F": 103,
-     "M": 163
+     "F": 173,
+     "M": 183
     }
    },
    "Southwest": {
     "Asian": {
-     "F": 51,
-     "M": 74
+     "F": 77,
+     "M": 80
     },
     "Black": {
-     "F": 1632,
-     "M": 1633
+     "F": 3040,
+     "M": 2038
     },
     "Hispanic": {
-     "F": 1207,
-     "M": 1846
+     "F": 2392,
+     "M": 2104
     },
     "White": {
-     "F": 216,
-     "M": 321
+     "F": 346,
+     "M": 372
     }
    },
    "Topanga": {
     "Asian": {
-     "F": 35,
-     "M": 56
+     "F": 81,
+     "M": 68
     },
     "Black": {
-     "F": 238,
-     "M": 196
+     "F": 477,
+     "M": 284
     },
     "Hispanic": {
-     "F": 669,
-     "M": 1049
+     "F": 1410,
+     "M": 1272
     },
     "White": {
-     "F": 479,
-     "M": 691
+     "F": 948,
+     "M": 870
     }
    },
    "Van Nuys": {
     "Asian": {
-     "F": 25,
-     "M": 45
+     "F": 60,
+     "M": 56
     },
     "Black": {
-     "F": 229,
-     "M": 294
+     "F": 466,
+     "M": 394
     },
     "Hispanic": {
-     "F": 814,
-     "M": 1209
+     "F": 1751,
+     "M": 1507
     },
     "White": {
-     "F": 377,
-     "M": 602
+     "F": 736,
+     "M": 739
     }
    },
    "West LA": {
     "Asian": {
-     "F": 60,
-     "M": 62
+     "F": 111,
+     "M": 80
     },
     "Black": {
-     "F": 221,
-     "M": 317
+     "F": 343,
+     "M": 365
     },
     "Hispanic": {
-     "F": 285,
-     "M": 547
+     "F": 499,
+     "M": 620
     },
     "White": {
-     "F": 465,
-     "M": 829
+     "F": 761,
+     "M": 976
     }
    },
    "West Valley": {
     "Asian": {
-     "F": 40,
-     "M": 33
+     "F": 79,
+     "M": 42
     },
     "Black": {
-     "F": 144,
-     "M": 245
+     "F": 334,
+     "M": 325
     },
     "Hispanic": {
-     "F": 709,
-     "M": 1228
+     "F": 1625,
+     "M": 1537
     },
     "White": {
-     "F": 406,
-     "M": 639
+     "F": 804,
+     "M": 781
     }
    },
    "Wilshire": {
     "Asian": {
-     "F": 72,
-     "M": 83
+     "F": 106,
+     "M": 91
     },
     "Black": {
-     "F": 522,
-     "M": 594
+     "F": 854,
+     "M": 723
     },
     "Hispanic": {
-     "F": 607,
-     "M": 1042
+     "F": 1051,
+     "M": 1199
     },
     "White": {
-     "F": 427,
-     "M": 714
+     "F": 705,
+     "M": 883
     }
    }
   }
@@ -592,306 +592,306 @@
    ],
    "rates": {
     "Black": [
-     103,
-     135,
-     724,
-     1865,
-     2440,
-     3003,
-     3011,
-     2494,
-     2527,
-     2175,
-     1815,
-     899,
-     329,
-     252
+     111,
+     150,
+     727,
+     2434,
+     4533,
+     6904,
+     7223,
+     5846,
+     5125,
+     3606,
+     2498,
+     1049,
+     373,
+     291
     ],
     "Hispanic": [
-     20,
-     42,
-     265,
-     590,
-     767,
-     961,
-     917,
-     887,
-     912,
-     769,
-     542,
-     366,
-     288,
-     130
+     21,
+     44,
+     276,
+     794,
+     1571,
+     2326,
+     2394,
+     2250,
+     1953,
+     1278,
+     697,
+     421,
+     321,
+     174
     ],
     "White": [
-     6,
-     8,
-     76,
-     177,
-     311,
-     527,
-     449,
-     404,
-     388,
-     522,
-     452,
-     230,
-     174,
-     111
+     9,
+     9,
+     79,
+     214,
+     604,
+     1147,
+     1009,
+     933,
+     867,
+     850,
+     612,
+     276,
+     203,
+     131
     ],
     "Asian": [
-     0,
+     3,
      4,
-     34,
-     76,
-     89,
-     117,
-     118,
-     126,
-     125,
-     141,
-     125,
-     104,
-     78,
-     59
+     38,
+     94,
+     140,
+     290,
+     300,
+     278,
+     248,
+     241,
+     160,
+     121,
+     99,
+     69
     ]
    },
    "standardized": {
-    "Black": 1814,
-    "Hispanic": 621,
-    "White": 336,
-    "Asian": 101
+    "Black": 3468,
+    "Hispanic": 1231,
+    "White": 618,
+    "Asian": 182
    },
    "crude": {
-    "Black": 1838,
-    "Hispanic": 617,
-    "White": 339,
-    "Asian": 107
+    "Black": 3510,
+    "Hispanic": 1229,
+    "White": 617,
+    "Asian": 191
    },
-   "unknown_age": 450
+   "unknown_age": 740
   },
   "location": {
    "divisions": [
     {
      "division": "77th Street",
-     "black_rate": 1781,
-     "other_rate": 719,
-     "ratio": 2.48,
+     "black_rate": 3519,
+     "other_rate": 1484,
+     "ratio": 2.37,
      "black_pop": 34378
     },
     {
      "division": "Central",
-     "black_rate": 7242,
-     "other_rate": 1914,
-     "ratio": 3.78,
+     "black_rate": 11895,
+     "other_rate": 2935,
+     "ratio": 4.05,
      "black_pop": 4191
     },
     {
      "division": "Devonshire",
-     "black_rate": 697,
-     "other_rate": 262,
-     "ratio": 2.66,
+     "black_rate": 1491,
+     "other_rate": 548,
+     "ratio": 2.72,
      "black_pop": 5919
     },
     {
      "division": "Foothill",
-     "black_rate": 1310,
-     "other_rate": 362,
-     "ratio": 3.62,
+     "black_rate": 2212,
+     "other_rate": 782,
+     "ratio": 2.83,
      "black_pop": 2385
     },
     {
      "division": "Harbor",
-     "black_rate": 1590,
-     "other_rate": 520,
-     "ratio": 3.06,
+     "black_rate": 3390,
+     "other_rate": 1068,
+     "ratio": 3.17,
      "black_pop": 5598
     },
     {
      "division": "Hollenbeck",
      "black_rate": null,
-     "other_rate": 595,
+     "other_rate": 1072,
      "ratio": null,
      "black_pop": 1367
     },
     {
      "division": "Hollywood",
-     "black_rate": 2744,
-     "other_rate": 722,
-     "ratio": 3.8,
+     "black_rate": 4925,
+     "other_rate": 1249,
+     "ratio": 3.94,
      "black_pop": 4254
     },
     {
      "division": "Mission",
-     "black_rate": 785,
-     "other_rate": 308,
-     "ratio": 2.55,
+     "black_rate": 1864,
+     "other_rate": 774,
+     "ratio": 2.41,
      "black_pop": 3916
     },
     {
      "division": "N Hollywood",
-     "black_rate": 1084,
-     "other_rate": 361,
-     "ratio": 3.0,
+     "black_rate": 2352,
+     "other_rate": 734,
+     "ratio": 3.2,
      "black_pop": 5675
     },
     {
      "division": "Newton",
-     "black_rate": 3215,
-     "other_rate": 795,
-     "ratio": 4.04,
+     "black_rate": 6227,
+     "other_rate": 1487,
+     "ratio": 4.19,
      "black_pop": 6251
     },
     {
      "division": "Northeast",
-     "black_rate": 1481,
-     "other_rate": 305,
-     "ratio": 4.86,
+     "black_rate": 2352,
+     "other_rate": 580,
+     "ratio": 4.06,
      "black_pop": 2009
     },
     {
      "division": "Olympic",
-     "black_rate": 2159,
-     "other_rate": 557,
-     "ratio": 3.88,
+     "black_rate": 4339,
+     "other_rate": 1090,
+     "ratio": 3.98,
      "black_pop": 4679
     },
     {
      "division": "Pacific",
-     "black_rate": 1465,
-     "other_rate": 301,
-     "ratio": 4.87,
+     "black_rate": 2648,
+     "other_rate": 530,
+     "ratio": 5.0,
      "black_pop": 7543
     },
     {
      "division": "Rampart",
-     "black_rate": 2793,
-     "other_rate": 628,
-     "ratio": 4.45,
+     "black_rate": 5999,
+     "other_rate": 1218,
+     "ratio": 4.93,
      "black_pop": 4001
     },
     {
      "division": "Southeast",
-     "black_rate": 2699,
-     "other_rate": 754,
-     "ratio": 3.58,
+     "black_rate": 5222,
+     "other_rate": 1476,
+     "ratio": 3.54,
      "black_pop": 17923
     },
     {
      "division": "Southwest",
-     "black_rate": 1433,
-     "other_rate": 564,
-     "ratio": 2.54,
+     "black_rate": 2669,
+     "other_rate": 1077,
+     "ratio": 2.48,
      "black_pop": 28475
     },
     {
      "division": "Topanga",
-     "black_rate": 1086,
-     "other_rate": 328,
-     "ratio": 3.31,
+     "black_rate": 2177,
+     "other_rate": 676,
+     "ratio": 3.22,
      "black_pop": 5478
     },
     {
      "division": "Van Nuys",
-     "black_rate": 1369,
-     "other_rate": 360,
-     "ratio": 3.8,
+     "black_rate": 2786,
+     "other_rate": 754,
+     "ratio": 3.69,
      "black_pop": 4182
     },
     {
      "division": "West LA",
-     "black_rate": 1026,
-     "other_rate": 182,
-     "ratio": 5.64,
+     "black_rate": 1592,
+     "other_rate": 309,
+     "ratio": 5.15,
      "black_pop": 5387
     },
     {
      "division": "West Valley",
-     "black_rate": 990,
-     "other_rate": 307,
-     "ratio": 3.22,
+     "black_rate": 2296,
+     "other_rate": 667,
+     "ratio": 3.44,
      "black_pop": 3636
     },
     {
      "division": "Wilshire",
-     "black_rate": 1419,
-     "other_rate": 449,
-     "ratio": 3.16,
+     "black_rate": 2322,
+     "other_rate": 756,
+     "ratio": 3.07,
      "black_pop": 9196
     }
    ],
-   "actual_rate": 1861,
-   "expected_if_other_rates": 584
+   "actual_rate": 3548,
+   "expected_if_other_rates": 1129
   },
   "type": {
    "simple": {
-    "Black": 1158,
-    "Hispanic": 456,
-    "White": 260,
-    "Asian": 87
+    "Black": 2390,
+    "Hispanic": 952,
+    "White": 478,
+    "Asian": 157
    },
    "aggravated": {
-    "Black": 701,
-    "Hispanic": 167,
-    "White": 82,
-    "Asian": 22
+    "Black": 1154,
+    "Hispanic": 288,
+    "White": 144,
+    "Asian": 36
    }
   },
   "time": {
    "2020": {
-    "Black": 1818,
-    "Hispanic": 571,
-    "White": 344,
-    "Asian": 103
+    "Black": 3491,
+    "Hispanic": 1158,
+    "White": 634,
+    "Asian": 192
    },
    "2021": {
-    "Black": 1811,
-    "Hispanic": 575,
-    "White": 326,
-    "Asian": 104
+    "Black": 3564,
+    "Hispanic": 1181,
+    "White": 608,
+    "Asian": 186
    },
    "2022": {
-    "Black": 1879,
-    "Hispanic": 664,
-    "White": 357,
-    "Asian": 122
+    "Black": 3581,
+    "Hispanic": 1302,
+    "White": 631,
+    "Asian": 214
    },
    "2023": {
-    "Black": 1929,
-    "Hispanic": 682,
-    "White": 342,
-    "Asian": 103
+    "Black": 3539,
+    "Hispanic": 1318,
+    "White": 616,
+    "Asian": 179
    }
   },
   "premises": {
    "labels": [
-    "Street",
-    "Single Family Dwelling",
     "Multi-Unit Dwelling",
+    "Single Family Dwelling",
+    "Street",
     "Sidewalk",
     "Parking Lot",
     "Other Business",
-    "Driveway",
-    "Mta Bus"
+    "Hotel",
+    "Vehicle, Passenger/Truck"
    ],
    "black": [
-    22.0,
-    19.7,
-    18.6,
-    10.2,
-    4.7,
-    2.4,
-    1.2,
-    1.2
+    25.7,
+    23.7,
+    19.6,
+    8.0,
+    4.0,
+    1.5,
+    1.4,
+    1.0
    ],
    "other": [
-    19.0,
-    18.8,
+    24.5,
+    26.8,
     16.0,
-    11.3,
-    5.2,
-    4.0,
-    1.4,
+    7.8,
+    4.3,
+    2.3,
+    0.9,
     1.0
    ]
   },
@@ -904,23 +904,23 @@
     "Unknown or other"
    ],
    "black": [
-    60.9,
-    12.2,
-    7.4,
-    10.8,
-    8.7
+    73.4,
+    7.8,
+    5.0,
+    7.3,
+    6.6
    ],
    "other": [
-    71.4,
-    6.4,
-    5.0,
-    8.1,
-    9.1
+    80.4,
+    3.9,
+    3.7,
+    5.4,
+    6.7
    ]
   },
   "women_n": {
-   "black": 12393,
-   "other": 30892
+   "black": 23622,
+   "other": 59987
   }
  },
  "population": {
@@ -949,74 +949,74 @@
  },
  "rates": {
   "Black": {
-   "F": 1859,
-   "M": 2340,
+   "F": 3544,
+   "M": 2894,
    "popF": 166645.0,
    "popM": 157183.0,
-   "ratio": 0.79
+   "ratio": 1.22
   },
   "Hispanic": {
-   "F": 623,
-   "M": 1007,
+   "F": 1240,
+   "M": 1177,
    "popF": 903648.0,
    "popM": 916749.0,
-   "ratio": 0.62
+   "ratio": 1.05
   },
   "White": {
-   "F": 342,
-   "M": 563,
+   "F": 622,
+   "M": 675,
    "popF": 531557.0,
    "popM": 550836.0,
-   "ratio": 0.61
+   "ratio": 0.92
   },
   "Asian": {
-   "F": 108,
-   "M": 193,
+   "F": 193,
+   "M": 221,
    "popF": 252224.0,
    "popM": 216219.0,
-   "ratio": 0.56
+   "ratio": 0.87
   }
  },
  "division_rates": [
   {
    "division": "77th Street",
    "Black_F": {
-    "n": 2449,
+    "n": 4839,
     "pop": 34378,
-    "rate": 1781
+    "rate": 3519
    },
    "Black_M": {
-    "n": 2315,
+    "n": 2870,
     "pop": 26412,
-    "rate": 2191
+    "rate": 2717
    },
    "Hispanic_F": {
-    "n": 1598,
+    "n": 3308,
     "pop": 56968,
-    "rate": 701
+    "rate": 1452
    },
    "Hispanic_M": {
-    "n": 2474,
+    "n": 2877,
     "pop": 58346,
-    "rate": 1060
+    "rate": 1233
    },
    "White_F": {
-    "n": 110,
+    "n": 229,
     "pop": 1926,
     "rate": null
    },
    "White_M": {
-    "n": 188,
+    "n": 216,
     "pop": 2523,
-    "rate": 1863
+    "rate": 2140
    },
    "Asian_F": {
-    "n": 17,
+    "n": 22,
     "pop": 1061,
     "rate": null
    },
    "Asian_M": {
-    "n": 42,
+    "n": 45,
     "pop": 1085,
     "rate": null
    }
@@ -1024,386 +1024,386 @@
   {
    "division": "Central",
    "Black_F": {
-    "n": 1214,
+    "n": 1994,
     "pop": 4191,
-    "rate": 7242
+    "rate": 11895
    },
    "Black_M": {
-    "n": 2056,
+    "n": 2359,
     "pop": 9583,
-    "rate": 5364
+    "rate": 6154
    },
    "Hispanic_F": {
-    "n": 1375,
+    "n": 2088,
     "pop": 7341,
-    "rate": 4683
+    "rate": 7111
    },
    "Hispanic_M": {
-    "n": 2814,
+    "n": 3061,
     "pop": 13054,
-    "rate": 5389
+    "rate": 5862
    },
    "White_F": {
-    "n": 627,
+    "n": 968,
     "pop": 6564,
-    "rate": 2388
+    "rate": 3687
    },
    "White_M": {
-    "n": 1122,
+    "n": 1281,
     "pop": 10123,
-    "rate": 2771
+    "rate": 3164
    },
    "Asian_F": {
-    "n": 139,
+    "n": 226,
     "pop": 14053,
-    "rate": 247
+    "rate": 402
    },
    "Asian_M": {
-    "n": 172,
+    "n": 206,
     "pop": 11007,
-    "rate": 391
+    "rate": 468
    }
   },
   {
    "division": "Devonshire",
    "Black_F": {
-    "n": 165,
+    "n": 353,
     "pop": 5919,
-    "rate": 697
+    "rate": 1491
    },
    "Black_M": {
-    "n": 194,
+    "n": 273,
     "pop": 6348,
-    "rate": 764
+    "rate": 1075
    },
    "Hispanic_F": {
-    "n": 663,
+    "n": 1433,
     "pop": 39614,
-    "rate": 418
+    "rate": 904
    },
    "Hispanic_M": {
-    "n": 960,
+    "n": 1213,
     "pop": 37369,
-    "rate": 642
+    "rate": 812
    },
    "White_F": {
-    "n": 423,
+    "n": 825,
     "pop": 43757,
-    "rate": 242
+    "rate": 471
    },
    "White_M": {
-    "n": 590,
+    "n": 736,
     "pop": 44382,
-    "rate": 332
+    "rate": 415
    },
    "Asian_F": {
-    "n": 45,
+    "n": 111,
     "pop": 24627,
-    "rate": 46
+    "rate": 113
    },
    "Asian_M": {
-    "n": 68,
+    "n": 76,
     "pop": 22684,
-    "rate": 75
+    "rate": 84
    }
   },
   {
    "division": "Foothill",
    "Black_F": {
-    "n": 125,
+    "n": 211,
     "pop": 2385,
-    "rate": 1310
+    "rate": 2212
    },
    "Black_M": {
-    "n": 158,
+    "n": 196,
     "pop": 2944,
-    "rate": 1342
+    "rate": 1664
    },
    "Hispanic_F": {
-    "n": 1036,
+    "n": 2308,
     "pop": 58988,
-    "rate": 439
+    "rate": 978
    },
    "Hispanic_M": {
-    "n": 1617,
+    "n": 1923,
     "pop": 60894,
-    "rate": 664
+    "rate": 789
    },
    "White_F": {
-    "n": 233,
+    "n": 436,
     "pop": 24168,
-    "rate": 241
+    "rate": 451
    },
    "White_M": {
-    "n": 334,
+    "n": 398,
     "pop": 23836,
-    "rate": 350
+    "rate": 417
    },
    "Asian_F": {
-    "n": 10,
+    "n": 20,
     "pop": 5174,
-    "rate": 48
+    "rate": 97
    },
    "Asian_M": {
-    "n": 11,
+    "n": 14,
     "pop": 4202,
-    "rate": 65
+    "rate": 83
    }
   },
   {
    "division": "Harbor",
    "Black_F": {
-    "n": 356,
+    "n": 759,
     "pop": 5598,
-    "rate": 1590
+    "rate": 3390
    },
    "Black_M": {
-    "n": 370,
+    "n": 498,
     "pop": 4805,
-    "rate": 1925
+    "rate": 2591
    },
    "Hispanic_F": {
-    "n": 1244,
+    "n": 2565,
     "pop": 54349,
-    "rate": 572
+    "rate": 1180
    },
    "Hispanic_M": {
-    "n": 1731,
+    "n": 2091,
     "pop": 57304,
-    "rate": 755
+    "rate": 912
    },
    "White_F": {
-    "n": 403,
+    "n": 818,
     "pop": 16741,
-    "rate": 602
+    "rate": 1222
    },
    "White_M": {
-    "n": 552,
+    "n": 688,
     "pop": 17016,
-    "rate": 811
+    "rate": 1011
    },
    "Asian_F": {
-    "n": 28,
+    "n": 61,
     "pop": 9493,
-    "rate": 74
+    "rate": 161
    },
    "Asian_M": {
-    "n": 43,
+    "n": 53,
     "pop": 8936,
-    "rate": 120
+    "rate": 148
    }
   },
   {
    "division": "Hollenbeck",
    "Black_F": {
-    "n": 111,
+    "n": 227,
     "pop": 1367,
     "rate": null
    },
    "Black_M": {
-    "n": 175,
+    "n": 215,
     "pop": 1774,
     "rate": null
    },
    "Hispanic_F": {
-    "n": 1788,
+    "n": 3239,
     "pop": 66393,
-    "rate": 673
+    "rate": 1220
    },
    "Hispanic_M": {
-    "n": 2554,
+    "n": 2914,
     "pop": 64938,
-    "rate": 983
+    "rate": 1122
    },
    "White_F": {
-    "n": 106,
+    "n": 184,
     "pop": 4930,
-    "rate": 538
+    "rate": 933
    },
    "White_M": {
-    "n": 195,
+    "n": 225,
     "pop": 6303,
-    "rate": 773
+    "rate": 892
    },
    "Asian_F": {
-    "n": 29,
+    "n": 44,
     "pop": 9503,
-    "rate": 76
+    "rate": 116
    },
    "Asian_M": {
-    "n": 43,
+    "n": 48,
     "pop": 8024,
-    "rate": 134
+    "rate": 150
    }
   },
   {
    "division": "Hollywood",
    "Black_F": {
-    "n": 467,
+    "n": 838,
     "pop": 4254,
-    "rate": 2744
+    "rate": 4925
    },
    "Black_M": {
-    "n": 940,
+    "n": 1139,
     "pop": 4998,
-    "rate": 4702
+    "rate": 5697
    },
    "Hispanic_F": {
-    "n": 800,
+    "n": 1394,
     "pop": 18868,
-    "rate": 1060
+    "rate": 1847
    },
    "Hispanic_M": {
-    "n": 1573,
+    "n": 1808,
     "pop": 19962,
-    "rate": 1970
+    "rate": 2264
    },
    "White_F": {
-    "n": 709,
+    "n": 1227,
     "pop": 28493,
-    "rate": 622
+    "rate": 1077
    },
    "White_M": {
-    "n": 1351,
+    "n": 1637,
     "pop": 32699,
-    "rate": 1033
+    "rate": 1252
    },
    "Asian_F": {
-    "n": 63,
+    "n": 100,
     "pop": 7092,
-    "rate": 222
+    "rate": 353
    },
    "Asian_M": {
-    "n": 106,
+    "n": 114,
     "pop": 6146,
-    "rate": 431
+    "rate": 464
    }
   },
   {
    "division": "Mission",
    "Black_F": {
-    "n": 123,
+    "n": 292,
     "pop": 3916,
-    "rate": 785
+    "rate": 1864
    },
    "Black_M": {
-    "n": 165,
+    "n": 223,
     "pop": 3329,
-    "rate": 1239
+    "rate": 1675
    },
    "Hispanic_F": {
-    "n": 1216,
+    "n": 3087,
     "pop": 86757,
-    "rate": 350
+    "rate": 890
    },
    "Hispanic_M": {
-    "n": 1934,
+    "n": 2451,
     "pop": 89548,
-    "rate": 540
+    "rate": 684
    },
    "White_F": {
-    "n": 149,
+    "n": 339,
     "pop": 12623,
-    "rate": 295
+    "rate": 671
    },
    "White_M": {
-    "n": 292,
+    "n": 358,
     "pop": 12509,
-    "rate": 584
+    "rate": 715
    },
    "Asian_F": {
-    "n": 18,
+    "n": 48,
     "pop": 12811,
-    "rate": 35
+    "rate": 94
    },
    "Asian_M": {
-    "n": 36,
+    "n": 47,
     "pop": 12579,
-    "rate": 72
+    "rate": 93
    }
   },
   {
    "division": "N Hollywood",
    "Black_F": {
-    "n": 246,
+    "n": 534,
     "pop": 5675,
-    "rate": 1084
+    "rate": 2352
    },
    "Black_M": {
-    "n": 368,
+    "n": 501,
     "pop": 6530,
-    "rate": 1409
+    "rate": 1918
    },
    "Hispanic_F": {
-    "n": 832,
+    "n": 1742,
     "pop": 39683,
-    "rate": 524
+    "rate": 1097
    },
    "Hispanic_M": {
-    "n": 1469,
+    "n": 1756,
     "pop": 37242,
-    "rate": 986
+    "rate": 1179
    },
    "White_F": {
-    "n": 505,
+    "n": 968,
     "pop": 45089,
-    "rate": 280
+    "rate": 537
    },
    "White_M": {
-    "n": 828,
+    "n": 1003,
     "pop": 45487,
-    "rate": 455
+    "rate": 551
    },
    "Asian_F": {
-    "n": 23,
+    "n": 54,
     "pop": 9343,
-    "rate": 62
+    "rate": 144
    },
    "Asian_M": {
-    "n": 41,
+    "n": 49,
     "pop": 7165,
-    "rate": 143
+    "rate": 171
    }
   },
   {
    "division": "Newton",
    "Black_F": {
-    "n": 804,
+    "n": 1557,
     "pop": 6251,
-    "rate": 3215
+    "rate": 6227
    },
    "Black_M": {
-    "n": 917,
+    "n": 1085,
     "pop": 5106,
-    "rate": 4490
+    "rate": 5312
    },
    "Hispanic_F": {
-    "n": 1903,
+    "n": 3599,
     "pop": 61650,
-    "rate": 772
+    "rate": 1459
    },
    "Hispanic_M": {
-    "n": 3320,
+    "n": 3719,
     "pop": 66191,
-    "rate": 1254
+    "rate": 1405
    },
    "White_F": {
-    "n": 107,
+    "n": 172,
     "pop": 1506,
     "rate": null
    },
    "White_M": {
-    "n": 229,
+    "n": 253,
     "pop": 1896,
     "rate": null
    },
    "Asian_F": {
-    "n": 21,
+    "n": 30,
     "pop": 734,
     "rate": null
    },
    "Asian_M": {
-    "n": 48,
+    "n": 50,
     "pop": 744,
     "rate": null
    }
@@ -1411,214 +1411,214 @@
   {
    "division": "Northeast",
    "Black_F": {
-    "n": 119,
+    "n": 189,
     "pop": 2009,
-    "rate": 1481
+    "rate": 2352
    },
    "Black_M": {
-    "n": 224,
+    "n": 272,
     "pop": 3076,
-    "rate": 1821
+    "rate": 2211
    },
    "Hispanic_F": {
-    "n": 885,
+    "n": 1719,
     "pop": 43953,
-    "rate": 503
+    "rate": 978
    },
    "Hispanic_M": {
-    "n": 1509,
+    "n": 1735,
     "pop": 44946,
-    "rate": 839
+    "rate": 965
    },
    "White_F": {
-    "n": 284,
+    "n": 518,
     "pop": 37695,
-    "rate": 188
+    "rate": 344
    },
    "White_M": {
-    "n": 523,
+    "n": 630,
     "pop": 41838,
-    "rate": 313
+    "rate": 376
    },
    "Asian_F": {
-    "n": 48,
+    "n": 76,
     "pop": 18086,
-    "rate": 66
+    "rate": 105
    },
    "Asian_M": {
-    "n": 64,
+    "n": 74,
     "pop": 15617,
-    "rate": 102
+    "rate": 118
    }
   },
   {
    "division": "Olympic",
    "Black_F": {
-    "n": 404,
+    "n": 812,
     "pop": 4679,
-    "rate": 2159
+    "rate": 4339
    },
    "Black_M": {
-    "n": 582,
+    "n": 750,
     "pop": 5722,
-    "rate": 2543
+    "rate": 3277
    },
    "Hispanic_F": {
-    "n": 1353,
+    "n": 2713,
     "pop": 43956,
-    "rate": 770
+    "rate": 1543
    },
    "Hispanic_M": {
-    "n": 2165,
+    "n": 2572,
     "pop": 45808,
-    "rate": 1182
+    "rate": 1404
    },
    "White_F": {
-    "n": 236,
+    "n": 457,
     "pop": 8557,
-    "rate": 689
+    "rate": 1335
    },
    "White_M": {
-    "n": 444,
+    "n": 543,
     "pop": 10021,
-    "rate": 1108
+    "rate": 1355
    },
    "Asian_F": {
-    "n": 241,
+    "n": 411,
     "pop": 29620,
-    "rate": 203
+    "rate": 347
    },
    "Asian_M": {
-    "n": 427,
+    "n": 477,
     "pop": 27408,
-    "rate": 389
+    "rate": 435
    }
   },
   {
    "division": "Pacific",
    "Black_F": {
-    "n": 442,
+    "n": 799,
     "pop": 7543,
-    "rate": 1465
+    "rate": 2648
    },
    "Black_M": {
-    "n": 611,
+    "n": 740,
     "pop": 6875,
-    "rate": 2222
+    "rate": 2691
    },
    "Hispanic_F": {
-    "n": 494,
+    "n": 846,
     "pop": 24070,
-    "rate": 513
+    "rate": 879
    },
    "Hispanic_M": {
-    "n": 851,
+    "n": 985,
     "pop": 21279,
-    "rate": 1000
+    "rate": 1157
    },
    "White_F": {
-    "n": 605,
+    "n": 1075,
     "pop": 52395,
-    "rate": 289
+    "rate": 513
    },
    "White_M": {
-    "n": 1261,
+    "n": 1464,
     "pop": 53746,
-    "rate": 587
+    "rate": 681
    },
    "Asian_F": {
-    "n": 46,
+    "n": 93,
     "pop": 18488,
-    "rate": 62
+    "rate": 126
    },
    "Asian_M": {
-    "n": 82,
+    "n": 93,
     "pop": 14686,
-    "rate": 140
+    "rate": 158
    }
   },
   {
    "division": "Rampart",
    "Black_F": {
-    "n": 447,
+    "n": 960,
     "pop": 4001,
-    "rate": 2793
+    "rate": 5999
    },
    "Black_M": {
-    "n": 594,
+    "n": 748,
     "pop": 6161,
-    "rate": 2410
+    "rate": 3035
    },
    "Hispanic_F": {
-    "n": 1440,
+    "n": 2865,
     "pop": 47861,
-    "rate": 752
+    "rate": 1497
    },
    "Hispanic_M": {
-    "n": 2884,
+    "n": 3291,
     "pop": 53455,
-    "rate": 1349
+    "rate": 1539
    },
    "White_F": {
-    "n": 312,
+    "n": 539,
     "pop": 9751,
-    "rate": 800
+    "rate": 1382
    },
    "White_M": {
-    "n": 546,
+    "n": 636,
     "pop": 10633,
-    "rate": 1284
+    "rate": 1495
    },
    "Asian_F": {
-    "n": 60,
+    "n": 112,
     "pop": 14572,
-    "rate": 103
+    "rate": 192
    },
    "Asian_M": {
-    "n": 113,
+    "n": 125,
     "pop": 11292,
-    "rate": 250
+    "rate": 277
    }
   },
   {
    "division": "Southeast",
    "Black_F": {
-    "n": 1935,
+    "n": 3744,
     "pop": 17923,
-    "rate": 2699
+    "rate": 5222
    },
    "Black_M": {
-    "n": 1764,
+    "n": 2199,
     "pop": 12135,
-    "rate": 3634
+    "rate": 4530
    },
    "Hispanic_F": {
-    "n": 1602,
+    "n": 3181,
     "pop": 54289,
-    "rate": 738
+    "rate": 1465
    },
    "Hispanic_M": {
-    "n": 2156,
+    "n": 2521,
     "pop": 52325,
-    "rate": 1030
+    "rate": 1204
    },
    "White_F": {
-    "n": 103,
+    "n": 173,
     "pop": 883,
     "rate": null
    },
    "White_M": {
-    "n": 163,
+    "n": 183,
     "pop": 1309,
     "rate": null
    },
    "Asian_F": {
-    "n": 19,
+    "n": 22,
     "pop": 2018,
-    "rate": 235
+    "rate": 273
    },
    "Asian_M": {
-    "n": 19,
+    "n": 21,
     "pop": 1637,
     "rate": null
    }
@@ -1626,259 +1626,259 @@
   {
    "division": "Southwest",
    "Black_F": {
-    "n": 1632,
+    "n": 3040,
     "pop": 28475,
-    "rate": 1433
+    "rate": 2669
    },
    "Black_M": {
-    "n": 1633,
+    "n": 2038,
     "pop": 23808,
-    "rate": 1715
+    "rate": 2140
    },
    "Hispanic_F": {
-    "n": 1207,
+    "n": 2392,
     "pop": 49982,
-    "rate": 604
+    "rate": 1196
    },
    "Hispanic_M": {
-    "n": 1846,
+    "n": 2104,
     "pop": 49055,
-    "rate": 941
+    "rate": 1072
    },
    "White_F": {
-    "n": 216,
+    "n": 346,
     "pop": 8059,
-    "rate": 670
+    "rate": 1073
    },
    "White_M": {
-    "n": 321,
+    "n": 372,
     "pop": 9918,
-    "rate": 809
+    "rate": 938
    },
    "Asian_F": {
-    "n": 51,
+    "n": 77,
     "pop": 7312,
-    "rate": 174
+    "rate": 263
    },
    "Asian_M": {
-    "n": 74,
+    "n": 80,
     "pop": 6955,
-    "rate": 266
+    "rate": 288
    }
   },
   {
    "division": "Topanga",
    "Black_F": {
-    "n": 238,
+    "n": 477,
     "pop": 5478,
-    "rate": 1086
+    "rate": 2177
    },
    "Black_M": {
-    "n": 196,
+    "n": 284,
     "pop": 5864,
-    "rate": 836
+    "rate": 1211
    },
    "Hispanic_F": {
-    "n": 669,
+    "n": 1410,
     "pop": 34215,
-    "rate": 489
+    "rate": 1030
    },
    "Hispanic_M": {
-    "n": 1049,
+    "n": 1272,
     "pop": 33970,
-    "rate": 772
+    "rate": 936
    },
    "White_F": {
-    "n": 479,
+    "n": 948,
     "pop": 40414,
-    "rate": 296
+    "rate": 586
    },
    "White_M": {
-    "n": 691,
+    "n": 870,
     "pop": 41788,
-    "rate": 413
+    "rate": 520
    },
    "Asian_F": {
-    "n": 35,
+    "n": 81,
     "pop": 15537,
-    "rate": 56
+    "rate": 130
    },
    "Asian_M": {
-    "n": 56,
+    "n": 68,
     "pop": 14000,
-    "rate": 100
+    "rate": 121
    }
   },
   {
    "division": "Van Nuys",
    "Black_F": {
-    "n": 229,
+    "n": 466,
     "pop": 4182,
-    "rate": 1369
+    "rate": 2786
    },
    "Black_M": {
-    "n": 294,
+    "n": 394,
     "pop": 5748,
-    "rate": 1279
+    "rate": 1714
    },
    "Hispanic_F": {
-    "n": 814,
+    "n": 1751,
     "pop": 37948,
-    "rate": 536
+    "rate": 1154
    },
    "Hispanic_M": {
-    "n": 1209,
+    "n": 1507,
     "pop": 38953,
-    "rate": 776
+    "rate": 967
    },
    "White_F": {
-    "n": 377,
+    "n": 736,
     "pop": 38388,
-    "rate": 246
+    "rate": 479
    },
    "White_M": {
-    "n": 602,
+    "n": 739,
     "pop": 39660,
-    "rate": 379
+    "rate": 466
    },
    "Asian_F": {
-    "n": 25,
+    "n": 60,
     "pop": 8079,
-    "rate": 77
+    "rate": 186
    },
    "Asian_M": {
-    "n": 45,
+    "n": 56,
     "pop": 6365,
-    "rate": 177
+    "rate": 220
    }
   },
   {
    "division": "West LA",
    "Black_F": {
-    "n": 221,
+    "n": 343,
     "pop": 5387,
-    "rate": 1026
+    "rate": 1592
    },
    "Black_M": {
-    "n": 317,
+    "n": 365,
     "pop": 4384,
-    "rate": 1808
+    "rate": 2081
    },
    "Hispanic_F": {
-    "n": 285,
+    "n": 499,
     "pop": 17131,
-    "rate": 416
+    "rate": 728
    },
    "Hispanic_M": {
-    "n": 547,
+    "n": 620,
     "pop": 14708,
-    "rate": 930
+    "rate": 1054
    },
    "White_F": {
-    "n": 465,
+    "n": 761,
     "pop": 71959,
-    "rate": 162
+    "rate": 264
    },
    "White_M": {
-    "n": 829,
+    "n": 976,
     "pop": 69405,
-    "rate": 299
+    "rate": 352
    },
    "Asian_F": {
-    "n": 60,
+    "n": 111,
     "pop": 21933,
-    "rate": 68
+    "rate": 127
    },
    "Asian_M": {
-    "n": 62,
+    "n": 80,
     "pop": 16301,
-    "rate": 95
+    "rate": 123
    }
   },
   {
    "division": "West Valley",
    "Black_F": {
-    "n": 144,
+    "n": 334,
     "pop": 3636,
-    "rate": 990
+    "rate": 2296
    },
    "Black_M": {
-    "n": 245,
+    "n": 325,
     "pop": 3373,
-    "rate": 1816
+    "rate": 2409
    },
    "Hispanic_F": {
-    "n": 709,
+    "n": 1625,
     "pop": 38857,
-    "rate": 456
+    "rate": 1046
    },
    "Hispanic_M": {
-    "n": 1228,
+    "n": 1537,
     "pop": 36839,
-    "rate": 833
+    "rate": 1043
    },
    "White_F": {
-    "n": 406,
+    "n": 804,
     "pop": 44773,
-    "rate": 227
+    "rate": 449
    },
    "White_M": {
-    "n": 639,
+    "n": 781,
     "pop": 43152,
-    "rate": 370
+    "rate": 452
    },
    "Asian_F": {
-    "n": 40,
+    "n": 79,
     "pop": 10394,
-    "rate": 96
+    "rate": 190
    },
    "Asian_M": {
-    "n": 33,
+    "n": 42,
     "pop": 9711,
-    "rate": 85
+    "rate": 108
    }
   },
   {
    "division": "Wilshire",
    "Black_F": {
-    "n": 522,
+    "n": 854,
     "pop": 9196,
-    "rate": 1419
+    "rate": 2322
    },
    "Black_M": {
-    "n": 594,
+    "n": 723,
     "pop": 7888,
-    "rate": 1883
+    "rate": 2291
    },
    "Hispanic_F": {
-    "n": 607,
+    "n": 1051,
     "pop": 19404,
-    "rate": 782
+    "rate": 1354
    },
    "Hispanic_M": {
-    "n": 1042,
+    "n": 1199,
     "pop": 19615,
-    "rate": 1328
+    "rate": 1528
    },
    "White_F": {
-    "n": 427,
+    "n": 705,
     "pop": 30431,
-    "rate": 351
+    "rate": 579
    },
    "White_M": {
-    "n": 714,
+    "n": 883,
     "pop": 30335,
-    "rate": 588
+    "rate": 728
    },
    "Asian_F": {
-    "n": 72,
+    "n": 106,
     "pop": 11757,
-    "rate": 153
+    "rate": 225
    },
    "Asian_M": {
-    "n": 83,
+    "n": 91,
     "pop": 9268,
-    "rate": 224
+    "rate": 245
    }
   }
  ]

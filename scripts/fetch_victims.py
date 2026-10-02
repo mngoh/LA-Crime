@@ -5,8 +5,10 @@ pre-NIBRS records system. LAPD moved to NIBRS on March 7, 2024 and the old file 
 from then on, so the window stops at the last full year, 2023.
 
 Writes the two victim files the other scripts read, one row per report:
-  data/eda_data.csv          crime code 624, BATTERY - SIMPLE ASSAULT
-  data/eda_data_deadly.csv   crime code 230, ASSAULT WITH DEADLY WEAPON, AGGRAVATED ASSAULT
+  data/eda_data.csv          simple assault: 624 BATTERY - SIMPLE ASSAULT, 626 INTIMATE PARTNER - SIMPLE ASSAULT
+  data/eda_data_deadly.csv   aggravated assault: 230 ASSAULT WITH DEADLY WEAPON, AGGRAVATED ASSAULT,
+                             236 INTIMATE PARTNER - AGGRAVATED ASSAULT
+The crime_code column tells partner and non-partner assault apart.
 
 Values are kept as LAPD publishes them: no imputation. Missing coordinates stay 0, as LAPD
 codes them, and are dropped where location is needed.
@@ -23,7 +25,7 @@ from compute_rates import DATA
 
 API = "https://data.lacity.org/resource/2nrs-mtv8.csv"
 START, END = "2020-01-01T00:00:00", "2023-12-31T23:59:59"
-FILES = {"624": "eda_data.csv", "230": "eda_data_deadly.csv"}
+FILES = {"eda_data.csv": ["624", "626"], "eda_data_deadly.csv": ["230", "236"]}
 RENAME = {
     "dr_no": "div_record", "area": "area", "area_name": "area_name", "rpt_dist_no": "rpt", "part_1_2": "part",
     "crm_cd": "crime_code", "crm_cd_desc": "crime_code_def", "mocodes": "mocodes", "vict_age": "vict_age",
@@ -33,9 +35,9 @@ RENAME = {
 }
 
 
-def download(code):
+def download(codes):
     query = urllib.parse.urlencode({
-        "$where": f"crm_cd = '{code}' AND date_occ between '{START}' and '{END}'",
+        "$where": f"crm_cd in ({','.join(repr(c) for c in codes)}) AND date_occ between '{START}' and '{END}'",
         "$order": "dr_no", "$limit": 500000,
     })
     req = urllib.request.Request(f"{API}?{query}", headers={"User-Agent": "LA-Crime analysis (github.com/mngoh/LA-Crime)"})
@@ -44,8 +46,8 @@ def download(code):
 
 
 def main():
-    for code, name in FILES.items():
-        raw = download(code)
+    for name, codes in FILES.items():
+        raw = download(codes)
         d = raw[list(RENAME)].rename(columns=RENAME)
         occ = pd.to_datetime(raw["date_occ"])
         hhmm = raw["time_occ"].str.zfill(4)

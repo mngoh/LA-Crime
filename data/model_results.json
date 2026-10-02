@@ -1,11 +1,11 @@
 {
- "women_located": 42446,
- "women_total": 42676,
+ "women_located": 82103,
+ "women_total": 82548,
  "cells": 33120,
  "min_cell_pop": 1,
  "coverage": {
-  "Black": 81.7,
-  "Other": 98.2
+  "Black": 82.0,
+  "Other": 98.3
  },
  "age_bands": [
   "0-17",
@@ -17,112 +17,112 @@
  "ladder": [
   {
    "model": "M0 group only",
-   "rate_ratio": 3.36,
-   "ci_low": 3.22,
-   "ci_high": 3.5,
+   "rate_ratio": 3.31,
+   "ci_low": 3.18,
+   "ci_high": 3.44,
    "controls": "black"
   },
   {
    "model": "M1 + age",
-   "rate_ratio": 3.29,
-   "ci_low": 3.16,
-   "ci_high": 3.43,
+   "rate_ratio": 3.25,
+   "ci_low": 3.13,
+   "ci_high": 3.37,
    "controls": "black + C(band)"
   },
   {
    "model": "M2 + year",
-   "rate_ratio": 3.29,
-   "ci_low": 3.16,
-   "ci_high": 3.43,
+   "rate_ratio": 3.25,
+   "ci_low": 3.13,
+   "ci_high": 3.37,
    "controls": "black + C(band) + C(year)"
   },
   {
    "model": "M3 + division",
-   "rate_ratio": 2.56,
-   "ci_low": 2.46,
-   "ci_high": 2.67,
+   "rate_ratio": 2.58,
+   "ci_low": 2.49,
+   "ci_high": 2.68,
    "controls": "black + C(band) + C(year) + C(division)"
   },
   {
    "model": "M4 + tract socioeconomics",
-   "rate_ratio": 2.47,
-   "ci_low": 2.37,
-   "ci_high": 2.57,
+   "rate_ratio": 2.5,
+   "ci_low": 2.41,
+   "ci_high": 2.59,
    "controls": "black + C(band) + C(year) + C(division) + poverty + log_income + unemployment + renters + log_density"
   },
   {
    "model": "M5 + tract homelessness",
-   "rate_ratio": 2.44,
-   "ci_low": 2.35,
-   "ci_high": 2.54,
+   "rate_ratio": 2.48,
+   "ci_low": 2.39,
+   "ci_high": 2.57,
    "controls": "black + C(band) + C(year) + C(division) + poverty + log_income + unemployment + renters + log_density + log_homeless"
   }
  ],
  "fully_adjusted_by_type": {
   "simple": {
-   "rate_ratio": 2.13,
-   "ci_low": 2.04,
-   "ci_high": 2.22
+   "rate_ratio": 2.22,
+   "ci_low": 2.14,
+   "ci_high": 2.3
   },
   "aggravated": {
-   "rate_ratio": 3.28,
-   "ci_low": 3.11,
-   "ci_high": 3.45
+   "rate_ratio": 3.29,
+   "ci_low": 3.14,
+   "ci_high": 3.44
   }
  },
  "pairwise": {
   "Hispanic": {
    "crude": {
-    "rate_ratio": 2.52,
-    "ci_low": 2.42,
-    "ci_high": 2.63
+    "rate_ratio": 2.41,
+    "ci_low": 2.32,
+    "ci_high": 2.51
    },
    "adjusted": {
-    "rate_ratio": 2.07,
-    "ci_low": 1.99,
+    "rate_ratio": 2.08,
+    "ci_low": 2.01,
     "ci_high": 2.16
    }
   },
   "White": {
    "crude": {
-    "rate_ratio": 4.86,
-    "ci_low": 4.61,
-    "ci_high": 5.11
+    "rate_ratio": 5.12,
+    "ci_low": 4.89,
+    "ci_high": 5.36
    },
    "adjusted": {
-    "rate_ratio": 2.3,
-    "ci_low": 2.17,
-    "ci_high": 2.44
+    "rate_ratio": 2.44,
+    "ci_low": 2.32,
+    "ci_high": 2.57
    }
   },
   "Asian": {
    "crude": {
-    "rate_ratio": 15.78,
-    "ci_low": 14.55,
-    "ci_high": 17.12
+    "rate_ratio": 16.68,
+    "ci_low": 15.6,
+    "ci_high": 17.82
    },
    "adjusted": {
-    "rate_ratio": 10.42,
-    "ci_low": 9.56,
-    "ci_high": 11.36
+    "rate_ratio": 10.71,
+    "ci_low": 9.99,
+    "ci_high": 11.49
    }
   }
  },
  "homelessness_sensitivity": {
   "homeless": {
-   "rate_ratio": 2.44,
-   "ci_low": 2.35,
-   "ci_high": 2.54
+   "rate_ratio": 2.48,
+   "ci_low": 2.39,
+   "ci_high": 2.57
   },
   "people_only": {
-   "rate_ratio": 2.45,
-   "ci_low": 2.36,
-   "ci_high": 2.55
+   "rate_ratio": 2.49,
+   "ci_low": 2.4,
+   "ci_high": 2.58
   },
   "unsheltered": {
-   "rate_ratio": 2.44,
-   "ci_low": 2.34,
-   "ci_high": 2.54
+   "rate_ratio": 2.47,
+   "ci_low": 2.39,
+   "ci_high": 2.56
   }
  },
  "homelessness_included": true,

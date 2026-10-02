@@ -63,6 +63,7 @@ def load_victims():
         frames.append(d)
     df = pd.concat(frames, ignore_index=True)
     df["race"] = df["vict_race"].map(RACE)
+    df["partner"] = df["crime_code"].astype(str).isin(["626", "236"])  # intimate partner assault
     df["sex"] = df["vict_sex"].where(df["vict_sex"].isin(["M", "F"]))
     return df
 
