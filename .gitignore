@@ -1,4 +1,7 @@
-data/
+# raw LAPD download (large) and cached external inputs; data/page_data.json and the two victim CSVs are tracked
+data/cime_data_2020.csv
+data/crime_map.json
+data/external/
 .claude/
 .DS_Store
 .ipynb_checkpoints/
