@@ -127,6 +127,7 @@ html = f'''<!DOCTYPE html>
     <div class="q">The question</div>
     <p>Black women are a far larger share of assault victims than women of any other group. Is that a higher rate of victimization, or just where assaults happen?</p>
     <p>A higher rate. Per 100,000 residents a year, Black women are assaulted {fmt(bw["F"])} times: {ratio["Hispanic"]} times the rate of Hispanic women, {ratio["White"]} times White women, {ratio["Asian"]} times Asian women, and more often than Hispanic or White men.</p>
+    <p>Adjusted for age, year, where the assault happened, neighborhood poverty, income, unemployment, housing and homelessness, the gap is still about {round(M["pairwise"]["Hispanic"]["adjusted"]["rate_ratio"])} times Hispanic or White women and {round(M["pairwise"]["Asian"]["adjusted"]["rate_ratio"])} times Asian women. The model is below.</p>
   </div>
 
   <div class="section-title">Dataset</div>
@@ -208,7 +209,7 @@ html = f'''<!DOCTYPE html>
   <div class="charts section-end">
     <div class="chart-box">
       <h3>Premises</h3>
-      <div class="chart-sub">Different places? Barely. Street {T["premises"]["black"][0]}% vs {T["premises"]["other"][0]}%, at home {home_black}% vs {home_other}%. Share of each group's assaults, top eight premises.</div>
+      <div class="chart-sub">Different places? Barely. Street {T["premises"]["black"][0]}% vs {T["premises"]["other"][0]}%, at home {home_black}% vs {home_other}%. Share of each group's assaults, top eight premises. A slightly larger share at home and on the street is consistent with domestic and neighborhood violence, but LAPD's file has no victim-offender relationship field, so this data cannot confirm it.</div>
       <div class="chart-wrap tall"><canvas id="premChart"></canvas></div>
     </div>
     <div class="chart-box">
@@ -252,6 +253,8 @@ html = f'''<!DOCTYPE html>
     <div class="finding red"><h4>What the model says</h4><p>Where assaults happen is the biggest single factor, removing about {loc_share}% of the excess. Tract poverty, income, unemployment, renters and density together remove another {ses_share}% once location is in. Age removes {age_share}%; year, nothing. A {final["rate_ratio"]}-fold gap remains that none of these measured factors explain.</p></div>
     <div class="finding"><h4>What it cannot say</h4><p>Residents are the denominator, so exposure away from home is unmeasured, and {round(100 - M["coverage"]["Black"])}% of Black women victims were assaulted in tracts with no resident women like them. {"Homelessness enters only as a tract-level count from the 2024 LAHSA count, a proxy for exposure, not a measure of who the victims were." if M["homelessness_included"] else "Homelessness counts by tract are not in the model."} Reporting behavior is invisible to police data.</p></div>
   </div>
+
+  <p class="note">Context: this is the direction national evidence points. The National Crime Victimization Survey, which counts crimes whether or not they were reported, found the rate of violence against Black women almost 50% higher than against White women in 2005, by strangers, acquaintances and partners alike (<a href="https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/heimer.pdf">Heimer and colleagues, BJS</a>; <a href="https://bjs.ojp.gov/content/pub/pdf/bvvc.pdf">Harrell, BJS 2007</a>). Los Angeles's police-recorded gap is larger than that national survey figure, which is itself worth explaining.</p>
 
   <div class="section-title">Caveats</div>
   <div class="findings">

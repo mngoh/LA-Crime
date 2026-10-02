@@ -43,6 +43,10 @@ Each comparison group on its own (crude, then fully adjusted): Hispanic women 2.
 
 Homelessness enters as a tract-level count from the 2024 LAHSA Homeless Count, built by `scripts/lahsa_tracts.py`. LAHSA publishes actual counts only and states that per-tract occupant estimates are not precise, so three definitions were tested: people counted plus one per dwelling (2.46x), people counted only (2.47x) and unsheltered only (2.45x). The choice does not matter. Not in the model: exposure away from home, reporting behavior, and anything about offenders or circumstances.
 
+## Context
+
+National victimization surveys, which include crimes never reported to police, point the same way: BJS data for 2005 put the rate of violence against Black women almost 50% higher than against White women, across strangers, acquaintances and partners ([Heimer et al., BJS-hosted](https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/heimer.pdf); [Harrell, Black Victims of Violent Crime, BJS 2007](https://bjs.ojp.gov/content/pub/pdf/bvvc.pdf)). The Los Angeles police-recorded gap is larger than that national figure.
+
 ## Caveats
 
 - This shows what the data says, not why. Nothing here measures causes, offenders or circumstances.
