@@ -1,0 +1,128 @@
+{
+ "windows": {
+  "legacy": "January 2020 to December 2023",
+  "nibrs": "June 2024 to August 2026"
+ },
+ "counts": {
+  "legacy": {
+   "general": {
+    "Black": 12393,
+    "Hispanic": 22520,
+    "White": 7282,
+    "Asian": 1090
+   },
+   "intimate": {
+    "Black": 11229,
+    "Hispanic": 22295,
+    "White": 5946,
+    "Asian": 854
+   }
+  },
+  "nibrs": {
+   "general": {
+    "Black": 7855,
+    "Hispanic": 15037,
+    "White": 4549,
+    "Asian": 1099
+   },
+   "intimate": {
+    "Black": 6403,
+    "Hispanic": 12578,
+    "White": 3021,
+    "Asian": 708
+   }
+  }
+ },
+ "rates": {
+  "legacy": {
+   "general": {
+    "Black": 1859,
+    "Hispanic": 623,
+    "White": 342,
+    "Asian": 108
+   },
+   "intimate": {
+    "Black": 1685,
+    "Hispanic": 617,
+    "White": 280,
+    "Asian": 85
+   },
+   "all": {
+    "Black": 3544,
+    "Hispanic": 1240,
+    "White": 622,
+    "Asian": 193
+   }
+  },
+  "nibrs": {
+   "general": {
+    "Black": 2095,
+    "Hispanic": 740,
+    "White": 380,
+    "Asian": 194
+   },
+   "intimate": {
+    "Black": 1708,
+    "Hispanic": 619,
+    "White": 253,
+    "Asian": 125
+   },
+   "all": {
+    "Black": 3803,
+    "Hispanic": 1358,
+    "White": 633,
+    "Asian": 318
+   }
+  }
+ },
+ "ratios": {
+  "legacy": {
+   "general": {
+    "Hispanic": 2.98,
+    "White": 5.44,
+    "Asian": 17.21
+   },
+   "intimate": {
+    "Hispanic": 2.73,
+    "White": 6.02,
+    "Asian": 19.82
+   },
+   "all": {
+    "Hispanic": 2.86,
+    "White": 5.7,
+    "Asian": 18.36
+   }
+  },
+  "nibrs": {
+   "general": {
+    "Hispanic": 2.83,
+    "White": 5.51,
+    "Asian": 10.8
+   },
+   "intimate": {
+    "Hispanic": 2.76,
+    "White": 6.75,
+    "Asian": 13.66
+   },
+   "all": {
+    "Hispanic": 2.8,
+    "White": 6.01,
+    "Asian": 11.96
+   }
+  }
+ },
+ "intimate_share": {
+  "legacy": {
+   "Black": 47.5,
+   "Hispanic": 49.7,
+   "White": 45.0,
+   "Asian": 43.9
+  },
+  "nibrs": {
+   "Black": 44.9,
+   "Hispanic": 45.5,
+   "White": 39.9,
+   "Asian": 39.2
+  }
+ }
+}

@@ -29,6 +29,7 @@ divmap = [{"name": d["division"], "lat": C["centroids"][d["division"]]["lat"], "
 
 T = D["tests"]
 M = json.loads((ROOT / "data" / "model_results.json").read_text())
+N = json.loads((ROOT / "data" / "nibrs_comparison.json").read_text())
 ladder = M["ladder"]; final = ladder[-1]; crude = ladder[0]
 explained = round((1 - (final["rate_ratio"] - 1) / (crude["rate_ratio"] - 1)) * 100)
 rr = {l["model"].split(" ")[0]: l["rate_ratio"] for l in ladder}
@@ -209,7 +210,7 @@ html = f'''<!DOCTYPE html>
   <div class="charts section-end">
     <div class="chart-box">
       <h3>Premises</h3>
-      <div class="chart-sub">Different places? Barely. Street {T["premises"]["black"][0]}% vs {T["premises"]["other"][0]}%, at home {home_black}% vs {home_other}%. Share of each group's assaults, top eight premises. A slightly larger share at home and on the street is consistent with domestic and neighborhood violence, but LAPD's file has no victim-offender relationship field, so this data cannot confirm it.</div>
+      <div class="chart-sub">Different places? Barely. Street {T["premises"]["black"][0]}% vs {T["premises"]["other"][0]}%, at home {home_black}% vs {home_other}%. Share of each group's assaults, top eight premises. Intimate partner assaults are coded separately by LAPD and covered in their own section below.</div>
       <div class="chart-wrap tall"><canvas id="premChart"></canvas></div>
     </div>
     <div class="chart-box">
@@ -254,6 +255,25 @@ html = f'''<!DOCTYPE html>
     <div class="finding"><h4>What it cannot say</h4><p>Residents are the denominator, so exposure away from home is unmeasured, and {round(100 - M["coverage"]["Black"])}% of Black women victims were assaulted in tracts with no resident women like them. {"Homelessness enters only as a tract-level count from the 2024 LAHSA count, a proxy for exposure, not a measure of who the victims were." if M["homelessness_included"] else "Homelessness counts by tract are not in the model."} Reporting behavior is invisible to police data.</p></div>
   </div>
 
+  <div class="section-title">A second records system, and intimate partner assault</div>
+  <p class="note">Two checks on data the analysis above does not use. LAPD moved to the FBI's NIBRS standard in March 2024, so {N["windows"]["nibrs"]} is a separate test on new records. And LAPD's old system coded intimate partner assaults separately (codes 626 and 236); they are not in the rates or model above. Here both are counted the same way in both systems, women only, per 100,000 residents a year.</p>
+  <div class="charts section-end">
+    <div class="chart-box">
+      <h3>The gap replicates</h3>
+      <div class="chart-sub">Non-partner assault. Black women's rate is {N["ratios"]["nibrs"]["general"]["Hispanic"]} times Hispanic women's and {N["ratios"]["nibrs"]["general"]["White"]} times White women's in NIBRS, against {N["ratios"]["legacy"]["general"]["Hispanic"]} and {N["ratios"]["legacy"]["general"]["White"]} before. The Asian comparison moved most, from {N["ratios"]["legacy"]["general"]["Asian"]} to {N["ratios"]["nibrs"]["general"]["Asian"]}.</div>
+      <div class="chart-wrap"><canvas id="nibrsChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Intimate partner assault</h3>
+      <div class="chart-sub">Nearly half of all assaults on women in every group. Black women's partner assault rate is {fmt(N["rates"]["legacy"]["intimate"]["Black"])}, {N["ratios"]["legacy"]["intimate"]["Hispanic"]} times Hispanic and {N["ratios"]["legacy"]["intimate"]["White"]} times White women's. 2020 to 2023.</div>
+      <div class="chart-wrap"><canvas id="ipvChart"></canvas></div>
+    </div>
+  </div>
+  <div class="findings">
+    <div class="finding red"><h4>Same gap, new system</h4><p>Different years, a different records system and different offense coding, and Black women's rate is still about 3 times Hispanic women's and 5.5 times White women's.</p></div>
+    <div class="finding red"><h4>Not concentrated at home</h4><p>Intimate partner assault is {N["intimate_share"]["legacy"]["Black"]}% of assaults on Black women and {N["intimate_share"]["legacy"]["Hispanic"]}% for Hispanic women. The gap is the same size with partners as without. Counting both, Black women are assaulted at {fmt(N["rates"]["legacy"]["all"]["Black"])} per 100,000 a year, about 1 in {round(1e5 / N["rates"]["legacy"]["all"]["Black"])}.</p></div>
+  </div>
+
   <p class="note">Context: this is the direction national evidence points. The National Crime Victimization Survey, which counts crimes whether or not they were reported, found the rate of violence against Black women almost 50% higher than against White women in 2005, by strangers, acquaintances and partners alike (<a href="https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/heimer.pdf">Heimer and colleagues, BJS</a>; <a href="https://bjs.ojp.gov/content/pub/pdf/bvvc.pdf">Harrell, BJS 2007</a>). Los Angeles's police-recorded gap is larger than that national survey figure, which is itself worth explaining.</p>
 
   <div class="section-title">Caveats</div>
@@ -262,13 +282,13 @@ html = f'''<!DOCTYPE html>
     <div class="finding red"><h4>Reported crimes only</h4><p>Every number is a report that reached LAPD. Willingness to report, and police recording practice, differ by group, by area and over time. A higher rate can partly reflect more reporting.</p></div>
     <div class="finding red"><h4>Exposure is not population</h4><p>Rates divide by where people live, not where they spend time. Someone who works, commutes or socializes in a high-assault area carries that exposure home to a different denominator.</p></div>
     <div class="finding red"><h4>Residential denominators</h4><p>Divisions with many visitors, workers or unhoused residents, Central above all, show inflated rates because victims there often do not live there.</p></div>
-    <div class="finding"><h4>Who is counted</h4><p>{fmt(C["total"] - C["known"])} victims with unknown race or sex are left out of the rates. LAPD descent codes are officer-recorded and were collapsed to four groups; everyone else is excluded.</p></div>
+    <div class="finding"><h4>Who is counted</h4><p>The main rates and model cover simple and aggravated assault (LAPD codes 624 and 230); intimate partner assaults are compared separately. {fmt(C["total"] - C["known"])} victims with unknown race or sex are left out of the rates. LAPD descent codes are officer-recorded and were collapsed to four groups; everyone else is excluded.</p></div>
     <div class="finding"><h4>Period and population mismatch</h4><p>Victims cover January 2020 to December 2023, a window that includes the pandemic. Population is the ACS 2020 to 2024 five-year average, with sampling error at the tract level.</p></div>
   </div>
 
   <div class="section-title">Method</div>
   <p class="note">LAPD victim descent codes mapped to four groups (Asian combines the Asian descent codes). Population by census tract from the ACS 2020 to 2024 five-year release via Census Reporter; {fmt(P["tracts"])} tracts inside the city were assigned to LAPD divisions by tract centroid using the city's division boundaries ({P["unassigned"]} fell outside). Rates divide victims by residents and by {D["years"]} years. Cells with fewer than {fmt(D["min_pop"])} residents are not rated.</p>
-  <p class="note">Sources: LAPD Open Data (Crime Data from 2020 to Present), US Census Bureau ACS, LA GeoHub. Reproduce with <code>scripts/compute_rates.py</code> and <code>scripts/build_page.py</code>.</p>
+  <p class="note">Sources: LAPD Open Data (Crime Data from 2020 to 2024; NIBRS Victims), US Census Bureau ACS, LA GeoHub, LAHSA. NIBRS assaults are offense codes 13A and 13B, classed as intimate partner by their offense label; officer and child victims are excluded in both systems. NIBRS labels do not map one-to-one to the old codes, so compare ratios between groups rather than levels between systems. Reproduce with the scripts in the repository.</p>
 
 </div>
 
@@ -404,6 +424,24 @@ html = f'''<!DOCTYPE html>
       {{ label: 'Fully adjusted', data: Object.values(PAIR).map(p => p.adjusted.rate_ratio), ...bar(C.red) }} ] }},
     options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => {{ const p = Object.values(PAIR)[i.dataIndex][i.datasetIndex ? 'adjusted' : 'crude']; return `${{i.dataset.label}}: ${{p.rate_ratio}}x (95% CI ${{p.ci_low}} to ${{p.ci_high}})`; }} }} }} }},
       scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, title: {{ display: true, text: "Black women's rate as a multiple of the group's" }} }} }} }}
+  }});
+  const NB = {json.dumps(N)};
+  const others = ['Hispanic', 'White', 'Asian'];
+  new Chart(document.getElementById('nibrsChart'), {{
+    type: 'bar',
+    data: {{ labels: others.map(r => r + ' women'), datasets: [
+      {{ label: 'Old system, 2020 to 2023', data: others.map(r => NB.ratios.legacy.general[r]), ...bar(C.muted) }},
+      {{ label: 'NIBRS, 2024 to 2026', data: others.map(r => NB.ratios.nibrs.general[r]), ...bar(C.red) }} ] }},
+    options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.y}}x` }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, title: {{ display: true, text: "Black women's rate as a multiple of the group's" }} }} }} }}
+  }});
+  new Chart(document.getElementById('ipvChart'), {{
+    type: 'bar',
+    data: {{ labels: RACES, datasets: [
+      {{ label: 'Other assault', data: RACES.map(r => NB.rates.legacy.general[r]), ...bar(C.red) }},
+      {{ label: 'Intimate partner', data: RACES.map(r => NB.rates.legacy.intimate[r]), ...bar(C.blue) }} ] }},
+    options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => `${{i.dataset.label}}: ${{i.parsed.y.toLocaleString()}} per 100,000 per year` }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, title: {{ display: true, text: 'Women assaulted per 100,000 per year' }} }} }} }}
   }});
   const SENS = {json.dumps(M["homelessness_sensitivity"])};
   const sensNames = {{ homeless: 'People + one per dwelling', people_only: 'People counted only', unsheltered: 'Unsheltered only' }};

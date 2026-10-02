@@ -43,6 +43,15 @@ Each comparison group on its own (crude, then fully adjusted): Hispanic women 2.
 
 Homelessness enters as a tract-level count from the 2024 LAHSA Homeless Count, built by `scripts/lahsa_tracts.py`. LAHSA publishes actual counts only and states that per-tract occupant estimates are not precise, so three definitions were tested: people counted plus one per dwelling (2.44x), people counted only (2.45x) and unsheltered only (2.44x). The choice does not matter. Not in the model: exposure away from home, reporting behavior, and anything about offenders or circumstances.
 
+## A second records system, and intimate partner assault
+
+`scripts/compare_nibrs.py` runs two checks on data the analysis above does not use, women only, per 100,000 residents a year.
+
+- **Replication.** LAPD moved to NIBRS in March 2024. In June 2024 to August 2026, Black women's rate of non-partner assault is 2.83x Hispanic women's and 5.51x White women's, against 2.98x and 5.44x in 2020 to 2023. The Asian comparison moved most (17.21x to 10.8x).
+- **Intimate partner assault.** LAPD's old system coded it separately (626 and 236), so it is not in the rates or model above. It is nearly half of assaults on women in every group (47.5% Black, 49.7% Hispanic, 45.0% White, 43.9% Asian). Black women's partner assault rate is 1,685, 2.73x Hispanic and 6.02x White women's: the gap is the same size with partners as without. Counting both, Black women are assaulted at 3,544 per 100,000 a year.
+
+NIBRS assaults are offense codes 13A and 13B, classed as intimate partner by their offense label; officer and child victims are excluded in both systems. NIBRS labels do not map one-to-one to the old codes, so compare ratios between groups, not levels between systems.
+
 ## Context
 
 National victimization surveys, which include crimes never reported to police, point the same way: BJS data for 2005 put the rate of violence against Black women almost 50% higher than against White women, across strangers, acquaintances and partners ([Heimer et al., BJS-hosted](https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/heimer.pdf); [Harrell, Black Victims of Violent Crime, BJS 2007](https://bjs.ojp.gov/content/pub/pdf/bvvc.pdf)). The Los Angeles police-recorded gap is larger than that national figure.
@@ -53,7 +62,7 @@ National victimization surveys, which include crimes never reported to police, p
 - Reported crimes only. Willingness to report and police recording practice differ by group, area and time, so a higher rate can partly reflect more reporting.
 - Exposure is not population. Rates divide by where people live, not where they spend their time.
 - Residential denominators inflate rates in divisions with many visitors, workers or unhoused residents (Central above all).
-- 10,238 victims with unknown race or sex are excluded. LAPD descent codes are officer-recorded and collapsed to four groups.
+- The main rates and model cover codes 624 and 230 only; intimate partner assault is compared separately above. 10,238 victims with unknown race or sex are excluded. LAPD descent codes are officer-recorded and collapsed to four groups.
 - Victims cover January 2020 to December 2023, including the pandemic; population is the ACS 2020 to 2024 five-year average.
 
 ## Method
@@ -70,7 +79,8 @@ python scripts/fetch_victims.py    # LAPD assault victims 2020 to 2023 -> data/e
 python scripts/compute_rates.py   # counts, rates, hypothesis tests -> data/page_data.json (downloads ACS, tract centroids and division boundaries once)
 python scripts/lahsa_tracts.py    # 2024 LAHSA count by tract -> data/external/lahsa_tracts.csv
 python scripts/model_gap.py       # adjustment ladder -> data/model_results.json (downloads tract geometry and ACS socioeconomics once)
-python scripts/build_page.py      # both JSON files -> index.html
+python scripts/compare_nibrs.py   # NIBRS replication and intimate partner assault -> data/nibrs_comparison.json
+python scripts/build_page.py      # the JSON files -> index.html
 ```
 
 Run from the repository root. The notebooks also expect to be run from the root.
@@ -84,12 +94,14 @@ scripts/
   compute_rates.py            counts, rates and the six hypothesis tests -> data/page_data.json
   lahsa_tracts.py             2024 LAHSA Homeless Count by tract -> data/external/lahsa_tracts.csv
   model_gap.py                tract-level Poisson adjustment ladder -> data/model_results.json
-  build_page.py               renders index.html from the two JSON files
+  compare_nibrs.py            NIBRS replication and intimate partner assault -> data/nibrs_comparison.json
+  build_page.py               renders index.html from the JSON files
 data/
   eda_data.csv                simple assault (battery) victims, LAPD, Jan 2020 to Dec 2023
   eda_data_deadly.csv         aggravated assault victims, same window
   page_data.json              computed counts, rates and tests
   model_results.json          model output
+  nibrs_comparison.json       NIBRS and intimate partner comparison
   external/                   cached downloads (ACS, tract centroids and geometry, division boundaries, LAHSA workbook); not committed
 notebooks/
   0_data_cleaning.ipynb       the original 2023 cleaning, superseded by scripts/fetch_victims.py
