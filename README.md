@@ -60,6 +60,8 @@ National victimization surveys, which include crimes never reported to police, p
 
 - This shows what the data says, not why. Nothing here measures causes, offenders or circumstances.
 - Reported crimes only. Willingness to report and police recording practice differ by group, area and time, so a higher rate can partly reflect more reporting.
+- Reports, not people. A woman assaulted twice counts twice, so rates are not the share of women assaulted.
+- Race is officer-recorded; the population is Black alone. LA has 24% more people who are Black alone or in combination. If multiracial victims are recorded as Black, the worst case lowers the ratios to about 2.3 times Hispanic and 4.6 times White women.
 - Exposure is not population. Rates divide by where people live, not where they spend their time.
 - Residential denominators inflate rates in divisions with many visitors, workers or unhoused residents (Central above all).
 - Covers simple and aggravated assault including intimate partner assault (codes 624, 626, 230, 236); assaults on police, child abuse and sexual battery are left out. 13,084 victims with unknown race or sex are excluded. LAPD descent codes are officer-recorded and collapsed to four groups.

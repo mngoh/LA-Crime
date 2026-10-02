@@ -30,6 +30,9 @@ divmap = [{"name": d["division"], "lat": C["centroids"][d["division"]]["lat"], "
 T = D["tests"]
 M = json.loads((ROOT / "data" / "model_results.json").read_text())
 N = json.loads((ROOT / "data" / "nibrs_comparison.json").read_text())
+# LA city, ACS 2020 to 2024: Black alone or in combination (B02009) over Black alone (B02001)
+BLACK_COMBO = 400482 / 323828
+BLACK_COMBO_PCT = round((BLACK_COMBO - 1) * 100)
 ladder = M["ladder"]; final = ladder[-1]; crude = ladder[0]
 explained = round((1 - (final["rate_ratio"] - 1) / (crude["rate_ratio"] - 1)) * 100)
 rr = {l["model"].split(" ")[0]: l["rate_ratio"] for l in ladder}
@@ -275,7 +278,7 @@ html = f'''<!DOCTYPE html>
   </div>
   <div class="findings">
     <div class="finding red"><h4>Same gap, new system</h4><p>Different years, a different records system and different offense coding, and Black women's rate is still about 3 times Hispanic women's and 6 times White women's.</p></div>
-    <div class="finding red"><h4>Not concentrated at home</h4><p>Intimate partner assault is {N["intimate_share"]["legacy"]["Black"]}% of assaults on Black women and {N["intimate_share"]["legacy"]["Hispanic"]}% for Hispanic women. The gap is the same size with partners as without. Counting both, Black women are assaulted at {fmt(N["rates"]["legacy"]["all"]["Black"])} per 100,000 a year, about 1 in {round(1e5 / N["rates"]["legacy"]["all"]["Black"])} each year.</p></div>
+    <div class="finding red"><h4>Not concentrated at home</h4><p>Intimate partner assault is {N["intimate_share"]["legacy"]["Black"]}% of assaults on Black women and {N["intimate_share"]["legacy"]["Hispanic"]}% for Hispanic women. The gap is the same size with partners as without.</p></div>
   </div>
 
   <p class="note">Context: this is the direction national evidence points. The National Crime Victimization Survey, which counts crimes whether or not they were reported, found the rate of violence against Black women almost 50% higher than against White women in 2005, by strangers, acquaintances and partners alike (<a href="https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/heimer.pdf">Heimer and colleagues, BJS</a>; <a href="https://bjs.ojp.gov/content/pub/pdf/bvvc.pdf">Harrell, BJS 2007</a>). Los Angeles's police-recorded gap is larger than that national survey figure, which is itself worth explaining.</p>
@@ -284,6 +287,8 @@ html = f'''<!DOCTYPE html>
   <div class="findings">
     <div class="finding red"><h4>This shows what, not why</h4><p>The data says Black women are assaulted at a higher rate. It does not say why. Nothing here measures causes, offenders or circumstances.</p></div>
     <div class="finding red"><h4>Reported crimes only</h4><p>Every number is a report that reached LAPD. Willingness to report, and police recording practice, differ by group, by area and over time. A higher rate can partly reflect more reporting.</p></div>
+    <div class="finding red"><h4>Reports, not people</h4><p>Rates count assault reports. A woman assaulted twice counts twice, which is common in partner violence, so a rate of {fmt(bw["F"])} per 100,000 is not the share of Black women assaulted.</p></div>
+    <div class="finding red"><h4>Who is recorded as Black</h4><p>Officers record victim race by sight; the population counts people who are Black alone. LA has {BLACK_COMBO_PCT}% more people who are Black alone or in combination with another race. If multiracial victims are recorded as Black, the rate is overstated by up to that much: at worst {round(ratio["Hispanic"] / BLACK_COMBO, 1)} times Hispanic women and {round(ratio["White"] / BLACK_COMBO, 1)} times White women instead of {ratio["Hispanic"]} and {ratio["White"]}.</p></div>
     <div class="finding red"><h4>Exposure is not population</h4><p>Rates divide by where people live, not where they spend time. Someone who works, commutes or socializes in a high-assault area carries that exposure home to a different denominator.</p></div>
     <div class="finding red"><h4>Residential denominators</h4><p>Divisions with many visitors, workers or unhoused residents, Central above all, show inflated rates because victims there often do not live there.</p></div>
     <div class="finding"><h4>Who is counted</h4><p>Simple and aggravated assault, including intimate partner assault (LAPD codes 624, 626, 230 and 236). Other assault codes (on police, child abuse, sexual battery) are left out. {fmt(C["total"] - C["known"])} victims with unknown race or sex are left out of the rates. LAPD descent codes are officer-recorded and were collapsed to four groups; everyone else is excluded.</p></div>
