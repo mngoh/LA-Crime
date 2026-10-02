@@ -187,8 +187,20 @@
     </div>
     <div class="chart-box">
       <h3>Fully adjusted, by assault type</h3>
-      <div class="chart-sub">The same controls, run separately. Simple assault 2.16x, aggravated assault 3.32x. The serious end of the distribution is where the gap resists explanation.</div>
+      <div class="chart-sub">The same controls, run separately. Simple assault 2.14x, aggravated assault 3.29x. The serious end of the distribution is where the gap resists explanation.</div>
       <div class="chart-wrap"><canvas id="typeModelChart"></canvas></div>
+    </div>
+  </div>
+  <div class="charts section-end">
+    <div class="chart-box">
+      <h3>Each comparison group on its own</h3>
+      <div class="chart-sub">Pooling hides a spread. Fully adjusted, Black women's rate is 2.09 times Hispanic women's, 2.26 times White women's and 10.31 times Asian women's. Crude gaps in grey outline.</div>
+      <div class="chart-wrap"><canvas id="pairChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Does the homelessness measure matter?</h3>
+      <div class="chart-sub">LAHSA publishes counts, not person estimates, by tract. Three definitions give the same answer: 2.46x, 2.47x, 2.45x. The covariate is not driving the result.</div>
+      <div class="chart-wrap"><canvas id="sensChart"></canvas></div>
     </div>
   </div>
   <div class="findings">
@@ -327,12 +339,31 @@
       plugins: { tooltip: { callbacks: { label: i => { const l = LADDER[i.dataIndex]; return `${l.rate_ratio}x (95% CI ${l.ci_low} to ${l.ci_high})`; } } } },
       scales: { x: { min: 0, title: { display: true, text: "Black women's rate as a multiple of other women's" } }, y: { grid: { display: false }, ticks: { color: C.text } } } }
   });
-  const BT = {"simple": {"rate_ratio": 2.16, "ci_low": 2.06, "ci_high": 2.26}, "aggravated": {"rate_ratio": 3.32, "ci_low": 3.13, "ci_high": 3.51}};
+  const BT = {"simple": {"rate_ratio": 2.14, "ci_low": 2.04, "ci_high": 2.24}, "aggravated": {"rate_ratio": 3.29, "ci_low": 3.11, "ci_high": 3.48}};
   new Chart(document.getElementById('typeModelChart'), {
     type: 'bar',
     data: { labels: ['Simple assault', 'Aggravated assault'], datasets: [{ data: [BT.simple.rate_ratio, BT.aggravated.rate_ratio], ...bar(C.red), maxBarThickness: 70 }] },
     options: { ...base, plugins: { tooltip: { callbacks: { label: i => { const k = i.dataIndex ? BT.aggravated : BT.simple; return `${k.rate_ratio}x (95% CI ${k.ci_low} to ${k.ci_high})`; } } } },
       scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { min: 0, title: { display: true, text: 'Adjusted rate ratio' } } } }
+  });
+
+  const PAIR = {"Hispanic": {"crude": {"rate_ratio": 2.54, "ci_low": 2.43, "ci_high": 2.66}, "adjusted": {"rate_ratio": 2.09, "ci_low": 2.0, "ci_high": 2.18}}, "White": {"crude": {"rate_ratio": 4.79, "ci_low": 4.54, "ci_high": 5.06}, "adjusted": {"rate_ratio": 2.26, "ci_low": 2.12, "ci_high": 2.41}}, "Asian": {"crude": {"rate_ratio": 15.69, "ci_low": 14.37, "ci_high": 17.14}, "adjusted": {"rate_ratio": 10.31, "ci_low": 9.4, "ci_high": 11.32}}};
+  const pairLabels = Object.keys(PAIR).map(k => k + ' women');
+  new Chart(document.getElementById('pairChart'), {
+    type: 'bar',
+    data: { labels: pairLabels, datasets: [
+      { label: 'Crude', data: Object.values(PAIR).map(p => p.crude.rate_ratio), ...bar(C.muted) },
+      { label: 'Fully adjusted', data: Object.values(PAIR).map(p => p.adjusted.rate_ratio), ...bar(C.red) } ] },
+    options: { ...base, plugins: { legend: { display: true }, tooltip: { callbacks: { label: i => { const p = Object.values(PAIR)[i.dataIndex][i.datasetIndex ? 'adjusted' : 'crude']; return `${i.dataset.label}: ${p.rate_ratio}x (95% CI ${p.ci_low} to ${p.ci_high})`; } } } },
+      scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { min: 0, title: { display: true, text: "Black women's rate as a multiple of the group's" } } } }
+  });
+  const SENS = {"homeless": {"rate_ratio": 2.46, "ci_low": 2.36, "ci_high": 2.56}, "people_only": {"rate_ratio": 2.47, "ci_low": 2.36, "ci_high": 2.57}, "unsheltered": {"rate_ratio": 2.45, "ci_low": 2.35, "ci_high": 2.56}};
+  const sensNames = { homeless: 'People + one per dwelling', people_only: 'People counted only', unsheltered: 'Unsheltered only' };
+  new Chart(document.getElementById('sensChart'), {
+    type: 'bar',
+    data: { labels: Object.keys(SENS).map(k => sensNames[k] || k), datasets: [{ data: Object.values(SENS).map(v => v.rate_ratio), ...bar(C.red), maxBarThickness: 70 }] },
+    options: { ...base, plugins: { tooltip: { callbacks: { label: i => { const v = Object.values(SENS)[i.dataIndex]; return `${v.rate_ratio}x (95% CI ${v.ci_low} to ${v.ci_high})`; } } } },
+      scales: { x: { grid: { display: false }, ticks: { color: C.text } }, y: { min: 0, max: 3.5, title: { display: true, text: 'Adjusted rate ratio, other women' } } } }
   });
 
   const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([34.05, -118.35], 10);

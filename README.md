@@ -26,20 +26,22 @@ After age, location and year, roughly a threefold gap remains, widest in aggrava
 
 ## The model
 
-`scripts/model_gap.py` asks how much of the gap survives adjustment. Poisson rate models at the census-tract level, women only; each assault is geocoded to the tract it happened in, and the denominator is that tract's female residents of the same group and age band (ACS 2020 to 2024). Covers 82% of located Black women victims and 98% of other women; the rest were assaulted in tracts with no resident women of their group and age.
+`scripts/model_gap.py` asks how much of the gap survives adjustment. Poisson rate models at the census-tract level, women only; each assault is geocoded to the tract it happened in, and the denominator is that tract's female residents of the same group and age band (ACS 2020 to 2024). Covers 81.6% of located Black women victims and 98.2% of other women; the rest were assaulted in tracts with no resident women of their group and age.
 
 | Controls | Black women vs other women |
 |---|---|
-| none | 3.37x |
-| + age | 3.30x |
-| + year | 3.30x |
-| + LAPD division (where it happened) | 2.57x |
-| + tract poverty, income, unemployment, renters, density | 2.48x |
-| + tract homelessness (LAHSA 2024 count) | 2.46x (95% CI 2.36 to 2.56) |
+| group only | 3.37x |
+| + age | 3.3x |
+| + year | 3.3x |
+| + division | 2.57x |
+| + tract socioeconomics | 2.48x |
+| + tract homelessness | 2.46x (95% CI 2.36 to 2.56) |
 
-Fully adjusted, by type: simple assault 2.16x, aggravated assault 3.32x. Where it happened removes about 31% of the crude excess; tract socioeconomics another 4% once location is in; age 3%; year nothing. About 38% of the excess is explained; a gap of about 2.46 remains that none of the measured factors account for.
+Fully adjusted, by type: simple assault 2.14x, aggravated assault 3.29x. About 38% of the crude excess is explained, almost all of it by where the assault happened; a gap of about 2.46 remains that none of the measured factors account for.
 
-Homelessness enters as a tract-level count from the 2024 LAHSA Homeless Count (people on the street, in safe parking and in shelters, plus one per vehicle, tent or makeshift shelter observed), built by `scripts/lahsa_tracts.py`. It changes nothing. Not in the model: exposure away from home, reporting behavior, and anything about offenders or circumstances.
+Each comparison group on its own (crude, then fully adjusted): Hispanic women 2.54x and 2.09x; White women 4.79x and 2.26x; Asian women 15.69x and 10.31x. Pooling other women averages across that spread.
+
+Homelessness enters as a tract-level count from the 2024 LAHSA Homeless Count, built by `scripts/lahsa_tracts.py`. LAHSA publishes actual counts only and states that per-tract occupant estimates are not precise, so three definitions were tested: people counted plus one per dwelling (2.46x), people counted only (2.47x) and unsheltered only (2.45x). The choice does not matter. Not in the model: exposure away from home, reporting behavior, and anything about offenders or circumstances.
 
 ## Caveats
 

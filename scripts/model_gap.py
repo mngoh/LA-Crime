@@ -56,8 +56,8 @@ def tract_populations():
         for race, t in ACS_TABLE.items():
             est = tables[t]["estimate"]
             for i, label in enumerate(AGE_LABELS):
-                rows.append({"geoid": geoid, "group": "Black" if race == "Black" else "Other", "band": COARSE_OF[i], "pop": float(est[f"{t}{18 + i:03d}"])})
-    return pd.DataFrame(rows).groupby(["geoid", "group", "band"], as_index=False)["pop"].sum()
+                rows.append({"geoid": geoid, "race": race, "band": COARSE_OF[i], "pop": float(est[f"{t}{18 + i:03d}"])})
+    return pd.DataFrame(rows).groupby(["geoid", "race", "band"], as_index=False)["pop"].sum()
 
 
 def tract_ses(aland):
@@ -82,18 +82,58 @@ def tract_ses(aland):
 
 
 def homelessness():
-    """Optional: LAHSA point-in-time count by tract, as data/external/lahsa_tracts.csv with columns geoid,homeless."""
+    """Optional: LAHSA 2024 count by tract from scripts/lahsa_tracts.py (data/external/lahsa_tracts.csv).
+
+    Columns: geoid, homeless (one per person or dwelling counted), persons_est (LAHSA-style
+    estimate using the count's dwelling multipliers), unsheltered_est (the same, street only)."""
     path = EXT / "lahsa_tracts.csv"
     if not path.exists():
         return None
-    h = pd.read_csv(path, dtype={"geoid": str})
-    return h.groupby("geoid", as_index=False)["homeless"].sum()
+    return pd.read_csv(path, dtype={"geoid": str}).groupby("geoid", as_index=False).sum(numeric_only=True)
+
+
+def build_cells(located, pop, grid_years, division, ses, hl, groups, kinds=None, pool_other=False):
+    """Tract x group x age band x year cells with counts, exposure and covariates, for the given victim groups.
+
+    With pool_other, every non-Black group is merged into one "Other" group (one denominator per tract and
+    age band), which is how the main ladder defines other women."""
+    sub = located[located["race"].isin(groups)].copy()
+    popg = pop[pop["race"].isin(groups)].copy()
+    if pool_other:
+        sub["race"] = np.where(sub["race"] == "Black", "Black", "Other")
+        popg["race"] = np.where(popg["race"] == "Black", "Black", "Other")
+        popg = popg.groupby(["geoid", "race", "band"], as_index=False)["pop"].sum()
+    if kinds:
+        sub = sub[sub["kind"].isin(kinds)]
+    counts = sub.groupby(["geoid", "race", "band", "year_incident_date"]).size().rename("n").reset_index()
+    grid = popg.merge(pd.DataFrame({"year_incident_date": grid_years}), how="cross")
+    cells = grid.merge(counts, on=["geoid", "race", "band", "year_incident_date"], how="left").fillna({"n": 0})
+    cells["exposure"] = cells["pop"] * np.where(cells["year_incident_date"] == 2023, 0.5, 1.0)
+    cells = cells[cells["pop"] >= MIN_CELL_POP].copy()
+    cells["division"] = cells["geoid"].map(division)
+    cells = cells.dropna(subset=["division"]).merge(ses, on="geoid", how="left").dropna(subset=["poverty", "log_income", "unemployment", "renters", "log_density"])
+    if hl is not None:
+        cells = cells.merge(hl, on="geoid", how="left").fillna({c: 0 for c in hl.columns if c != "geoid"})
+        for c in [c for c in hl.columns if c != "geoid"]:
+            cells["log_" + c] = np.log1p(cells[c])
+    for col in ["poverty", "log_income", "unemployment", "renters", "log_density"]:
+        cells[col] = (cells[col] - cells[col].mean()) / cells[col].std()
+    cells["black"] = (cells["race"] == "Black").astype(int)
+    cells["band"] = cells["band"].astype(str)
+    cells["year"] = cells["year_incident_date"].astype(str)
+    return cells
+
+
+def ratio(cells, formula):
+    """Rate ratio for Black women in a Poisson GLM with log exposure offset and robust errors."""
+    fit = sm.GLM.from_formula(f"n ~ {formula}", data=cells, family=sm.families.Poisson(), offset=np.log(cells["exposure"])).fit(cov_type="HC0")
+    b, se = fit.params["black"], fit.bse["black"]
+    return {"rate_ratio": round(math.exp(b), 2), "ci_low": round(math.exp(b - 1.96 * se), 2), "ci_high": round(math.exp(b + 1.96 * se), 2)}
 
 
 def main():
     df = load_victims()
     women = df[(df["sex"] == "F") & df["race"].notna() & (df["vict_age"] > 0) & df["lat"].notna() & (df["lat"] > 30)].copy()
-    women["group"] = np.where(women["race"] == "Black", "Black", "Other")
     women["band"] = women["vict_age"].apply(age_band).map(COARSE_OF)
 
     # geocode each assault to the tract it happened in
@@ -115,69 +155,58 @@ def main():
         c = shp.centroid
         division[gid] = lookup(c.y, c.x)
 
-    counts = located.groupby(["geoid", "group", "band", "year_incident_date"]).size().rename("n").reset_index()
     pop = tract_populations()
     years = sorted(located["year_incident_date"].unique())
-    grid = pop.merge(pd.DataFrame({"year_incident_date": years}), how="cross")
-    cells = grid.merge(counts, on=["geoid", "group", "band", "year_incident_date"], how="left").fillna({"n": 0})
-    cells["exposure"] = cells["pop"] * np.where(cells["year_incident_date"] == 2023, 0.5, 1.0)
-    cells = cells[cells["pop"] >= MIN_CELL_POP].copy()
-    cells["division"] = cells["geoid"].map(division)
-    cells = cells.dropna(subset=["division"])
     ses = tract_ses(aland)
-    cells = cells.merge(ses, on="geoid", how="left").dropna(subset=["poverty", "log_income", "unemployment", "renters", "log_density"])
     hl = homelessness()
-    if hl is not None:
-        cells = cells.merge(hl, on="geoid", how="left").fillna({"homeless": 0})
-        cells["log_homeless"] = np.log1p(cells["homeless"])
-    for col in ["poverty", "log_income", "unemployment", "renters", "log_density"]:
-        cells[col] = (cells[col] - cells[col].mean()) / cells[col].std()
-    cov = cells.groupby("group")["n"].sum()
-    tot = located.groupby("group").size()
-    coverage = {g: round(float(cov.get(g, 0) / tot[g] * 100), 1) for g in tot.index}
-    print(f"model cells: {len(cells):,} (tract x group x age band x year), victims in cells: {int(cells['n'].sum()):,}; coverage by group: {coverage}")
-
-    cells["black"] = (cells["group"] == "Black").astype(int)
-    cells["band"] = cells["band"].astype(str)
-    cells["year"] = cells["year_incident_date"].astype(str)
+    SES = "poverty + log_income + unemployment + renters + log_density"
     layers = [
         ("M0 group only", "black"),
         ("M1 + age", "black + C(band)"),
         ("M2 + year", "black + C(band) + C(year)"),
         ("M3 + division", "black + C(band) + C(year) + C(division)"),
-        ("M4 + tract socioeconomics", "black + C(band) + C(year) + C(division) + poverty + log_income + unemployment + renters + log_density"),
+        ("M4 + tract socioeconomics", f"black + C(band) + C(year) + C(division) + {SES}"),
     ]
     if hl is not None:
         layers.append(("M5 + tract homelessness", layers[-1][1] + " + log_homeless"))
+    full = layers[-1][1]
 
+    # 1. the main ladder: Black women against all other women
+    cells = build_cells(located, pop, years, division, ses, hl, RACES, pool_other=True)
+    cov = cells.groupby("black")["n"].sum()
+    tot = located.groupby(located["race"] == "Black").size()
+    coverage = {"Black": round(float(cov[1] / tot[True] * 100), 1), "Other": round(float(cov[0] / tot[False] * 100), 1)}
+    print(f"model cells: {len(cells):,} (tract x race x age band x year), victims in cells: {int(cells['n'].sum()):,}; coverage by group: {coverage}")
     results = []
     for name, formula in layers:
-        model = sm.GLM.from_formula(f"n ~ {formula}", data=cells, family=sm.families.Poisson(), offset=np.log(cells["exposure"]))
-        fit = model.fit(cov_type="HC0")
-        b, se = fit.params["black"], fit.bse["black"]
-        results.append({"model": name, "rate_ratio": round(math.exp(b), 2), "ci_low": round(math.exp(b - 1.96 * se), 2),
-                        "ci_high": round(math.exp(b + 1.96 * se), 2), "controls": formula})
-        print(f"{name:28s} Black women vs other women: {math.exp(b):.2f}x  (95% CI {math.exp(b - 1.96 * se):.2f} to {math.exp(b + 1.96 * se):.2f})")
+        r = ratio(cells, formula)
+        results.append({"model": name, **r, "controls": formula})
+        print(f"{name:28s} Black women vs other women: {r['rate_ratio']:.2f}x  (95% CI {r['ci_low']:.2f} to {r['ci_high']:.2f})")
 
-    # the same ladder, split by assault type
+    # 2. the same, split by assault type
     by_type = {}
     for kind in ["simple", "aggravated"]:
-        ck = located[located["kind"] == kind].groupby(["geoid", "group", "band", "year_incident_date"]).size().rename("n").reset_index()
-        ct = grid.merge(ck, on=["geoid", "group", "band", "year_incident_date"], how="left").fillna({"n": 0})
-        ct["exposure"] = ct["pop"] * np.where(ct["year_incident_date"] == 2023, 0.5, 1.0)
-        ct = ct[ct["pop"] >= MIN_CELL_POP].copy()
-        ct["division"] = ct["geoid"].map(division)
-        ct = ct.dropna(subset=["division"]).merge(ses, on="geoid", how="left").dropna()
-        for col in ["poverty", "log_income", "unemployment", "renters", "log_density"]:
-            ct[col] = (ct[col] - ct[col].mean()) / ct[col].std()
-        ct["black"] = (ct["group"] == "Black").astype(int); ct["band"] = ct["band"].astype(str); ct["year"] = ct["year_incident_date"].astype(str)
-        fit = sm.GLM.from_formula(f"n ~ {layers[4][1]}", data=ct, family=sm.families.Poisson(), offset=np.log(ct["exposure"])).fit(cov_type="HC0")
-        b, se = fit.params["black"], fit.bse["black"]
-        by_type[kind] = {"rate_ratio": round(math.exp(b), 2), "ci_low": round(math.exp(b - 1.96 * se), 2), "ci_high": round(math.exp(b + 1.96 * se), 2)}
-        print(f"fully adjusted, {kind:10s}: {math.exp(b):.2f}x (95% CI {math.exp(b - 1.96 * se):.2f} to {math.exp(b + 1.96 * se):.2f})")
+        by_type[kind] = ratio(build_cells(located, pop, years, division, ses, hl, RACES, kinds=[kind], pool_other=True), full)
+        print(f"fully adjusted, {kind:10s}: {by_type[kind]['rate_ratio']:.2f}x")
 
-    out = {"women_located": int(len(located)), "women_total": int(len(women)), "cells": int(len(cells)), "min_cell_pop": MIN_CELL_POP, "coverage": coverage, "age_bands": list(COARSE),
-           "ladder": results, "fully_adjusted_by_type": by_type, "homelessness_included": hl is not None,
+    # 3. each comparison group on its own: Black women against Hispanic, White and Asian women separately
+    pairwise = {}
+    for other in ["Hispanic", "White", "Asian"]:
+        pc = build_cells(located, pop, years, division, ses, hl, ["Black", other])
+        pairwise[other] = {"crude": ratio(pc, "black"), "adjusted": ratio(pc, full)}
+        print(f"vs {other:8s} women: crude {pairwise[other]['crude']['rate_ratio']:.2f}x, fully adjusted {pairwise[other]['adjusted']['rate_ratio']:.2f}x "
+              f"(95% CI {pairwise[other]['adjusted']['ci_low']:.2f} to {pairwise[other]['adjusted']['ci_high']:.2f})")
+
+    # 4. homelessness sensitivity: swap the covariate definition
+    sensitivity = {}
+    if hl is not None:
+        for col in [c for c in hl.columns if c != "geoid"]:
+            sensitivity[col] = ratio(cells, layers[4][1] + f" + log_{col}")
+            print(f"homelessness as {col:16s}: {sensitivity[col]['rate_ratio']:.2f}x")
+
+    out = {"women_located": int(len(located)), "women_total": int(len(women)), "cells": int(len(cells)), "min_cell_pop": MIN_CELL_POP,
+           "coverage": coverage, "age_bands": list(COARSE), "ladder": results, "fully_adjusted_by_type": by_type,
+           "pairwise": pairwise, "homelessness_sensitivity": sensitivity, "homelessness_included": hl is not None,
            "ses_covariates": ["poverty rate", "log median household income", "unemployment rate", "renter share", "log population density"]}
     (DATA / "model_results.json").write_text(json.dumps(out, indent=1))
     print("wrote", DATA / "model_results.json")

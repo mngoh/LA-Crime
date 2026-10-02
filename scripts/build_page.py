@@ -236,6 +236,18 @@ html = f'''<!DOCTYPE html>
       <div class="chart-wrap"><canvas id="typeModelChart"></canvas></div>
     </div>
   </div>
+  <div class="charts section-end">
+    <div class="chart-box">
+      <h3>Each comparison group on its own</h3>
+      <div class="chart-sub">Pooling hides a spread. Fully adjusted, Black women's rate is {M["pairwise"]["Hispanic"]["adjusted"]["rate_ratio"]} times Hispanic women's, {M["pairwise"]["White"]["adjusted"]["rate_ratio"]} times White women's and {M["pairwise"]["Asian"]["adjusted"]["rate_ratio"]} times Asian women's. Crude gaps in grey outline.</div>
+      <div class="chart-wrap"><canvas id="pairChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Does the homelessness measure matter?</h3>
+      <div class="chart-sub">LAHSA publishes counts, not person estimates, by tract. Three definitions give the same answer: {", ".join(f"{v['rate_ratio']}x" for v in M["homelessness_sensitivity"].values())}. The covariate is not driving the result.</div>
+      <div class="chart-wrap"><canvas id="sensChart"></canvas></div>
+    </div>
+  </div>
   <div class="findings">
     <div class="finding red"><h4>What the model says</h4><p>Where assaults happen is the biggest single factor, removing about {loc_share}% of the excess. Tract poverty, income, unemployment, renters and density together remove another {ses_share}% once location is in. Age removes {age_share}%; year, nothing. A {final["rate_ratio"]}-fold gap remains that none of these measured factors explain.</p></div>
     <div class="finding"><h4>What it cannot say</h4><p>Residents are the denominator, so exposure away from home is unmeasured, and {round(100 - M["coverage"]["Black"])}% of Black women victims were assaulted in tracts with no resident women like them. {"Homelessness enters only as a tract-level count from the 2024 LAHSA count, a proxy for exposure, not a measure of who the victims were." if M["homelessness_included"] else "Homelessness counts by tract are not in the model."} Reporting behavior is invisible to police data.</p></div>
@@ -378,6 +390,25 @@ html = f'''<!DOCTYPE html>
     data: {{ labels: ['Simple assault', 'Aggravated assault'], datasets: [{{ data: [BT.simple.rate_ratio, BT.aggravated.rate_ratio], ...bar(C.red), maxBarThickness: 70 }}] }},
     options: {{ ...base, plugins: {{ tooltip: {{ callbacks: {{ label: i => {{ const k = i.dataIndex ? BT.aggravated : BT.simple; return `${{k.rate_ratio}}x (95% CI ${{k.ci_low}} to ${{k.ci_high}})`; }} }} }} }},
       scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, title: {{ display: true, text: 'Adjusted rate ratio' }} }} }} }}
+  }});
+
+  const PAIR = {json.dumps(M["pairwise"])};
+  const pairLabels = Object.keys(PAIR).map(k => k + ' women');
+  new Chart(document.getElementById('pairChart'), {{
+    type: 'bar',
+    data: {{ labels: pairLabels, datasets: [
+      {{ label: 'Crude', data: Object.values(PAIR).map(p => p.crude.rate_ratio), ...bar(C.muted) }},
+      {{ label: 'Fully adjusted', data: Object.values(PAIR).map(p => p.adjusted.rate_ratio), ...bar(C.red) }} ] }},
+    options: {{ ...base, plugins: {{ legend: {{ display: true }}, tooltip: {{ callbacks: {{ label: i => {{ const p = Object.values(PAIR)[i.dataIndex][i.datasetIndex ? 'adjusted' : 'crude']; return `${{i.dataset.label}}: ${{p.rate_ratio}}x (95% CI ${{p.ci_low}} to ${{p.ci_high}})`; }} }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, title: {{ display: true, text: "Black women's rate as a multiple of the group's" }} }} }} }}
+  }});
+  const SENS = {json.dumps(M["homelessness_sensitivity"])};
+  const sensNames = {{ homeless: 'People + one per dwelling', people_only: 'People counted only', unsheltered: 'Unsheltered only' }};
+  new Chart(document.getElementById('sensChart'), {{
+    type: 'bar',
+    data: {{ labels: Object.keys(SENS).map(k => sensNames[k] || k), datasets: [{{ data: Object.values(SENS).map(v => v.rate_ratio), ...bar(C.red), maxBarThickness: 70 }}] }},
+    options: {{ ...base, plugins: {{ tooltip: {{ callbacks: {{ label: i => {{ const v = Object.values(SENS)[i.dataIndex]; return `${{v.rate_ratio}}x (95% CI ${{v.ci_low}} to ${{v.ci_high}})`; }} }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, max: 3.5, title: {{ display: true, text: 'Adjusted rate ratio, other women' }} }} }} }}
   }});
 
   const map = L.map('map', {{ zoomControl: true, scrollWheelZoom: false }}).setView([34.05, -118.35], 10);
