@@ -24,6 +24,23 @@ Women only, Black women against all other women.
 
 After age, location and year, roughly a threefold gap remains, widest in aggravated and armed assaults. The data shows it; it does not explain it.
 
+## The model
+
+`scripts/model_gap.py` asks how much of the gap survives adjustment. Poisson rate models at the census-tract level, women only; each assault is geocoded to the tract it happened in, and the denominator is that tract's female residents of the same group and age band (ACS 2020 to 2024). Covers 82% of located Black women victims and 98% of other women; the rest were assaulted in tracts with no resident women of their group and age.
+
+| Controls | Black women vs other women |
+|---|---|
+| none | 3.37x |
+| + age | 3.30x |
+| + year | 3.30x |
+| + LAPD division (where it happened) | 2.57x |
+| + tract poverty, income, unemployment, renters, density | 2.48x |
+| + tract homelessness (LAHSA 2024 count) | 2.46x (95% CI 2.36 to 2.56) |
+
+Fully adjusted, by type: simple assault 2.16x, aggravated assault 3.32x. Where it happened removes about 31% of the crude excess; tract socioeconomics another 4% once location is in; age 3%; year nothing. About 38% of the excess is explained; a gap of about 2.46 remains that none of the measured factors account for.
+
+Homelessness enters as a tract-level count from the 2024 LAHSA Homeless Count (people on the street, in safe parking and in shelters, plus one per vehicle, tent or makeshift shelter observed), built by `scripts/lahsa_tracts.py`. It changes nothing. Not in the model: exposure away from home, reporting behavior, and anything about offenders or circumstances.
+
 ## Caveats
 
 - This shows what the data says, not why. Nothing here measures causes, offenders or circumstances.
@@ -43,16 +60,32 @@ After age, location and year, roughly a threefold gap remains, widest in aggrava
 
 ```bash
 pip install -r requirements.txt
-python scripts/compute_rates.py   # counts + rates -> data/page_data.json (downloads ACS, tract centroids and division boundaries once)
-python scripts/build_page.py      # data/page_data.json -> index.html
+python scripts/compute_rates.py   # counts, rates, hypothesis tests -> data/page_data.json (downloads ACS, tract centroids and division boundaries once)
+python scripts/lahsa_tracts.py    # 2024 LAHSA count by tract -> data/external/lahsa_tracts.csv
+python scripts/model_gap.py       # adjustment ladder -> data/model_results.json (downloads tract geometry and ACS socioeconomics once)
+python scripts/build_page.py      # both JSON files -> index.html
 ```
 
-## Contents
+Run from the repository root. The notebooks also expect to be run from the root.
 
-- `index.html`: the published page (Chart.js and Leaflet, no build step beyond the scripts above)
-- `scripts/compute_rates.py`, `scripts/build_page.py`: the pipeline behind the page
-- `data/eda_data.csv`, `data/eda_data_deadly.csv`: simple and aggravated assault victims; `data/page_data.json`: computed counts and rates
-- `0_data_cleaning.ipynb`: how the two victim files were cut from the raw LAPD download
-- `1_eda.ipynb`, `1_eda_early.ipynb`: exploratory analysis from 2023
-- `2_regression_experiment.ipynb`: an exploratory regression, not used on the page
-- `functions/`: helper and plotting functions
+## Layout
+
+```
+index.html                    the published page (Chart.js and Leaflet)
+scripts/
+  compute_rates.py            counts, rates and the six hypothesis tests -> data/page_data.json
+  lahsa_tracts.py             2024 LAHSA Homeless Count by tract -> data/external/lahsa_tracts.csv
+  model_gap.py                tract-level Poisson adjustment ladder -> data/model_results.json
+  build_page.py               renders index.html from the two JSON files
+data/
+  eda_data.csv                simple assault (battery) victims, LAPD, Jan 2020 to Jun 2023
+  eda_data_deadly.csv         aggravated assault victims, same window
+  page_data.json              computed counts, rates and tests
+  model_results.json          model output
+  external/                   cached downloads (ACS, tract centroids and geometry, division boundaries, LAHSA workbook); not committed
+notebooks/
+  0_data_cleaning.ipynb       how the two victim files were cut from the raw LAPD download (2023)
+  1_eda.ipynb, 1_eda_early.ipynb   exploratory analysis (2023)
+  2_regression_experiment.ipynb    an exploratory regression, not used on the page
+  functions/                  helper and plotting functions used by the notebooks
+```

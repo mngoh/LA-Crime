@@ -1,0 +1,81 @@
+{
+ "women_located": 35856,
+ "women_total": 36056,
+ "cells": 33120,
+ "min_cell_pop": 1,
+ "coverage": {
+  "Black": 81.6,
+  "Other": 98.2
+ },
+ "age_bands": [
+  "0-17",
+  "18-29",
+  "30-44",
+  "45-64",
+  "65+"
+ ],
+ "ladder": [
+  {
+   "model": "M0 group only",
+   "rate_ratio": 3.37,
+   "ci_low": 3.22,
+   "ci_high": 3.52,
+   "controls": "black"
+  },
+  {
+   "model": "M1 + age",
+   "rate_ratio": 3.3,
+   "ci_low": 3.16,
+   "ci_high": 3.44,
+   "controls": "black + C(band)"
+  },
+  {
+   "model": "M2 + year",
+   "rate_ratio": 3.3,
+   "ci_low": 3.16,
+   "ci_high": 3.44,
+   "controls": "black + C(band) + C(year)"
+  },
+  {
+   "model": "M3 + division",
+   "rate_ratio": 2.57,
+   "ci_low": 2.47,
+   "ci_high": 2.69,
+   "controls": "black + C(band) + C(year) + C(division)"
+  },
+  {
+   "model": "M4 + tract socioeconomics",
+   "rate_ratio": 2.48,
+   "ci_low": 2.38,
+   "ci_high": 2.59,
+   "controls": "black + C(band) + C(year) + C(division) + poverty + log_income + unemployment + renters + log_density"
+  },
+  {
+   "model": "M5 + tract homelessness",
+   "rate_ratio": 2.46,
+   "ci_low": 2.36,
+   "ci_high": 2.56,
+   "controls": "black + C(band) + C(year) + C(division) + poverty + log_income + unemployment + renters + log_density + log_homeless"
+  }
+ ],
+ "fully_adjusted_by_type": {
+  "simple": {
+   "rate_ratio": 2.16,
+   "ci_low": 2.06,
+   "ci_high": 2.26
+  },
+  "aggravated": {
+   "rate_ratio": 3.32,
+   "ci_low": 3.13,
+   "ci_high": 3.51
+  }
+ },
+ "homelessness_included": true,
+ "ses_covariates": [
+  "poverty rate",
+  "log median household income",
+  "unemployment rate",
+  "renter share",
+  "log population density"
+ ]
+}

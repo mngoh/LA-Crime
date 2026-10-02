@@ -28,6 +28,12 @@ divmap = [{"name": d["division"], "lat": C["centroids"][d["division"]]["lat"], "
           for d in D["division_rates"]]
 
 T = D["tests"]
+M = json.loads((ROOT / "data" / "model_results.json").read_text())
+ladder = M["ladder"]; final = ladder[-1]; crude = ladder[0]
+explained = round((1 - (final["rate_ratio"] - 1) / (crude["rate_ratio"] - 1)) * 100)
+rr = {l["model"].split(" ")[0]: l["rate_ratio"] for l in ladder}
+share = lambda a, b: round((rr[a] - rr[b]) / (crude["rate_ratio"] - 1) * 100)  # share of the crude excess removed by a step
+loc_share, ses_share, age_share = share("M2", "M3"), share("M3", "M4"), share("M0", "M1")
 loc_sorted = sorted([d for d in T["location"]["divisions"] if d["ratio"] is not None], key=lambda d: -d["ratio"])
 other_pop_f = sum(P["city"][r]["F"] for r in RACES[1:])
 other_women_rate = round(T["women_n"]["other"] / other_pop_f / D["years"] * 1e5)
@@ -213,7 +219,26 @@ html = f'''<!DOCTYPE html>
   </div>
   <div class="findings">
     <div class="finding red"><h4>Reporting: not testable here</h4><p>LAPD data holds only what was reported. The National Crime Victimization Survey measures unreported crime nationally, not for Los Angeles. If Black women report assaults more or less often than other women, every rate above moves, and this data cannot say which way.</p></div>
-    <div class="finding red"><h4>What remains</h4><p>After age, location and year, roughly a threefold gap stands, widest in aggravated and armed assaults. The data shows it. It does not explain it.</p></div>
+    <div class="finding red"><h4>What remains</h4><p>After age, location and year, a gap of roughly two and a half to three stands, widest in aggravated and armed assaults. The model below puts numbers on it. The data shows the gap; it does not explain it.</p></div>
+  </div>
+
+  <div class="section-title">The model</div>
+  <p class="note">One question, answered one adjustment at a time: how much of the gap survives? Poisson rate models at the census-tract level, women only, {fmt(M["cells"])} tract by group by age by year cells, {M["coverage"]["Black"]}% of located Black women victims and {M["coverage"]["Other"]}% of other women (the rest were assaulted in tracts with no resident women of their group and age, so they have no denominator). Each bar is Black women's rate as a multiple of other women's after the controls named.</p>
+  <div class="charts section-end">
+    <div class="chart-box">
+      <h3>Surviving rate ratio</h3>
+      <div class="chart-sub">Crude {crude["rate_ratio"]}x. After age, year, where it happened and tract poverty, income, unemployment, renters and density: {final["rate_ratio"]}x (95% CI {final["ci_low"]} to {final["ci_high"]}). Controls account for about {explained}% of the excess; the rest stands.</div>
+      <div class="chart-wrap"><canvas id="modelChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <h3>Fully adjusted, by assault type</h3>
+      <div class="chart-sub">The same controls, run separately. Simple assault {M["fully_adjusted_by_type"]["simple"]["rate_ratio"]}x, aggravated assault {M["fully_adjusted_by_type"]["aggravated"]["rate_ratio"]}x. The serious end of the distribution is where the gap resists explanation.</div>
+      <div class="chart-wrap"><canvas id="typeModelChart"></canvas></div>
+    </div>
+  </div>
+  <div class="findings">
+    <div class="finding red"><h4>What the model says</h4><p>Where assaults happen is the biggest single factor, removing about {loc_share}% of the excess. Tract poverty, income, unemployment, renters and density together remove another {ses_share}% once location is in. Age removes {age_share}%; year, nothing. A {final["rate_ratio"]}-fold gap remains that none of these measured factors explain.</p></div>
+    <div class="finding"><h4>What it cannot say</h4><p>Residents are the denominator, so exposure away from home is unmeasured, and {round(100 - M["coverage"]["Black"])}% of Black women victims were assaulted in tracts with no resident women like them. {"Homelessness enters only as a tract-level count from the 2024 LAHSA count, a proxy for exposure, not a measure of who the victims were." if M["homelessness_included"] else "Homelessness counts by tract are not in the model."} Reporting behavior is invisible to police data.</p></div>
   </div>
 
   <div class="section-title">Caveats</div>
@@ -338,6 +363,22 @@ html = f'''<!DOCTYPE html>
   }});
   twoGroups('premChart', T.premises, "Share of the group's assaults (%)");
   twoGroups('weapChart', T.weapons, "Share of the group's assaults (%)");
+
+  const LADDER = {json.dumps(ladder)};
+  new Chart(document.getElementById('modelChart'), {{
+    type: 'bar',
+    data: {{ labels: LADDER.map(l => l.model.replace(/^M\\d /, '')), datasets: [{{ data: LADDER.map(l => l.rate_ratio), ...bar(C.red) }}] }},
+    options: {{ ...base, indexAxis: 'y',
+      plugins: {{ tooltip: {{ callbacks: {{ label: i => {{ const l = LADDER[i.dataIndex]; return `${{l.rate_ratio}}x (95% CI ${{l.ci_low}} to ${{l.ci_high}})`; }} }} }} }},
+      scales: {{ x: {{ min: 0, title: {{ display: true, text: "Black women's rate as a multiple of other women's" }} }}, y: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }} }} }}
+  }});
+  const BT = {json.dumps(M["fully_adjusted_by_type"])};
+  new Chart(document.getElementById('typeModelChart'), {{
+    type: 'bar',
+    data: {{ labels: ['Simple assault', 'Aggravated assault'], datasets: [{{ data: [BT.simple.rate_ratio, BT.aggravated.rate_ratio], ...bar(C.red), maxBarThickness: 70 }}] }},
+    options: {{ ...base, plugins: {{ tooltip: {{ callbacks: {{ label: i => {{ const k = i.dataIndex ? BT.aggravated : BT.simple; return `${{k.rate_ratio}}x (95% CI ${{k.ci_low}} to ${{k.ci_high}})`; }} }} }} }},
+      scales: {{ x: {{ grid: {{ display: false }}, ticks: {{ color: C.text }} }}, y: {{ min: 0, title: {{ display: true, text: 'Adjusted rate ratio' }} }} }} }}
+  }});
 
   const map = L.map('map', {{ zoomControl: true, scrollWheelZoom: false }}).setView([34.05, -118.35], 10);
   L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
