@@ -39,7 +39,7 @@ EXCLUDE = re.compile(r"Peace Officer|Police|P\.O\.|Firefighter|Obstruct|Resist|C
 
 def soql(dataset, params):
     url = f"{PORTAL}/{dataset}.json?" + urllib.parse.urlencode({**params, "$limit": 50000})
-    req = urllib.request.Request(url, headers={"User-Agent": "LA-Crime analysis (github.com/mngoh/LA-Crime)"})
+    req = urllib.request.Request(url, headers={"User-Agent": "Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023 analysis (github.com/mngoh/Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023)"})
     with urllib.request.urlopen(req, timeout=300) as r:
         return json.load(r)
 

@@ -40,7 +40,7 @@ def download(codes):
         "$where": f"crm_cd in ({','.join(repr(c) for c in codes)}) AND date_occ between '{START}' and '{END}'",
         "$order": "dr_no", "$limit": 500000,
     })
-    req = urllib.request.Request(f"{API}?{query}", headers={"User-Agent": "LA-Crime analysis (github.com/mngoh/LA-Crime)"})
+    req = urllib.request.Request(f"{API}?{query}", headers={"User-Agent": "Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023 analysis (github.com/mngoh/Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023)"})
     with urllib.request.urlopen(req, timeout=300) as r:
         return pd.read_csv(io.BytesIO(r.read()), dtype=str)
 

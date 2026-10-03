@@ -122,7 +122,7 @@ html = f'''<!DOCTYPE html>
     <p>LAPD reports, {D["window"]} · {fmt(C["total"])} assaults · Martin Ngoh</p>
   </div>
   <nav>
-    <a href="https://github.com/mngoh/LA-Crime">Code &amp; notebooks</a>
+    <a href="https://github.com/mngoh/Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023">Code &amp; notebooks</a>
     <a href="https://martinngoh.com">martinngoh.com</a>
   </nav>
 </header>
@@ -306,7 +306,7 @@ html = f'''<!DOCTYPE html>
 
 <footer>
   <span>Assault victims in Los Angeles, Martin Ngoh</span>
-  <a href="https://github.com/mngoh/LA-Crime">github.com/mngoh/LA-Crime</a>
+  <a href="https://github.com/mngoh/Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023">github.com/mngoh/Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023</a>
   <a href="https://martinngoh.com">martinngoh.com</a>
 </footer>
 

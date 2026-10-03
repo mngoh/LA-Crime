@@ -2,7 +2,7 @@
 
 Who gets assaulted in Los Angeles, as rates rather than counts. 174,827 LAPD assault reports from January 2020 to December 2023, intimate partner assault included, by race, sex and police division, against ACS population.
 
-**Live analysis:** https://mngoh.github.io/LA-Crime/
+**Live analysis:** https://mngoh.github.io/Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023/
 
 The method is packaged as reusable Claude Code skills in [disparity-kit](https://github.com/mngoh/disparity-kit).
 

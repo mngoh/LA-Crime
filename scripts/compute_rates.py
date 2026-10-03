@@ -49,7 +49,7 @@ def fetch(url, name):
     path = EXT / name
     if not path.exists():
         print("downloading", name)
-        req = urllib.request.Request(url, headers={"User-Agent": "LA-Crime-analysis/1.0 (github.com/mngoh/LA-Crime)"})
+        req = urllib.request.Request(url, headers={"User-Agent": "Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023-analysis/1.0 (github.com/mngoh/Los-Angeles-CA-Assault-Victim-Rates-by-Race-and-Sex-2020-2023)"})
         with urllib.request.urlopen(req, timeout=120) as r:
             path.write_bytes(r.read())
     return path
