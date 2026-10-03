@@ -60,6 +60,7 @@ National victimization surveys, which include crimes never reported to police, p
 
 ## Caveats
 
+- **What this number measures.** Police reports, not how often women are hurt. In the national victimization survey, which counts assaults whether or not police learned of them, Black and White women describe being assaulted at about the same rate nationally and about 1.5 to 2 times in large cities. A [follow-up](https://github.com/mngoh/Police-Records-vs-Survey-Assault-Victims-by-Race-and-Sex-2015-2025) tested why police records differ more: not reporting rates, not (or only a little) how police write up a call, not the same women counted repeatedly, but largely where assaults happen and who calls. Hospital emergency departments, which do not depend on a call to police, see a gap like the police one (about 4.6 times for women in 2021 to 2022), which points to the survey undercounting assaults on Black women.
 - This shows what the data says, not why. Nothing here measures causes, offenders or circumstances.
 - Reported crimes only. Willingness to report and police recording practice differ by group, area and time, so a higher rate can partly reflect more reporting.
 - Reports, not people. A woman assaulted twice counts twice, so rates are not the share of women assaulted.
